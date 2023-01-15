@@ -7,6 +7,11 @@ import Video, { DRMType } from 'react-native-video';
 import { navigate } from "../RootNavigator";
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
+
+
+
+
+
 export default Trending = (props) => {
 
     const [trendingData, setTrendingData] = useState([])
@@ -17,9 +22,11 @@ export default Trending = (props) => {
     const [refresing, setRefreshing] = useState(false)
     const [loading, setLoading] = useState(false)
     const [caughtUp, setCaughtUp] = useState(false)
+    const [query, setQuery] = useState('')
     var flatListRef = useRef(null)
 
-    const fetchTrending = async (page) => {
+    const fetchTrending = async (page, query) => {
+        console.log('fetching trending with', page, query)
 
         setLoading(true)
 
@@ -32,7 +39,7 @@ export default Trending = (props) => {
         }
         else {
             if (!caughtUp) {
-                var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}`, { method: 'GET' })
+                var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&query=${query}`, { method: 'GET' })
                 var feedDataJson = await feedData.json()
                 setTrendingData(feedDataJson.response)
                 setCaughtUp(feedDataJson.caughtup)
@@ -48,22 +55,132 @@ export default Trending = (props) => {
 
     useEffect(() => {
 
-        fetchTrending(1)
+        fetchTrending(1, query)
 
     }, [])
+
+
+
+    const SearchBar = () => {
+        const [textVal, setTextVal] = useState('')
+
+        const SearchButtonIcon = () => {
+            if (textVal.length == 0) {
+                return (
+                    <>
+                        <Image source={{ uri: "https://img.icons8.com/ios/50/null/search--v1.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} />
+                    </>
+                )
+            }
+            else {
+                return (
+                    <>
+                        <Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} />
+                    </>
+                )
+            }
+        }
+
+        return (<>
+
+            <View style={{
+                height: 'auto',
+                width: '100%',
+                flexDirection: 'row',
+                paddingTop: 5,
+                marginLeft: 20
+            }}>
+                <TextInput
+                    onChangeText={(text) => { console.log(text); setTextVal(text) }}
+                    value={textVal}
+                    placeholder={'Search your reel ! '}
+                    style={{
+                        width: '60%',
+                        borderBottomColor: 'grey',
+                        borderBottomWidth: 1,
+                    }}
+                >
+                </TextInput>
+                <TouchableOpacity style={{
+                    height: 40,
+                    width: 40,
+                    paddingTop: 15,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginLeft: 5,
+                    marginTop: 10,
+                    borderRadius: 50,
+                    borderWidth: 0.5,
+                    borderColor: 'lightgrey',
+                }}
+                    onPress={() => {
+                        setPage(1)
+                        fetchTrending(1, textVal)
+                    }}
+                >
+                    <SearchButtonIcon />
+                </TouchableOpacity>
+            </View>
+
+        </>)
+    }
+
+    const Header = ({ setQuery }) => {
+        return (<>
+            <View style={{
+                height: 'auto',
+                width: '100%',
+                paddingHorizontal: 5,
+            }}>
+                <View style={{
+                    flexDirection: 'row',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'lightgrey',
+                    paddingVertical: 10
+                }}>
+                    <Image source={{ uri: 'https://lh3.googleusercontent.com/EUyLnq_4bQ_DCshfKyP6bJFunSOOPaJVMUV-qSUMw4nGC5UGeJ9V6rgqGEqoqDP8tKezQCRFlPf4ILMip74aC-3fAcpMCHpqM2LLSsm55XKN9VOHMLMAXfENbkweg6CCB490GyeimnCMm07ZNfw5UQZCXOOMcBseM7I-jP16K1h-SmJONfs3XmizstS1EaLR0zGZAMU61m9vE0t5fJN-opgY_Zt7QbzWN6n4FQ_vku_TEtEkVpYjpITAeqdK8Eje5i8p7iuaCxRRSfOMigP-HS11L16F2EGU-JuxGxhM8tsEeNgv9DpQWgLWZX9k-5efAnLRD64II2JCIDjECCJnKJfmDVGlj-QLvzaQFKgEppC6orjcShedVIuqokd68XmUy4za-3Th8fqXSo5NzYrHlpKVHm9c85m_gSc6tYsQNfr9QiUl7NLSk8lDvGAEb_SLFtRVvHJyBu3D9LIKMtClH1xyTcdTDxPmByY6zK_qnm7FLIBX7S3Ch0grXCciHfmBBwM0jPCIOhm6vCnoPgOiKjaL_trV5azwSuwjwYQJb9H3E-clS1GCzbNPuqS2qrNE7wdcwcqVKKX66LK05XnURfVBjFXQ_BZXwHA3FQCEopVydiEMDhQTNcfM3TO2l66LInh3hfMLuDLFWMaFARs0sdyCU0NJwEksz3BsLAn_tfNT8ot-qEwKST7bC_X_AqKwqxHB9XdEC0NZjVRJquca0ay6IdTXYClnIjiySFcWo3s9OCRjIFr3Rkm29mU20m4yx_hADVnydt1_6C80WhaUWlRk44EqQ_Edhqr62zwy4bT2eUXH_-9Dapy1TlX0lFC6r9JOTqYwKKCg-5xKodtoywYRtJSEnKJ9gkp_sFyKPknQvMmY6Q9osq0_2TJ3Wm8LuJzQdFTfWF429aXvXDB-oE-vBdpKHqcv4rCtKOs5a-h1TM2EiUvkJuCUUF3HUOS3evVtxEi4OvtD7NXQgcc=w280-h286-no?authuser=0' }} style={{
+                        height: 55,
+                        width: 55,
+                    }} />
+                    {/* <View style={{
+                        marginLeft: 5
+                    }}>
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'green'
+                        }}>BuyBold</Text>
+                        <Text style={{
+                            fontSize: 15,
+                            color: 'darkgreen',
+                            fontStyle: 'italic'
+                        }}>Look Before You Buy</Text>
+                    </View> */}
+                    <View style={{
+                        height: 'auto',
+                        width: '100%',
+                        flexDirection: 'row',
+                    }}>
+                        <SearchBar />
+                    </View>
+                </View>
+
+            </View>
+        </>)
+    }
 
     const onRefresh = async () => {
         console.log('refresh !')
         setRefreshing(true)
         var new_page = Math.max(1, page - 1)
-        await fetchTrending(new_page)
+        await fetchTrending(new_page, query)
         setPage(new_page)
         setRefreshing(false)
     }
 
     const onEndReached = async () => {
         setLoading(true)
-        await fetchTrending(page + 1)
+        await fetchTrending(page + 1, query)
         setPage(page + 1)
         // flatListRef.scrollToOffset({ animated: true, offset: 0 });
     }
@@ -225,6 +342,7 @@ export default Trending = (props) => {
 
     return (<>
         <SafeAreaView>
+            <Header setQuery={setQuery} />
             <FlatList
                 data={trendingData}
                 ref={(ref) => { flatListRef = ref }}
@@ -246,12 +364,6 @@ export default Trending = (props) => {
                 HeaderLoadingIndicator={() => { /** Your loading indicator */ }} // optional
                 FooterLoadingIndicator={() => { /** Your loading indicator */ }} // optional
                 enableAutoscrollToTop={true} // optional | default - false
-
-
-
-
-
-
             />
         </SafeAreaView>
     </>)
