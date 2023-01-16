@@ -159,7 +159,7 @@ export const CartView = (navigation) => {
               setLoading(true)
               // console.log("removing from cart")
               var userId = await AsyncStorage.getItem("user_id")
-              const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=0`, { method: 'POST' })
+              const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=0`, { method: 'POST' })
 
               fetchCart();
 

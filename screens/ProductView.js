@@ -68,17 +68,15 @@ function AddToCartButton({ productID }) {
 
     if (count === 0)
         return (
-            <Button icon="cart" mode="contained" style={{ backgroundColor: "black", borderRadius: 50 }} onPress={addProduct}>Add to Cart</Button>
+            <Button icon="cart" mode="contained" style={{ backgroundColor: "black", borderRadius: 50 }} onPress={addProduct}>Add </Button>
         )
     else
         return (
-            <View style={{ width: 200 }}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: "center", width: '100%' }}>
-                    <Button style={styles.button} onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
-                    <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black" }}>{count}</Text>
+                <View style={{ flex:1, flexDirection: 'row', flexWrap: 'nowrap', justifyContent:"space-around", width: '100%' }}>
+                    <Button style={styles.button}   onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
+                    <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black",minWidth:60 }}>{count}</Text>
                     <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
                 </View>
-            </View>
         );
 }
 /**
@@ -95,7 +93,7 @@ const ProductView = ({ item, navigation }) => {
 
             <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
             <View style={styles.contentWrapperStyle}>
-                <Text style={styles.txtNameStyle} >{item.name}+"hsadvn jdsh dbsjak bdjbah"</Text>
+                <Text style={styles.txtNameStyle} >{item.name}</Text>
             </View>
 
             <View style={{
@@ -110,7 +108,7 @@ const ProductView = ({ item, navigation }) => {
                 </View>
                 <View style={styles.bottomIcon}>
                     <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
-                    <Text style={styles.bottomContentText}>{item.price}</Text>
+                    <Text style={styles.bottomContentText}>{item.price} ₹ </Text>
                 </View>
             </View>
 
@@ -123,20 +121,20 @@ const ProductView = ({ item, navigation }) => {
 
 const styles = StyleSheet.create({
     itemWrapperStyle: {
-        width: '48%',
+        width: '50%',
         height: 'auto',
-        margin:"1%",
+        // margin:"1%",
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 32,
         borderColor: 'lightgrey',
-        borderWidth:2,
-        // borderBottomWidth: 0.5,
-        // borderLeftWidth: 0.5,
-        // borderRadius: 0,
+        // borderWidth:2,
+        borderBottomWidth: 0.5,
+        borderRightWidth: 0.5,
+        borderRadius: 0,
 
         backgroundColor: 'white',
-    borderRadius: 8,
+    // borderRadius: 8,
     paddingVertical: 45,
     paddingHorizontal: 25,
     // width: '100%',
@@ -193,7 +191,7 @@ const styles = StyleSheet.create({
 
     button: {
         backgroundColor: "black",
-        width: "10%"
+        width: '10%',
     },
 });
 
