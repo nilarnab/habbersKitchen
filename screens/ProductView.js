@@ -55,7 +55,7 @@ function AddToCartButton({ productID }) {
 
     const modifyCount = async (newCount) => {
         setLoading(true);
-        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&qnt_new=${newCount}`, { method: 'POST' })
+        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&prod_id=${productID}&qnt_new=${newCount}`, { method: 'POST' })
 
         fetchCart()
     }

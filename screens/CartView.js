@@ -127,7 +127,7 @@ export const CartView = (navigation) => {
                 setLoading(true)
                 // console.log("reducing from cart")
                 var userId = await AsyncStorage.getItem("user_id")
-                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
+                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
 
                 fetchCart();
 
@@ -138,7 +138,7 @@ export const CartView = (navigation) => {
                 // // console.log("adding to cart")
                 console.log(props)
                 var userId = await AsyncStorage.getItem("user_id")
-                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
+                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
                 fetchCart();
               }} props={props}><Text style={{ fontSize: 18, color: "black" }}>+</Text>
               </TouchableOpacity>
