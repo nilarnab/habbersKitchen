@@ -55,7 +55,7 @@ function AddToCartButton({ productID }) {
 
     const modifyCount = async (newCount) => {
         setLoading(true);
-        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&qnt_new=${newCount}`, { method: 'POST' })
+        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&prod_id=${productID}&qnt_new=${newCount}`, { method: 'POST' })
 
         fetchCart()
     }
@@ -68,17 +68,15 @@ function AddToCartButton({ productID }) {
 
     if (count === 0)
         return (
-            <Button icon="cart" mode="contained" style={{ backgroundColor: "black", borderRadius: 50 }} onPress={addProduct}>Add to Cart</Button>
+            <Button icon="cart" mode="contained" style={{ backgroundColor: "black", borderRadius: 50 }} onPress={addProduct}>Add </Button>
         )
     else
         return (
-            <View style={{ width: 200 }}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: "center", width: '100%' }}>
-                    <Button style={styles.button} onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
-                    <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black" }}>{count}</Text>
+                <View style={{ flex:1, flexDirection: 'row', flexWrap: 'nowrap', justifyContent:"space-around", width: '100%' }}>
+                    <Button style={styles.button}   onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
+                    <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black",minWidth:60 }}>{count}</Text>
                     <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
                 </View>
-            </View>
         );
 }
 /**
@@ -96,46 +94,26 @@ const ProductView = ({ item, navigation }) => {
             <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
             <View style={styles.contentWrapperStyle}>
                 <Text style={styles.txtNameStyle} >{item.name}</Text>
-
-                <Text style={styles.title}>{item.description}</Text>
-
-
             </View>
 
             <View style={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                width: '100%',
-                justifyContent: "center",
-                alignItems: 'center',
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                marginLeft: 15,
-            }}>
-                <View
-                    style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        marginBottom: 10,
-                    }}>
-                    <View style={styles.bottomIcon}>
-                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
-                    </View>
-                    <View style={styles.bottomContent}>
-                        <Text style={styles.bottomContentText}>{item.ratings}</Text>
-                    </View>
-                    <View style={styles.bottomIcon}>
-                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
-                    </View>
-                    <View style={styles.bottomContent}>
-                        <Text style={styles.bottomContentText}>{item.price}</Text>
-                    </View>
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: "space-between",
+                    marginBottom: 10,
+                }}>
+                <View style={styles.bottomIcon}>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
+                    <Text style={styles.bottomContentText}>{item.ratings}</Text>
                 </View>
-                <View style={{ marginBottom: 20 }}>
-                    <AddToCartButton productID={item._id} />
+                <View style={styles.bottomIcon}>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
+                    <Text style={styles.bottomContentText}>{item.price} ₹ </Text>
                 </View>
+            </View>
+
+            <View >
+                <AddToCartButton productID={item._id} />
             </View>
         </TouchableOpacity>
     );
@@ -145,13 +123,26 @@ const styles = StyleSheet.create({
     itemWrapperStyle: {
         width: '50%',
         height: 'auto',
+        // margin:"1%",
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 32,
         borderColor: 'lightgrey',
+        // borderWidth:2,
         borderBottomWidth: 0.5,
-        borderLeftWidth: 0.5,
+        borderRightWidth: 0.5,
         borderRadius: 0,
+
+        backgroundColor: 'white',
+    // borderRadius: 8,
+    paddingVertical: 45,
+    paddingHorizontal: 25,
+    // width: '100%',
+    marginVertical: 10,
+        shadowColor: '#171717',
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
     },
     itemImageStyle: {
         width: '100%',
@@ -161,7 +152,7 @@ const styles = StyleSheet.create({
     contentWrapperStyle: {
         alignItems: "flex-start",
         marginTop: 10,
-        marginBottom: 55,
+        marginBottom: 5,
         height: 'auto',
     },
     title: {
@@ -178,8 +169,10 @@ const styles = StyleSheet.create({
         borderColor: 'lightgrey',
     },
     bottomIcon: {
-        width: '10%',
-        marginHorizontal: 0,
+        width: '50%',
+        flex:1,
+        flexDirection:'row',
+        flexWrap:"nowrap",
     },
     bottomContentText: {
         color: "black",
@@ -189,14 +182,16 @@ const styles = StyleSheet.create({
 
     txtNameStyle: {
         fontSize: 20,
+        height:50,
         color: "black",
         fontWeight: "bold",
+        overflow:"hidden",
 
     },
 
     button: {
         backgroundColor: "black",
-        width: "10%"
+        width: '10%',
     },
 });
 
