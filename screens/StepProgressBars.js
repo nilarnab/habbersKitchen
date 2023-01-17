@@ -1,4 +1,4 @@
-export const PreBuyPipeLabels = ["Location Confirmation", "Order Summary", "Payment Method", "Completion"];
+export const PreBuyPipeLabels = ["Location Confirmation", 'User Info', "Order Summary", "Payment Method", "Completion"];
 export const PreBuyPipeStyles = {
     stepIndicatorSize: 25,
     currentStepIndicatorSize: 30,

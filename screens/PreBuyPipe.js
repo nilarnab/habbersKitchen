@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, PermissionsAndroid, StyleSheet, Image, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView, PermissionsAndroid, StyleSheet, Image, Text, View, AppRegistry, FlatList, TextInput, Button, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -391,7 +391,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
 }
 
 
-const OrderSummary = ({ setStage, prodId }) => {
+const OrderSummary = ({ setStage, prodId, stage }) => {
 
     const [lat, setLat] = useState(0.0)
     const [long, setLong] = useState(0.0)
@@ -404,9 +404,6 @@ const OrderSummary = ({ setStage, prodId }) => {
 
     useEffect(() => {
 
-
-        console.log("stage is")
-        console.log(setStage)
         const getCachedLocation = async () => {
             console.log("getting cacehd location")
 
@@ -464,7 +461,7 @@ const OrderSummary = ({ setStage, prodId }) => {
     }, [])
 
     const handleSummary = () => {
-        setStage(2)
+        setStage(stage + 1)
     }
 
     const ItemListingView = (data) => {
@@ -490,9 +487,10 @@ const OrderSummary = ({ setStage, prodId }) => {
 
 
                 if (prodId == null) {
-
+                    console.log('trying to get cart items')
                     var response = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
                     var responseJson = await response.json()
+                    console.log(responseJson)
 
                     if (responseJson.response != null) {
 
@@ -509,6 +507,7 @@ const OrderSummary = ({ setStage, prodId }) => {
                     }
                 }
                 else {
+                    console.log('trying to get prods')
                     var response = await fetch(BASE_URL + `products/get_one_product?prodId=${prodId}`, { method: 'GET' })
                     var responseJson = await response.json()
 
@@ -758,6 +757,8 @@ const PreBuyComp = (props) => {
         await checkSession()
 
         var userId = await AsyncStorage.getItem("user_id")
+        var name = await AsyncStorage.getItem("name")
+        var email = await AsyncStorage.getItem("email")
         var loc_lat = await AsyncStorage.getItem("loc_lat")
         var loc_long = await AsyncStorage.getItem("loc_long")
         var loc_addr1 = await AsyncStorage.getItem("loc_addr1")
@@ -765,15 +766,17 @@ const PreBuyComp = (props) => {
         var loc_pin = await AsyncStorage.getItem("loc_pin")
         var loc_city = await AsyncStorage.getItem("city")
 
+        var phoneNumber = auth().currentUser.phoneNumber
+
 
         if (prodId == null) {
             console.log("placing by cart")
-            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&name=${name}&email=${email}&phone=${phoneNumber}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
             var resp = await resp_raw.json()
         }
         else {
             console.log("placing by item")
-            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_item?user_id=${userId}&prod_id=${prodId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_item?user_id=${userId}&name=${name}&email=${email}&phone=${phoneNumber}&prod_id=${prodId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
             var resp = await resp_raw.json()
             console.log("response")
             console.log(resp)
@@ -809,9 +812,93 @@ const PreBuyComp = (props) => {
     }
 
 
+    const UserInformation = ({ setStage, stage }) => {
+
+        const [name, setName] = useState(null)
+        const [email, setEmail] = useState(null)
+        const [phone, setPhone] = useState(null)
+
+        const submitUserInfo = async () => {
+            setLoading(true)
+
+            if (name == null || email == null || phone == null) {
+                alert("Please fill all the fields")
+                setLoading(false)
+            }
+            else {
+
+                await AsyncStorage.setItem("name", name)
+                await AsyncStorage.setItem("email", email)
+                await AsyncStorage.setItem("phone", phone)
+                setStage(stage + 1)
+                setLoading(false)
+            }
+        }
 
 
+        useEffect(() => {
+            const fetchUser = async () => {
+                const name = await AsyncStorage.getItem("name")
+                const email = await AsyncStorage.getItem("email")
+                var user = auth().currentUser
+                const phone = user.phoneNumber
 
+                setName(name)
+                setEmail(email)
+                setPhone(phone)
+                console.log('phone', phone)
+
+            }
+
+            fetchUser();
+
+        }, [])
+
+
+        return <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 30, color: 'black' }}>User Information</Text>
+
+            <Text style={{
+                fontSize: 15,
+                color: 'black',
+                marginTop: 20
+            }}>For making a successful delivery, we need to know a little bit more about you .. </Text>
+
+            <TextInput placeholder="Name" style={{ borderWidth: 1, borderColor: 'black', width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
+                onChangeText={setName}
+                value={name}
+            />
+            <TextInput placeholder="Email" style={{ borderWidth: 1, borderColor: 'black', width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
+                onChangeText={setEmail}
+                value={email}
+                autoCompleteType="email"
+                TextContentType="emailAddress"
+            />
+            <TouchableOpacity placeholder="Phone" style={{ borderWidth: 1, borderColor: 'black', width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
+                onPress={() => {
+                    Alert.alert("Only one phone number can be registered for now.", "Please contact us for any changes.")
+                }}
+            >
+                <Text style={{ color: 'black' }}>{phone}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={async () => {
+                await submitUserInfo()
+            }} style={{
+                alignItems: 'center',
+                padding: 20,
+                borderWidth: 1,
+                borderColor: 'green',
+                borderRadius: 10,
+                width: 100,
+                marginTop: 20
+            }}>
+                <Text style={{ fontWeight: 'bold', color: 'green' }}>Next</Text>
+            </TouchableOpacity>
+        </View>
+
+
+    }
 
 
     const Loader = () => {
@@ -844,7 +931,7 @@ const PreBuyComp = (props) => {
             return (
                 <>
                     <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
-                        <StepProgressBar step={0} />
+                        <StepProgressBar step={stage} />
                         <AddressDetails setStage={setStage} stage={stage} />
                     </SafeAreaView>
                 </>
@@ -855,29 +942,40 @@ const PreBuyComp = (props) => {
             return (
                 <>
                     <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
-                        <StepProgressBar step={1} />
-                        <OrderSummary setStage={setStage} prodId={prodId} />
+                        <StepProgressBar step={stage} />
+                        <UserInformation setStage={setStage} stage={stage} />
                     </SafeAreaView>
                 </>
-            )
+            );
         }
+
         if (stage == 2) {
             return (
                 <>
                     <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
-                        <StepProgressBar step={2} setStage={setStage} />
+                        <StepProgressBar step={stage} />
+                        <OrderSummary setStage={setStage} prodId={prodId} stage={stage} />
+                    </SafeAreaView>
+                </>
+            )
+        }
+        if (stage == 3) {
+            return (
+                <>
+                    <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
+                        <StepProgressBar step={stage} setStage={setStage} />
                         <PaymentGateway />
                     </SafeAreaView>
                 </>
             )
         }
 
-        if (stage == 3) {
+        if (stage == 4) {
 
             return (
                 <>
                     <SafeAreaView style={{ backgroundColor: 'white', height: '100%' }}>
-                        <StepProgressBar step={3} setStage={setStage} />
+                        <StepProgressBar step={stage} setStage={setStage} />
                         <Success />
                     </SafeAreaView>
                 </>
@@ -892,7 +990,6 @@ const PreBuyComp = (props) => {
 
 
 }
-
 
 
 const styles = StyleSheet.create({

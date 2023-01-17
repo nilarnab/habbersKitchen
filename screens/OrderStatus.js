@@ -604,7 +604,7 @@ const OrderStatus = (props) => {
                     <FlatList
                         horizontal={true}
                         data={OrderList}
-                        renderItem={({ item }) => <OrderView item={item} />}
+                        renderItem={OrderView}
                         keyExtractor={item => item.order_id}
                         style={{ height: 'auto' }}
                     />
