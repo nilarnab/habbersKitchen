@@ -72,11 +72,11 @@ function AddToCartButton({ productID }) {
         )
     else
         return (
-                <View style={{ flex:1, flexDirection: 'row', flexWrap: 'nowrap', justifyContent:"space-around", width: '100%' }}>
-                    <Button style={styles.button}   onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
-                    <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black",minWidth:60 }}>{count}</Text>
-                    <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
-                </View>
+            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'nowrap', justifyContent: "space-around", width: '100%' }}>
+                <Button style={styles.button} onPress={() => modifyCount(count - 1)} mode="contained">-</Button>
+                <Text style={{ flexGrow: 1, textAlign: "center", fontSize: 20, color: "black", minWidth: 60 }}>{count}</Text>
+                <Button style={styles.button} onPress={() => modifyCount(count + 1)} mode="contained">+</Button>
+            </View>
         );
 }
 /**
@@ -97,11 +97,11 @@ const ProductView = ({ item, navigation }) => {
             </View>
 
             <View style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: "space-between",
-                    marginBottom: 10,
-                }}>
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: "space-between",
+                marginBottom: 10,
+            }}>
                 <View style={styles.bottomIcon}>
                     <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
                     <Text style={styles.bottomContentText}>{item.ratings}</Text>
@@ -132,15 +132,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderRightWidth: 0.5,
         borderRadius: 0,
-
         backgroundColor: 'white',
-    // borderRadius: 8,
-    paddingVertical: 45,
-    paddingHorizontal: 25,
-    // width: '100%',
-    marginVertical: 10,
+        // borderRadius: 8,
+        paddingVertical: 45,
+        paddingHorizontal: 25,
+        // width: '100%',
         shadowColor: '#171717',
-        shadowOffset: {width: -2, height: 4},
+        shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
     },
@@ -170,9 +168,9 @@ const styles = StyleSheet.create({
     },
     bottomIcon: {
         width: '50%',
-        flex:1,
-        flexDirection:'row',
-        flexWrap:"nowrap",
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: "nowrap",
     },
     bottomContentText: {
         color: "black",
@@ -182,10 +180,10 @@ const styles = StyleSheet.create({
 
     txtNameStyle: {
         fontSize: 20,
-        height:50,
+        height: 50,
         color: "black",
         fontWeight: "bold",
-        overflow:"hidden",
+        overflow: "hidden",
 
     },
 

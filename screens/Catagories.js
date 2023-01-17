@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, Image, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'
+import LinearGradient from 'react-native-linear-gradient';
 
 const bigCatagoryActionCenter = async ({ item }) => {
 
@@ -67,15 +68,22 @@ const CatagoryItem = ({ item }) => {
 
         return (
             <>
+
                 <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+
+                    {/* <Text style={styles.catagoryText}>{item.title}</Text> */}
+
+                    {/* <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} /> */}
+
+
                     <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
                         width: '100%',
                         height: '100%',
-                        borderRadius: 8
                     }} imageStyle={{ borderRadius: 8 }}>
                         {/* <Text>{item.title}</Text> */}
                     </ImageBackground>
                 </TouchableOpacity>
+
             </>
         )
     }
@@ -104,8 +112,8 @@ const Catagories = () => {
     return (
         <>
             <View style={styles.catagoryBlock}>
-                <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/like--v4.png' }} style={{ width: 35, height: 35 }} />
-                <Text style={styles.catagoryText}>Just for you .. </Text>
+                {/* <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/like--v4.png' }} style={{ width: 35, height: 35 }} />
+                <Text style={styles.catagoryText}>Just for you .. </Text> */}
             </View>
             <View style={styles.catContainer}>
                 <FlatList
@@ -137,8 +145,7 @@ const styles = StyleSheet.create({
     catItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
-        borderRadius: 0,
+        borderRadius: 10,
         height: 150,
         width: 150,
         shadowColor: "#000",

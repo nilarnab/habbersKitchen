@@ -9,6 +9,9 @@ import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native'
 import SideBar from '../SideBar';
 
+const WHITE_COLOR = '#FFFFFF'
+const OFFWHITE_COLOR = '#F7F7F7'
+
 
 export const HomeScreen = (props) => {
     const [products, setProducts] = useState([])
@@ -124,7 +127,7 @@ export const HomeScreen = (props) => {
             <View style={{
                 width: mainWidth,
                 height: '100%',
-                backgroundColor: 'white',
+                backgroundColor: OFFWHITE_COLOR,
                 elevation: 1
             }}>
                 <Home props={props} />
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
     containter: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#ffff',
+        backgroundColor: 'green',
         elevation: 2,
         flexDirection: 'row'
     },
@@ -156,7 +159,6 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 20,
         borderRadius: 100,
-        backgroundColor: 'white',
         borderWidth: 1,
         borderColor: 'lightgrey',
         marginRight: 10

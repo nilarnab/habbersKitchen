@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
+import { View, FlatList, Image, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'
 
 
@@ -94,12 +94,10 @@ const SearchableCatagories = (props) => {
             return (
                 <>
                     <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
-                        <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
-                            width: '100%',
-                            height: '100%',
-                        }} imageStyle={{ borderRadius: 50 }}>
-                            {/* <Text>{item.title}</Text> */}
-                        </ImageBackground>
+                        <Image source={{ uri: item.image }} resizeMode="cover" style={styles.catItemImage} />
+
+                        <Text style={styles.catItemText}>{item.title}</Text>
+
                     </TouchableOpacity>
                 </>
             )
@@ -116,8 +114,6 @@ const SearchableCatagories = (props) => {
         }
     }
 
-    // console.log("searchable prop")
-    // console.log(props)
     return (
         <>
             {/* <View style={styles.catagoryText}>
@@ -155,19 +151,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        borderRadius: 100,
-        height: 80,
-        width: 80,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.29,
-        shadowRadius: 4.65,
-        elevation: 0,
-        margin: 10
-
+        borderRadius: 10,
+        height: 'auto',
+        width: 'auto',
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        marginHorizontal: 10,
+        marginVertical: 5,
+        flexDirection: 'row',
+        elevation: 10,
+    },
+    catItemImage: {
+        width: 30,
+        height: 30,
+        borderRadius: 8
+    },
+    catItemText: {
+        marginLeft: 5
     },
     catItemQuad: {
         justifyContent: 'center',

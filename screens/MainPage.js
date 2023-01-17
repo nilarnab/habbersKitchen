@@ -87,7 +87,7 @@ function MainPage(props) {
 
 
                 })}
-                sceneContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
+                sceneContainerStyle={{ elevation: 10 }}
             // tabBarOptions={{
             //     activeTintColor: '#ffffff',
             // }}
