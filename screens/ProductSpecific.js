@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground, FlatList } from 'react-native';
+import { Animated, Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground,ToastAndroid, FlatList } from 'react-native';
 // import Ionicons from '@expo/vector-icons/Ionicons';
 import Video, { DRMType } from 'react-native-video';
 import { ActivityIndicator, Button } from 'react-native-paper';
@@ -36,6 +36,134 @@ const ProductImage = (url, index) => {
         }}>
         </View>
     </>
+
+}
+function AddToWishButton({productID}){
+   
+    const [loading, setLoading] = useState(true);
+    
+    // const [fetchbutton,setfetchbutton]=useState(true);
+    const [fetchaddbutton,setfetchaddbutton]=useState(true)
+    
+    
+    const [userid, setUserid] = useState(null)
+    
+    const checkstatus=async()=>{
+        setLoading(true);
+        var user_id_temp = await AsyncStorage.getItem('user_id');
+        setUserid(user_id_temp);
+        const resp = await fetch(BASE_URL + `wishlist/get_ind/${userid}/${productID}`, { method: 'GET' })
+        const data = resp.json();
+        if(resp){
+            console.log("data fetched");
+            setLoading(false)
+
+            // setwishbutton("Remove from Wishlist")
+
+            setfetchaddbutton(false)
+            
+            // setLoading(false)
+        }
+        else{
+            setLoading(false)
+            // setwishbutton("Add to Wishlist")
+            console.log("some error has occured")
+        }
+    }
+    useEffect(() => {
+        checkstatus();
+
+    }, [])
+    const addTOwish = async () => {
+
+        setLoading(true);
+      
+        var user_id_temp = await AsyncStorage.getItem('user_id');
+        setUserid(user_id_temp)
+
+        const resp = await fetch(BASE_URL + `wishlist/insert-item?user_id=${userid}&prod_id=${productID}`, { method: 'POST' })
+        // const data = await resp.json();
+        if(resp){
+            console.log("data inserted");
+            setLoading(false)
+            setfetchaddbutton(false)
+          
+          
+            ToastAndroid.show('added successfully!', ToastAndroid.SHORT);
+            // checkstatus();
+            // setLoading(false)
+        }
+        else{
+            console.log("some error has occured")
+        }
+        
+        
+    };
+    const removewish = async () => {
+        setLoading(true);
+        // var user_id_temp = await AsyncStorage.getItem('user_id')
+        var user_id_temp = await AsyncStorage.getItem('user_id');
+        setUserid(user_id_temp)
+
+        const resp = await fetch(BASE_URL + `wishlist/remove/${userid}/${productID}`, { method: 'POST' })
+        const data = await resp.json();
+        if(data){
+            console.log("data removed");
+            setLoading(false)
+            
+            setfetchaddbutton(true)
+            ToastAndroid.show('Remove successfully!', ToastAndroid.SHORT);
+            // checkstatus();
+            // setLoading(false)
+        }
+        else{
+            console.log("some error has occured")
+        }
+        
+    };
+    
+    if (loading) {
+        return (
+            <ActivityIndicator size={38} color="black" />
+        );
+    }
+    if(fetchaddbutton){
+    return (
+        <View>
+        <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
+                Add to Wishlist
+            </Button>
+        {/* <FontAwesomeIcon icon="fa-regular fa-heart" onPress={addTOwish}  /> */}
+        {/* <FontAwesomeIcon icon={ faMugSaucer }  onPress={addTOwish}/> */}
+        {/* <WishIcon onPress={addTOwish} /> */}
+        </View>
+      );
+       
+        //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={addTOwish}>
+        //     {wishbutton}
+        // </Button>
+        
+       
+   
+    
+    }
+    else {
+        return(
+            <View>
+       <Button icon="heart" mode="contained" style={{ backgroundColor: "green" }} onPress={removewish}>
+                Remove from Wishlist
+            </Button>
+      {/* <FontAwesomeIcon icon="fa-solid fa-heart" onPress={removewish}  /> */}
+      {/* <FontAwesomeIcon icon={ faMugSaucer } onPress={removewish} /> */}
+      {/* <WishIcon onPress={removewish}/> */}
+    </View>
+        //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={removewish}>
+        //     {wishbutton}
+        // </Button>
+
+        )
+    }
+
 
 }
 
@@ -600,6 +728,7 @@ export default function ProductSpecific({ route, navigation }) {
                         }}>
                             <Text style={{ color: 'green', fontSize: 20, fontWeight: 'bold' }}>Buy Now</Text>
                         </TouchableOpacity>
+                        <AddToWishButton productID={item._id} />
                     </View>
                 </Animated.View>
             </ScrollView >
