@@ -52,14 +52,11 @@ export default Trending = (props) => {
 
     }
 
-
     useEffect(() => {
 
         fetchTrending(1, query)
 
     }, [])
-
-
 
     const SearchBar = () => {
         const [textVal, setTextVal] = useState('')
@@ -220,32 +217,48 @@ export default Trending = (props) => {
                 height: 'auto',
                 width: 200,
                 paddingTop: 0,
-                paddingBottom: 25,
+                paddingBottom: 0,
                 paddingHorizontal: 20,
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderRightColor: 'lightgrey',
-                borderRightWidth: 0.5,
-
+                // borderRightColor: 'lightgrey',
+                // borderRightWidth: 0.5,
+                backgroundColor: 'white',
+                marginLeft: 5,
+                borderRadius: 20,
             }} onPress={OpenSpecificView}>
                 <View
                     style={{
                         flexDirection: 'row',
                     }}>
                     <View style={{
-                        width: '50%'
+                        width: 90,
+                        marginLeft: 5,
                     }}>
-
-                        <Image source={{ uri: item.image }} style={{ height: 100, width: 100, borderRadius: 20 }} />
+                        <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20 }} />
                     </View>
 
                     <View style={{
-                        width: '50%'
+                        width: '50%',
+                        justifyContent: 'center',
                     }}>
 
                         <Text style={styles.titleStyle}>{item.name}</Text>
                     </View>
 
+                </View>
+
+                <View>
+                    <Text style={{
+                        fontSize: 15,
+                        color: 'grey'
+                    }}>
+                        Now at only
+                    </Text>
+                    <Text style={{
+                        fontSize: 25,
+                        color: 'black'
+                    }}>{item.price} /-</Text>
                 </View>
 
             </TouchableOpacity>
@@ -295,17 +308,16 @@ export default Trending = (props) => {
                     width: '100%',
                     paddingVertical: 20,
                     borderColorBottom: 'lightgrey',
-                    borderBottomWidth: 0.5,
-                    alignItems: 'center'
+                    borderBottomWidth: 0.2,
+                    alignItems: 'center',
                 }}>
 
                     <View style={styles.textContainer}>
-                        <Text style={styles.titleStyle}>{item.title}</Text>
+                        <Text style={styles.titleMainStyle}>{item.title}</Text>
                         <Text style={styles.descr1Style}>{item.description1}</Text>
                     </View>
 
                     <VidRendrable />
-
 
                     <View style={styles.textContainer}>
                         <Text style={styles.titleStyle}>Buy From Here</Text>
@@ -320,6 +332,7 @@ export default Trending = (props) => {
                             height: 150,
                             width: '100%',
                             marginVertical: 5,
+                            marginLeft: 5,
                         }}
                     />
 
@@ -399,19 +412,27 @@ const styles = StyleSheet.create({
     textContainer: {
         height: 'auto',
         width: '100%',
-        paddingVertical: 20,
+        marginTop: 10,
+        marginBottom: 5,
         paddingHorizontal: 10,
+    },
+    titleMainStyle: {
+        fontSize: 15,
+        color: 'black',
+        fontWeight: 'bold',
+        flexWrap: 'wrap',
+        marginLeft: 0,
     },
     titleStyle: {
         fontSize: 15,
         color: 'black',
         fontWeight: 'bold',
         flexWrap: 'wrap',
-        marginLeft: 10,
+        marginLeft: 0,
     },
     descr1Style: {
         fontSize: 15,
-        color: 'grey',
+        color: 'black',
     },
     descr2Style: {
         fontSize: 12,
