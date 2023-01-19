@@ -35,6 +35,15 @@ const SideBar = ({ props, setState }) => {
                             <Text style={styles.tabTextStyle}>See Profile</Text>
                         </TouchableOpacity>
                     </View>
+                     <View style={styles.tabContainer}>
+                        <TouchableOpacity onPress={async () => {
+                            setState(0)
+                            props.navigate('Wishlist')
+                        }} style={styles.tabTab}>
+                            <Text style={styles.tabTextStyle}>Your Wishlist</Text>
+                        </TouchableOpacity>
+                    </View>
+
 
                     <View style={styles.tabContainer}>
                         <TouchableOpacity onPress={async () => {

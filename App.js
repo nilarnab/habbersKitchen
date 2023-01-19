@@ -16,6 +16,7 @@ import PreBuyComp from './screens/PreBuyPipe';
 import OrderStatus from './screens/OrderStatus';
 import OldOrderStatus from './screens/OldOrder';
 import SplashScreen from 'react-native-splash-screen';
+import Wishlistview from './screens/Wishlistview';
 
 
 import {
@@ -82,6 +83,7 @@ const App: () => Node = () => {
           <Stack.Screen name="PreBuyPipe" component={PreBuyComp} />
           <Stack.Screen name="OrderStatus" component={OrderStatus} />
           <Stack.Screen name="OldOrderStatus" component={OldOrderStatus} />
+          <Stack.Screen name="Wishlist" component={Wishlistview} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
