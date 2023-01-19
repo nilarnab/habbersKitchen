@@ -10,7 +10,7 @@ import { useIsFocused } from '@react-navigation/native'
 import SideBar from '../SideBar';
 
 const WHITE_COLOR = '#FFFFFF'
-const OFFWHITE_COLOR = '#F7F7F7'
+const BACKGROUND_COLOR = 'white'
 
 
 export const HomeScreen = (props) => {
@@ -115,7 +115,10 @@ export const HomeScreen = (props) => {
 
     return (
 
+
         <View style={styles.containter}>
+
+
             <Animated.View style={{
                 width: fadeAnim,
                 height: '100%',
@@ -127,7 +130,7 @@ export const HomeScreen = (props) => {
             <View style={{
                 width: mainWidth,
                 height: '100%',
-                backgroundColor: OFFWHITE_COLOR,
+                backgroundColor: BACKGROUND_COLOR,
                 elevation: 1
             }}>
                 <Home props={props} />

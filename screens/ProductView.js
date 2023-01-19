@@ -91,11 +91,53 @@ const ProductView = ({ item, navigation }) => {
     return (
         <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
 
+
+            {/* <View style={{
+                height: 180,
+                width: 180,
+                borderRadius: 90,
+                backgroundColor: '#CCF2F4',
+                alignSelf: 'center',
+                position: 'absolute',
+                transform: [{ translateY: -40 }],
+            }}></View> */}
+
+            {/* <View style={{
+                height: 100,
+                width: 100,
+                borderRadius: 50,
+                backgroundColor: '#A4EBF3',
+                alignSelf: 'center',
+                position: 'absolute',
+                transform: [{ translateY: 40 }],
+            }}></View> */}
+
+            <View style={{
+                height: 300,
+                width: 300,
+                borderRadius: 150,
+                backgroundColor: '#CCF2F4',
+                alignSelf: 'center',
+                position: 'absolute',
+                bottom: 0,
+                transform: [{ translateY: 150 }],
+            }}></View>
+
+            <View style={{
+                height: 100,
+                width: 100,
+                borderRadius: 50,
+                backgroundColor: '#A4EBF3',
+                alignSelf: 'center',
+                position: 'absolute',
+                bottom: 0,
+                transform: [{ translateY: 40 }],
+            }}></View>
+
             <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
             <View style={styles.contentWrapperStyle}>
                 <Text style={styles.txtNameStyle} >{item.name}</Text>
             </View>
-
             <View style={{
                 width: '100%',
                 flexDirection: 'row',
@@ -121,21 +163,21 @@ const ProductView = ({ item, navigation }) => {
 
 const styles = StyleSheet.create({
     itemWrapperStyle: {
-        width: '50%',
+        width: '47%',
         height: 'auto',
-        // margin:"1%",
-        paddingHorizontal: 16,
-        paddingTop: 16,
+        overflow: 'hidden',
+        margin: "1.5%",
+        // margin: 5
         paddingBottom: 32,
         borderColor: 'lightgrey',
         // borderWidth:2,
         borderBottomWidth: 0.5,
         borderRightWidth: 0.5,
-        borderRadius: 0,
-        backgroundColor: 'white',
+        borderRadius: 10,
+        backgroundColor: '#F4F9F9',
         // borderRadius: 8,
-        paddingVertical: 45,
-        paddingHorizontal: 25,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
         // width: '100%',
         shadowColor: '#171717',
         shadowOffset: { width: -2, height: 4 },

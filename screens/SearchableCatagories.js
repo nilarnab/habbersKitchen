@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { View, FlatList, Image, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL } from '../env'

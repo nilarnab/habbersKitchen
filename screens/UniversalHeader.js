@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     containter: {
         width: '100%',
         height: 60,
-        backgroundColor: '#ffff',
-        elevation: 2,
+        // backgroundColor: '#ffff',
+        // elevation: 2,
         flexDirection: 'row'
     },
 
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     {
         width: '80%',
         height: '100%',
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
         position: 'absolute',
         right: 0,
     },
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 20,
         borderRadius: 100,
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
     },
 
     input: {

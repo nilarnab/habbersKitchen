@@ -503,7 +503,31 @@ export default function ProductSpecific({ route, navigation }) {
 
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView style={{ backgroundColor: "rgb(250, 250, 250)" }}>
+            <ScrollView style={{ backgroundColor: "white" }}>
+
+                {/* <View style={{
+                    height: 400,
+                    width: 400,
+                    borderRadius: 300,
+                    backgroundColor: '#CCF2F4',
+                    // alignSelf: 'center',
+                    position: 'absolute',
+                    bottom: -50,
+                    left: -50,
+                    // transform: [{ translateY: -40 }],
+                }}></View>
+
+                <View style={{
+                    height: 180,
+                    width: 180,
+                    borderRadius: 300,
+                    backgroundColor: '#A4EBF3',
+                    // alignSelf: 'center',
+                    position: 'absolute',
+                    bottom: -60,
+                    left: -60,
+                    // transform: [{ translateY: -40 }],
+                }}></View> */}
 
                 <View style={{
                     marginTop: 20

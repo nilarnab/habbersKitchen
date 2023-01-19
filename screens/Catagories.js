@@ -68,21 +68,36 @@ const CatagoryItem = ({ item }) => {
 
         return (
             <>
+                <View style={styles.catItem}>
+                    <TouchableOpacity onPress={() => bigCatagoryActionCenter({ item })}>
 
-                <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+                        {/* <Text style={styles.catagoryText}>{item.title}</Text> */}
 
-                    {/* <Text style={styles.catagoryText}>{item.title}</Text> */}
+                        {/* <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} /> */}
 
-                    {/* <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} /> */}
+                        {/* <View style={{
+                            position: 'absolute',
+                            height: 200,
+                            width: 200,
+                            borderRadius: 100,
+                            bottom: 0,
+                            transform: [{ translateY: 100 }],
+                            alignSelf: 'center',
+                            backgroundColor: '#A4EBF3'
+                        }}></View> */}
+
+                        <Image source={{ uri: item.image }} resizeMode="cover" style={{
+                            width: 180,
+                            height: 180,
+                            margin: 0,
+                            borderRadius: 20
+                        }} Image>
+                        </Image>
+                        {/* <Text style={styles.catItemTitle}>{item.title}</Text> */}
 
 
-                    <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
-                        width: '100%',
-                        height: '100%',
-                    }} imageStyle={{ borderRadius: 8 }}>
-                        {/* <Text>{item.title}</Text> */}
-                    </ImageBackground>
-                </TouchableOpacity>
+                    </TouchableOpacity>
+                </View>
 
             </>
         )
@@ -144,10 +159,11 @@ const styles = StyleSheet.create({
     },
     catItem: {
         alignItems: 'center',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         borderRadius: 10,
-        height: 150,
-        width: 150,
+        backgroundColor: '#F4F9F9',
+        height: 180,
+        width: 180,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -157,23 +173,28 @@ const styles = StyleSheet.create({
         margin: 2,
         borderColor: 'lightgrey',
         padding: 2,
-        borderRightWidth: 0.5
+        borderRightWidth: 0.5,
+        overflow: 'hidden'
 
     },
+    catItemTitle: {
+        fontWeight: 'bold',
+        fontSize: 15,
+        color: 'black',
+        alignSelf: 'center',
+    },
     catItemQuad: {
+        backgroundColor: '#F4F9F9',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
         borderRadius: 8,
         padding: 11,
-        height: 150,
-        width: 150,
+        height: 180,
+        width: 180,
         margin: 4,
-        borderColor: 'lightgrey',
-        borderRightWidth: 0.5
     },
 
     catagoryBlock: {
@@ -197,10 +218,9 @@ const styles = StyleSheet.create({
     catItemSmall: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
         borderRadius: 8,
-        height: 59,
-        width: 59,
+        height: 75,
+        width: 75,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -208,7 +228,6 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
-        elevation: 0,
         margin: 2
 
     },

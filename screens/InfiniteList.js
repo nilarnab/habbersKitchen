@@ -200,6 +200,7 @@ const InfiniteList = (props) => {
                     refreshing={refreshing}
                     onRefresh={resetList}
                     numColumns={2}
+                    style={{ alignSelf: 'center', backgroundColor: 'white' }}
 
                 />
             )
@@ -233,14 +234,27 @@ const styles = StyleSheet.create({
 
     catagoryBlock: {
         fontWeight: '800',
-        height: 30,
+        height: 0,
+        width: '100%',
         color: 'black',
         flexDirection: 'row',
+        borderTopColor: 'lightgrey',
+        borderTopWidth: 0,
         backgroundColor: 'white',
         borderTopStartRadius: 40,
         borderTopEndRadius: 40,
-        transform: [{ translateY: 10 }],
-        elevation: 10,
+        transform: [{ translateY: 20 }],
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: -16,
+        },
+        shadowOpacity: 0.37,
+        shadowRadius: 7.49,
+
+        elevation: 12,
+
     },
 
     catagoryText: {
