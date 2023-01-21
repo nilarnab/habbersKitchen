@@ -44,7 +44,7 @@ function MainPage(props) {
             <Tab.Navigator
                 screenOptions={({ route }) => ({
 
-                    "tabBarActiveTintColor": "black",
+                    "tabBarActiveTintColor": "#3a748a",
                     tabBarInactiveTintColor: 'gray',
                     "tabBarStyle": [
                         {
@@ -75,7 +75,7 @@ function MainPage(props) {
 
                     contentStyle: {
                         backgroundColor: '#FFFFFF',
-                        activeTintColor: '#ffffff',
+                        activeTintColor: '#A4EBF3',
                     },
                     headerMode: 'screen',
                     defaultNavigationOptions: ({ navigation }) => {

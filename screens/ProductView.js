@@ -5,6 +5,7 @@ import { ActivityIndicator, Button } from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { BASE_URL } from '../env'
+import LinearGradient from "react-native-linear-gradient";
 
 function AddToCartButton({ productID }) {
     const [count, setCount] = useState(0);
@@ -89,6 +90,7 @@ const ProductView = ({ item, navigation }) => {
     };
 
     return (
+
         <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
 
 
@@ -111,52 +113,59 @@ const ProductView = ({ item, navigation }) => {
                 position: 'absolute',
                 transform: [{ translateY: 40 }],
             }}></View> */}
-
-            <View style={{
-                height: 300,
-                width: 300,
-                borderRadius: 150,
-                backgroundColor: '#CCF2F4',
-                alignSelf: 'center',
-                position: 'absolute',
-                bottom: 0,
-                transform: [{ translateY: 150 }],
-            }}></View>
-
-            <View style={{
-                height: 100,
-                width: 100,
-                borderRadius: 50,
-                backgroundColor: '#A4EBF3',
-                alignSelf: 'center',
-                position: 'absolute',
-                bottom: 0,
-                transform: [{ translateY: 40 }],
-            }}></View>
-
-            <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
-            <View style={styles.contentWrapperStyle}>
-                <Text style={styles.txtNameStyle} >{item.name}</Text>
-            </View>
-            <View style={{
+            <LinearGradient colors={['white', 'aliceblue', '#A4EBF3']} style={{
                 width: '100%',
-                flexDirection: 'row',
-                justifyContent: "space-between",
-                marginBottom: 10,
+                paddingVertical: 10,
+                paddingHorizontal: 10,
             }}>
-                <View style={styles.bottomIcon}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
-                    <Text style={styles.bottomContentText}>{item.ratings}</Text>
-                </View>
-                <View style={styles.bottomIcon}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
-                    <Text style={styles.bottomContentText}>{item.price} ₹ </Text>
-                </View>
-            </View>
+                <View style={{
+                    height: 350,
+                    width: 350,
+                    borderRadius: 250,
+                    backgroundColor: '#CCF2F4',
+                    alignSelf: 'center',
+                    position: 'absolute',
+                    bottom: 0,
+                    shadowColor: "black",
+                    elevation: 10,
+                    transform: [{ translateY: 150 }],
+                }}></View>
 
-            <View >
-                <AddToCartButton productID={item._id} />
-            </View>
+                <View style={{
+                    height: 150,
+                    width: 150,
+                    borderRadius: 100,
+                    backgroundColor: '#A4EBF3',
+                    alignSelf: 'center',
+                    position: 'absolute',
+                    bottom: 0,
+                    transform: [{ translateY: 40 }],
+                }}></View>
+
+                <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
+                <View style={styles.contentWrapperStyle}>
+                    <Text style={styles.txtNameStyle} >{item.name}</Text>
+                </View>
+                <View style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: "space-between",
+                    marginBottom: 10,
+                }}>
+                    <View style={styles.bottomIcon}>
+                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/star.png' }} style={{ width: 20, height: 20 }} />
+                        <Text style={styles.bottomContentText}>{item.ratings}</Text>
+                    </View>
+                    <View style={styles.bottomIcon}>
+                        <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/price-tag.png' }} style={{ width: 20, height: 20 }} />
+                        <Text style={styles.bottomContentText}>{item.price} ₹ </Text>
+                    </View>
+                </View>
+
+                <View >
+                    <AddToCartButton productID={item._id} />
+                </View>
+            </LinearGradient>
         </TouchableOpacity>
     );
 };
@@ -167,22 +176,14 @@ const styles = StyleSheet.create({
         height: 'auto',
         overflow: 'hidden',
         margin: "1.5%",
-        // margin: 5
-        paddingBottom: 32,
         borderColor: 'lightgrey',
         // borderWidth:2,
         borderBottomWidth: 0.5,
         borderRightWidth: 0.5,
         borderRadius: 10,
-        backgroundColor: '#F4F9F9',
-        // borderRadius: 8,
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        // width: '100%',
-        shadowColor: '#171717',
-        shadowOffset: { width: -2, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        shadowColor: '#3a748a',
+        shadowOffset: { width: 20, height: 10 },
+        elevation: 15,
     },
     itemImageStyle: {
         width: '100%',

@@ -145,7 +145,7 @@ const InfiniteList = (props) => {
                     refreshing={refreshing}
                     onRefresh={resetList}
                     numColumns={2}
-                    style={{ alignSelf: 'center', backgroundColor: 'white' }}
+                    style={{ alignSelf: 'center' }}
 
                 />
             )

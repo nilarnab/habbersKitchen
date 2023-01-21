@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native'
 import SideBar from '../SideBar';
+import LinearGradient from 'react-native-linear-gradient';
 
 const WHITE_COLOR = '#FFFFFF'
 const BACKGROUND_COLOR = 'white'
@@ -81,7 +82,7 @@ export const HomeScreen = (props) => {
 
         return (
             <>
-                <View>
+                <LinearGradient colors={['white', 'white', 'white']}>
                     <ImageBackground
                         // source={{ uri: '' }}
                         resizeMode="stretch"
@@ -106,7 +107,7 @@ export const HomeScreen = (props) => {
                             navigation={props.props.navigation}
                         />
                     </ImageBackground>
-                </View>
+                </LinearGradient>
             </>
         )
     }

@@ -66,7 +66,6 @@ const SignBoard = ({ item }) => {
 }
 
 const CarouselCardItem = ({ item, index }) => {
-    console.log("carousel data at item", item);
     if (item.type == 1) {
 
         return (

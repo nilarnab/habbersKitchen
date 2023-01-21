@@ -68,7 +68,7 @@ const CatagoryItem = ({ item }) => {
 
         return (
             <>
-                <View style={styles.catItem}>
+                <LinearGradient colors={['white', 'aliceblue']} style={styles.catItem}>
                     <TouchableOpacity onPress={() => bigCatagoryActionCenter({ item })}>
 
                         {/* <Text style={styles.catagoryText}>{item.title}</Text> */}
@@ -97,7 +97,7 @@ const CatagoryItem = ({ item }) => {
 
 
                     </TouchableOpacity>
-                </View>
+                </LinearGradient>
 
             </>
         )

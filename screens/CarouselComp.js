@@ -27,11 +27,9 @@ const CarouselComp = () => {
     const [carouselData, setcarouselData] = useState([]);
     useEffect(() => {
         // fecth will be here (guess so)
-        console.log("tryinna get carousel data");
         fetch(BASE_URL + 'carousel/getCarousel')
             .then(res => res.json())
             .then(result => {
-                console.log("carousel data", result);
                 setcarouselData(result.data);
             })
     }, []);

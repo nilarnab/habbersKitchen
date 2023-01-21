@@ -5,6 +5,7 @@ import { BASE_URL } from '../env';
 import { useIsFocused } from '@react-navigation/native';
 import Video, { DRMType } from 'react-native-video';
 import { navigate } from "../RootNavigator";
+import LinearGradient from 'react-native-linear-gradient';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
 
@@ -128,6 +129,7 @@ export default Trending = (props) => {
                 height: 'auto',
                 width: '100%',
                 paddingHorizontal: 5,
+                backgroundColor: 'white'
             }}>
                 <View style={{
                     flexDirection: 'row',
@@ -213,54 +215,82 @@ export default Trending = (props) => {
         };
 
         return (
-            <TouchableOpacity style={{
-                height: 'auto',
-                width: 200,
-                paddingTop: 0,
-                paddingBottom: 0,
-                paddingHorizontal: 20,
-                alignItems: 'center',
-                justifyContent: 'center',
-                // borderRightColor: 'lightgrey',
-                // borderRightWidth: 0.5,
-                backgroundColor: 'white',
-                marginLeft: 5,
-                borderRadius: 20,
-            }} onPress={OpenSpecificView}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                    }}>
-                    <View style={{
-                        width: 90,
-                        marginLeft: 5,
-                    }}>
-                        <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20 }} />
-                    </View>
+
+            <TouchableOpacity onPress={OpenSpecificView}>
+                <LinearGradient style={{
+                    height: 'auto',
+                    width: 200,
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    paddingHorizontal: 20,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // borderRightColor: 'lightgrey',
+                    // borderRightWidth: 0.5,
+                    backgroundColor: 'white',
+                    marginLeft: 5,
+                    borderRadius: 20,
+                    shadowColor: "#3a748a",
+                    elevation: 10,
+                    overflow: 'hidden',
+                }} colors={['white', 'aliceblue']}>
 
                     <View style={{
-                        width: '50%',
-                        justifyContent: 'center',
-                    }}>
+                        height: 150,
+                        width: 150,
+                        borderRadius: 80,
+                        backgroundColor: '#A4EBF3',
+                        left: -75,
+                        bottom: -75,
+                        position: 'absolute',
+                        transform: [{ translateY: 0 }],
+                    }}></View>
+                    <View style={{
+                        height: 150,
+                        width: 150,
+                        borderRadius: 80,
+                        backgroundColor: '#A4EBF3',
+                        right: -75,
+                        top: -75,
+                        position: 'absolute',
+                        transform: [{ translateY: 0 }],
+                    }}></View>
 
-                        <Text style={styles.titleStyle}>{item.name}</Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                        }}>
+                        <View style={{
+                            width: 90,
+                            marginLeft: 5,
+                        }}>
+                            <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20 }} />
+                        </View>
+
+                        <View style={{
+                            width: '50%',
+                            justifyContent: 'center',
+                        }}>
+
+                            <Text style={styles.titleStyle}>{item.name}</Text>
+                        </View>
+
                     </View>
 
-                </View>
+                    <View>
+                        <Text style={{
+                            fontSize: 15,
+                            color: 'grey'
+                        }}>
+                            Now at only
+                        </Text>
+                        <Text style={{
+                            fontSize: 25,
+                            color: 'black'
+                        }}>{item.price} /-</Text>
+                    </View>
 
-                <View>
-                    <Text style={{
-                        fontSize: 15,
-                        color: 'grey'
-                    }}>
-                        Now at only
-                    </Text>
-                    <Text style={{
-                        fontSize: 25,
-                        color: 'black'
-                    }}>{item.price} /-</Text>
-                </View>
-
+                </LinearGradient>
             </TouchableOpacity>
         )
     }
@@ -303,14 +333,37 @@ export default Trending = (props) => {
 
         return (
             <>
-                <View style={{
+                <LinearGradient style={{
                     height: 'auto',
                     width: '100%',
                     paddingVertical: 20,
                     borderColorBottom: 'lightgrey',
                     borderBottomWidth: 0.2,
                     alignItems: 'center',
-                }}>
+                    overflow: 'hidden',
+                }} colors={['white', 'white']}>
+
+                    <View style={{
+                        height: 100,
+                        width: 100,
+                        borderRadius: 80,
+                        backgroundColor: 'aliceblue',
+                        left: -50,
+                        top: -50,
+                        position: 'absolute',
+                        transform: [{ translateY: 0 }],
+                    }}></View>
+
+                    <View style={{
+                        height: 150,
+                        width: 150,
+                        borderRadius: 150,
+                        backgroundColor: 'aliceblue',
+                        right: -75,
+                        bottom: -75,
+                        position: 'absolute',
+                        transform: [{ translateY: 0 }],
+                    }}></View>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.titleMainStyle}>{item.title}</Text>
@@ -336,7 +389,7 @@ export default Trending = (props) => {
                         }}
                     />
 
-                </View>
+                </LinearGradient>
 
             </>
 
@@ -395,6 +448,9 @@ export default Trending = (props) => {
                 HeaderLoadingIndicator={() => { /** Your loading indicator */ }} // optional
                 FooterLoadingIndicator={() => { /** Your loading indicator */ }} // optional
                 enableAutoscrollToTop={true} // optional | default - false
+                style={{
+                    backgroundColor: 'white',
+                }}
             />
         </SafeAreaView>
     </>)

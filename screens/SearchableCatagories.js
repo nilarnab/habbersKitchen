@@ -43,7 +43,7 @@ const SearchableCatagories = (props) => {
                     <TouchableOpacity style={styles.catItemSmall} onPress={async () => {
 
                         if (item["action"] == 'SEARCH') {
-                            // console.log("search for", item['title'])
+
                         }
                     }}>
                         <ImageBackground source={{ uri: item.image }} resizeMode="cover" style={{
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     catItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'aliceblue',
         borderRadius: 10,
         height: 'auto',
         width: 'auto',
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginVertical: 5,
         flexDirection: 'row',
-        elevation: 10,
     },
     catItemImage: {
         width: 30,
@@ -166,12 +165,14 @@ const styles = StyleSheet.create({
         borderRadius: 8
     },
     catItemText: {
-        marginLeft: 5
+        marginLeft: 5,
+        color: 'black',
     },
     catItemQuad: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
+        color: 'black',
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',

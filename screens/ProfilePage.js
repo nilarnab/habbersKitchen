@@ -16,6 +16,8 @@ import { useIsFocused } from '@react-navigation/native'
 import Header from './NonSearchHeader';
 import SideBar from '../SideBar';
 import { BASE_URL } from '../env';
+import LinearGradient from 'react-native-linear-gradient';
+import auth from '@react-native-firebase/auth';
 
 const SECTIONS = [
     {
@@ -116,204 +118,504 @@ const ListItem = ({ item }) => {
 
 const Rendarable = ({ recVisited }) => {
 
-    const [name, setName] = useState("")
     const [nameEditProgress, setNameEditProgress] = useState(true)
     const [underlineColor, setUnderlineColor] = useState('ligthgray')
     const [loading, setLoading] = useState(false)
-    useEffect(() => {
 
-        // fetch the name of the guy
-        getName()
+    const PersonalInfo = () => {
+        const [infoUpdateProgress, setInfoUpdateProgress] = useState(false)
+        const [name, setName] = useState("")
+        const [email, setEmail] = useState("")
+        const [phone, setPhone] = useState("")
 
-    }, [])
-    const ProfileHeader = () => {
-        // states
+        const getName = async () => {
 
+            var name = await AsyncStorage.getItem('name')
+            setName(name)
 
-        const NameEditLoader = () => {
-            if (loading) {
-                return (
-                    <ActivityIndicator size="small" color="green" />
-                )
-            }
-            else {
-                return (
-                    <ShowName />
-                )
-            }
         }
 
-
-        const ShowName = () => {
-
-            if (!nameEditProgress) {
-
-                return (
-                    <>
-                        <Image source={{ uri: "https://img.icons8.com/ios-filled/50/40C057/ball-point-pen.png" }} style={{
-                            width: 28,
-                            height: 28,
-                        }}></Image>
-                    </>
-                )
-            }
-            else {
-                return (
-                    <>
-                        <Image source={{ uri: "https://img.icons8.com/ios-glyphs/30/null/ball-point-pen.png" }} style={{
-                            width: 28,
-                            height: 28,
-                        }}></Image>
-                    </>
-                )
-            }
+        const getPhone = async () => {
+            var phone = auth().currentUser.phoneNumber
+            setPhone(phone)
         }
 
+        const getEmail = async () => {
+            var email = await AsyncStorage.getItem('email')
+            setEmail(email)
+        }
 
+        useEffect(() => {
+            console.log('getting person name <<>> ')
+            getName()
+            getEmail()
+            getPhone()
+        }, [])
 
-        return (
-            <>
+        const EditButton = () => {
 
-                <View style={styles.frontMatter}>
-                    <Text style={styles.salutation}>Hello</Text>
-                    <View style={{
-                        flexWrap: 'wrap',
-                        flexDirection: 'row'
+            const resetName = async () => {
+                // send name
+                setLoading(true)
+
+                var uuid = await AsyncStorage.getItem('uuid')
+                var user_id = await AsyncStorage.getItem('user_id')
+
+                const resp = await fetch(BASE_URL + `userInfo/update_name?uuid=${uuid}&user_id=${user_id}&name=${name}`, { method: 'POST' })
+                var resp_json = await resp.json();
+
+                console.log(resp_json)
+
+                await AsyncStorage.setItem('name', name)
+
+                setNameEditProgress(true)
+                setUnderlineColor('white')
+
+                setLoading(false)
+            }
+
+            const resetEmail = async () => {
+                // await AsyncStorage.setItem('email', email)
+                setEmail(email)
+                await AsyncStorage.setItem('email', email)
+                console.log('>>>> setting email', email)
+            }
+
+            if (!infoUpdateProgress) {
+                return (
+                    <TouchableOpacity onPress={() => {
+                        setInfoUpdateProgress(true)
+                    }} style={{
+                        left: 10,
+                        top: 10,
+                        position: 'absolute',
+                        borderColor: 'aliceblue',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
                     }}>
-                        <TextInput editable={!nameEditProgress} value={name} onChangeText={setName} placeholder='write someting' underlineColor={underlineColor} style={{
-                            backgroundColor: 'white', borderWidth: 0, fontSize: 20,
-                            fontWeight: '400', color: 'green', transform: [{ translateX: -20 }]
-                        }}></TextInput>
-                        <TouchableOpacity style={{
-                            borderWidth: 1,
-                            borderRadius: 210,
-                            borderColor: '#e1e3e1',
-                            padding: 10,
-                            marginLeft: 0,
-                            width: 50,
-                            height: 50,
-                            transform: [{ translateX: -30 }]
-                        }}
-                            onPress={async () => {
-                                if (nameEditProgress) {
-                                    setNameEditProgress(false)
-                                    setUnderlineColor('green')
-                                }
-                                else {
+                        <Text style={{
+                            color: 'black',
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            alignSelf: 'center',
+                        }}>Edit</Text>
+                    </TouchableOpacity>
+                )
+            }
 
-                                    // send name
-                                    setLoading(true)
+            else {
+                return (
+                    <TouchableOpacity onPress={async () => {
+                        await resetName()
+                        await AsyncStorage.setItem('email', email)
+                        setInfoUpdateProgress(false)
+                    }} style={{
+                        left: 10,
+                        top: 10,
+                        position: 'absolute',
+                        borderColor: 'aliceblue',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        backgroundColor: 'green',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingHorizontal: 10,
+                        paddingVertical: 5,
 
-                                    var uuid = await AsyncStorage.getItem('uuid')
-                                    var user_id = await AsyncStorage.getItem('user_id')
+                    }}>
+                        <Text style={{
+                            color: 'white',
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            alignSelf: 'center',
+                        }}>Save</Text>
+                    </TouchableOpacity>
+                )
+            }
 
-                                    const resp = await fetch(BASE_URL + `userInfo/update_name?uuid=${uuid}&user_id=${user_id}&name=${name}`, { method: 'POST' })
-                                    var resp_json = await resp.json();
+        }
 
-                                    console.log(resp_json)
+        if (infoUpdateProgress) {
+            return (<>
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        width: '80%',
+                        height: 'auto',
+                        paddingVertical: 50,
+                        backgroundColor: 'white',
+                        borderRadius: 10,
+                        marginVertical: 10,
+                        paddingLeft: 10,
+                        borderColor: 'green',
+                        borderWidth: 1,
+                        shadowColor: "green",
+                        elevation: 5,
+                        overflow: 'hidden',
+                    }}>
 
-                                    await AsyncStorage.setItem('name', name)
+                    <EditButton />
 
-                                    setNameEditProgress(true)
-                                    setUnderlineColor('white')
+                    <TextInput
+                        style={{
+                            fontSize: 15,
+                            color: 'blue',
+                            height: 40,
+                            backgroundColor: 'white',
+                        }} placeholder={'Your Name'}
+                        underlineColor={'aliceblue'}
+                        activeUnderlineColor={'#3a748a'}
+                        onChangeText={setName}
+                        value={name} />
 
-                                    setLoading(false)
-                                }
-                            }}><NameEditLoader /></TouchableOpacity>
+                    <TextInput
+                        style={{
+                            fontSize: 15,
+                            color: 'blue',
+                            height: 40,
+                            backgroundColor: 'white',
+                        }} placeholder={'New Email'}
+                        onChangeText={setEmail}
+                        underlineColor={'aliceblue'}
+                        activeUnderlineColor={'#3a748a'}
+                        value={email} />
+
+                </View>
+            </>)
+        }
+        else {
+            return (<>
+                <LinearGradient
+                    colors={['white', 'aliceblue']}
+                    style={{
+                        alignSelf: 'center',
+                        width: '80%',
+                        heidth: 'auto',
+                        paddingVertical: 50,
+                        backgroundColor: 'white',
+                        borderRadius: 10,
+                        marginVertical: 10,
+                        paddingLeft: 10,
+                        overflow: 'hidden',
+                        shadowColor: '#3a748a',
+                        elevation: 10,
+                    }}>
+
+                    <View style={{
+                        height: 150,
+                        width: 150,
+                        borderRadius: 80,
+                        backgroundColor: '#A4EBF3',
+                        left: -75,
+                        bottom: -75,
+                        position: 'absolute',
+                        transform: [{ translateY: 0 }],
+                    }}></View>
+                    <View style={{
+                        height: 150,
+                        width: 150,
+                        borderRadius: 80,
+                        backgroundColor: '#A4EBF3',
+                        right: -75,
+                        top: -75,
+                        position: 'absolute',
+                        transform: [{ translateY: 0 }],
+                    }}></View>
+
+                    <EditButton />
+
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            color: 'black',
+                        }}> {name} </Text>
+
+                    <View
+                        style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        <Text
+                            style={{
+                                fontSize: 13,
+                                color: 'black',
+                            }}>{phone}</Text>
+                        <View style={{
+                            width: 5,
+                            height: 5,
+                            borderRadius: 5,
+                            backgroundColor: 'black',
+                            marginHorizontal: 5,
+                            marginTop: 7,
+                        }}></View>
+                        <Text
+                            style={{
+                                fontSize: 13,
+                                color: 'black',
+                            }}>{email}</Text>
                     </View>
-                </View>
-                <View
-                    style={styles.line}
-                />
 
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={
-                        () => {
-                            // handle view orders event
-                            console.log("should open view orders")
-                        }
-                    }>
-                        <Text style={styles.buttonText}>View Orders</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.button} onPress={
-                        () => {
-                            // handle view Wishlist event
-                            console.log("should open view wishlist")
-                        }
-                    }>
-                        <Text style={styles.buttonText}>Show Wishlist</Text>
-                    </TouchableOpacity>
-
-
-
-                </View>
-
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={
-                        () => {
-                            // handle view orders event
-                            console.log("should open view orders")
-                        }
-                    }>
-                        <Text style={styles.buttonText}>View Orders</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.button} onPress={
-                        () => {
-                            // handle view Wishlist event
-                            console.log("should open view wishlist")
-                        }
-                    }>
-                        <Text style={styles.buttonText}>Show Wishlist</Text>
-                    </TouchableOpacity>
-
-
-
-                </View>
-                <View
-                    style={styles.line}
-                />
-
-            </>
-        )
-    }
-    const getName = async () => {
-
-        var name = await AsyncStorage.getItem('name')
-        setName(name)
+                </LinearGradient>
+            </>)
+        }
 
     }
+
+    const LocationData = () => {
+
+        const [lat, setLat] = useState(0.0)
+        const [long, setLong] = useState(0.0)
+        const [latMarker, setLatMarker] = useState(0.0)
+        const [longMarker, setLongMarker] = useState(0.0)
+        const [addr1, setAddr1] = useState('')
+        const [addr2, setAddr2] = useState('')
+        const [pin, setPin] = useState('')
+        const [city, setCity] = useState('')
+        const [loading, setLoading] = useState(false)
+        const [getLocatonButton, setGetLocatonButton] = useState('Get Current Location')
+        const [confLocationButton, setConfLocationButton] = useState('Confirm location')
+        const [locationRecieved, setLocationRecieved] = useState(false)
+
+
+        useEffect(() => {
+
+            const getCachedLocation = async () => {
+
+                var loc_lat = await AsyncStorage.getItem("loc_lat")
+                var loc_long = await AsyncStorage.getItem("loc_long")
+                var loc_addr1 = await AsyncStorage.getItem("loc_addr1")
+                var loc_addr2 = await AsyncStorage.getItem("loc_addr2")
+                var loc_pin = await AsyncStorage.getItem("loc_pin")
+                var loc_city = await AsyncStorage.getItem("city")
+
+
+                if (loc_lat == null || loc_long == null) {
+                    await findCoordinates()
+                }
+
+
+                if (loc_lat != null && !isNaN(loc_lat)) {
+
+                    setLat(parseFloat(loc_lat))
+                    setLatMarker(parseFloat(loc_lat))
+                }
+
+                if (loc_long != null && !isNaN(loc_long)) {
+                    console.log("setting up lat")
+                    setLong(parseFloat(loc_long))
+                    setLongMarker(parseFloat(loc_long))
+                }
+                if (loc_addr1 != null) {
+                    console.log("addr 1 is set as", loc_addr1)
+                    setAddr1(loc_addr1)
+                }
+                else {
+                    console.log("addr is not set")
+                    setAddr1('')
+                }
+
+                if (loc_addr2 != null) {
+                    setAddr2(loc_addr2)
+                }
+                else {
+                    setAddr2('')
+                }
+
+                if (loc_city != null) {
+                    setCity(loc_city)
+                }
+                else {
+                    setCity('')
+                }
+
+                if (loc_pin != null) {
+                    setPin(loc_pin)
+                }
+                else {
+                    setPin('')
+                }
+
+
+                console.log("received")
+            }
+
+            getCachedLocation()
+        }, [])
+
+        const submitLocation = async () => {
+            setLoading(true)
+
+            var message = ''
+
+            if (addr1)
+                await AsyncStorage.setItem("loc_addr1", addr1)
+            else
+                message = 'First Address line is empty !!'
+
+            if (addr2)
+                await AsyncStorage.setItem("loc_addr2", addr2)
+            else
+                message = 'Second Address line is empty'
+
+            if (pin)
+                await AsyncStorage.setItem("loc_pin", pin)
+            else
+                message = 'Your PIN ?'
+
+            if (city)
+                await AsyncStorage.setItem("city", city)
+            else
+                message = "Please provide your city name"
+
+            setLoading(false)
+
+            if (message == '') {
+                // setStage(1)
+            }
+            else {
+                setConfLocationButton(message)
+            }
+        }
+
+        return <>
+
+            <View style={{
+                backgroundColor: 'white',
+                height: 'auto',
+                paddingTop: 20,
+                paddingBottom: 20,
+                paddingHorizontal: 20,
+                borderWidth: 1,
+                borderColor: 'aliceblue',
+                marginHorizontal: 20,
+                borderRadius: 10,
+                shadowColor: '#3a748a',
+                elevation: 5,
+            }}>
+
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: 'black',
+                    }}>
+                    Location Details
+                </Text>
+
+                <Text
+                    style={{
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                        color: 'black',
+                        transform: [{ translateY: 10 }],
+                    }}>
+                    Address Line 1:
+                </Text>
+
+                <TextInput
+                    onChangeText={setAddr1}
+                    value={addr1}
+                    style={styles.inputStyleLocation}
+                    activeUnderlineColor='#3a748a'
+                ></TextInput>
+
+                <Text
+                    style={{
+                        fontSize: 15,
+                        fontWeight: 'bold',
+                        color: 'black',
+                        transform: [{ translateY: 10 }],
+                    }}>
+                    Address Line 2:
+                </Text>
+                <TextInput
+                    onChangeText={setAddr2}
+                    value={addr2}
+                    style={styles.inputStyleLocation}
+                    activeUnderlineColor='#3a748a'
+                ></TextInput>
+
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        width: 'auto',
+                        height: 'auto',
+                    }}>
+
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            color: 'black',
+                            transform: [{ translateY: 20 }],
+                        }}>
+                        PIN:
+                    </Text>
+
+                    <TextInput
+                        placeholder='Pin Address'
+                        keyboardType="numeric"
+                        style={{
+                            width: '30%',
+                            color: 'black',
+                            backgroundColor: 'white'
+                        }}
+                        underlineColorAndroid="aliceblue"
+                        onChangeText={setPin}
+                        placeholderTextColor="lightgray"
+                        activeUnderlineColor='#3a748a'
+                        value={pin}></TextInput>
+
+
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            fontWeight: 'bold',
+                            color: 'black',
+                            transform: [{ translateY: 20 }],
+                        }}>
+                        City:
+                    </Text>
+
+                    <TextInput
+                        placeholder='City'
+                        style={{
+                            width: '40%',
+                            color: 'black',
+                            backgroundColor: 'white'
+                        }}
+                        underlineColorAndroid="aliceblue"
+                        onChangeText={setCity}
+                        placeholderTextColor="lightgray"
+                        activeUnderlineColor='#3a748a'
+                        value={city}></TextInput>
+                </View>
+
+                <TouchableOpacity style={styles.buttonStyleLocation} onPress={submitLocation}>
+                    <Text style={styles.buttonTextStyleLocation}>{confLocationButton}</Text>
+                </TouchableOpacity>
+
+
+            </View>
+
+
+
+
+        </>
+    }
+
+
+
+
+
+
     // console.log([recVisited,...SECTIONS])
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <SectionList
-                contentContainerStyle={{ paddingHorizontal: 10 }}
-                stickySectionHeadersEnabled={false}
-                sections={[recVisited, ...SECTIONS]}
-                ListHeaderComponent={ProfileHeader}
-                renderSectionHeader={({ section }) => (
-                    <>
-                        <Text style={styles.headerStyle}>{section.title}</Text>
-
-                        <FlatList
-                            horizontal
-                            data={section.data}
-                            renderItem={({ item }) => <ListItem item={item} />}
-                            showsHorizontalScrollIndicator={false}
-                        />
-                        <View
-                            style={styles.line}
-                        />
-
-                    </>
-
-                )}
-                renderItem={({ item, section }) => {
-                    return null;
-                }}
-            />
-
+            <PersonalInfo />
+            <LocationData />
         </SafeAreaView>
     )
 }
@@ -413,98 +715,52 @@ export const ProfilePage = (props) => {
                     elevation: 1
                 }}>
                     <Header setState={setSideMenu} State={SideMenu} />
+                    {/* <View style={{
+                        marginVertical: 0,
+                    }}> */}
                     <Rendarable recVisited={recVisited} />
+                    {/* </View> */}
                 </View>
-
             </View>
-
         </>
     )
 }
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row'
-    },
-    headerStyle: {
-        fontSize: 25,
-        fontWeight: '600',
-        color: 'black',
-    },
-    buttonContainer: {
-        flex: 2,
-        width: 'auto',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+    addressDetails: {
         marginLeft: 20,
         marginRight: 20,
-        margin: 10,
+        height: 'auto',
+        backgroundColor: 'aliceblue'
     },
-    buttonText: {
-        color: 'grey',
+    buttonTextLocation: {
+        color: 'green'
     },
-    button: {
-        height: 50,
-        width: '50%',
-        borderRadius: 8,
+    inputStyle: {
+        fontSize: 15,
+        color: "black"
+    },
+    inputStyleLocation: {
+        fontSize: 15,
+        color: "black",
+        backgroundColor: '',
+        // height: 40
+    },
+    buttonStyleLocation: {
+        backgroundColor: '#A4EBF3',
+        width: 'auto',
+        height: 'auto',
+        borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
-        marginLeft: 20,
-        marginRight: 6,
-        borderWidth: 1,
-        borderColor: 'green',
+        paddingHorizontal: 10,
+        marginVertical: 20,
+        paddingVertical: 10,
     },
-    sectionHeader: {
-        fontWeight: '800',
-        fontSize: 18,
-        marginTop: 20,
-        marginLeft: 15,
-        marginBottom: 5,
-    },
-    item: {
-        margin: 10,
-        borderRadius: 8
-    },
-    itemPhoto: {
-        width: 200,
-        height: 200,
-        borderRadius: 8
-    },
-    itemText: {
-        marginTop: 5,
-    },
-
-    // for the header
-    frontMatter: {
-        marginLeft: 20
-    },
-
-    redChar: {
-        color: 'red'
-    },
-
-    salutation: {
-        fontSize: 35,
-        fontWeight: '600',
+    buttonTextStyleLocation: {
+        fontSize: 15,
+        fontWeight: 'bold',
         color: 'black',
-        transform: [{ translateX: -10 }]
-    },
-
-    username: {
-        fontSize: 30,
-        fontWeight: '600',
-        color: 'rgb(50, 50, 50)'
-    },
-
-    // for line
-    line: {
-        marginTop: 25,
-        marginBottom: 25,
-        borderBottomColor: 'lightgrey',
-        borderBottomWidth: 1,
     }
 });

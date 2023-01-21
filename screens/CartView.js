@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import PreBuyComp from './PreBuyPipe';
 import { BASE_URL } from '../env';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 const ITEM_HEIGHT = Dimensions.get('window').height;
@@ -179,10 +180,7 @@ export const CartView = (navigation) => {
     if (data.length == 0) {
       return (
         <>
-          <View style={{ alignItems: 'center', marginTop: 100 }}>
-            <Image source={{ uri: "https://img.icons8.com/fluency/96/null/empty-box.png" }} style={{ width: 100, height: 100 }} />
-            <Text style={{ fontSize: 40 }}>Oh, nothing here</Text>
-          </View>
+          <NextRedirect />
         </>
       )
     }
@@ -206,6 +204,116 @@ export const CartView = (navigation) => {
   }
 
 
+  const NextRedirect = () => {
+    // console.log(navigation.)
+    if (data.length == 0) {
+      return (
+        <>
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 30, flexDirection: 'row' }}>
+            <Text style={{ fontSize: 25, color: '#3a748a' }}>No Item in the Cart !</Text>
+          </View>
+          <View style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 30,
+            flexDirection: 'row'
+          }}>
+            <Text style={{ fontSize: 20, color: '#3a748a' }}>Why not you try</Text>
+          </View>
+          <View style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 20,
+            flexDirection: 'row'
+          }}>
+            <LinearGradient
+              colors={['white', 'aliceblue']}
+              style={styles.nextRedirectItem}
+            >
+              <TouchableOpacity onPress={() => navigation.navigation.navigate('Home')} style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%'
+              }}>
+                <Image source={{ uri: "https://img.icons8.com/ios-filled/100/22C3E6/home-page.png" }} style={{ width: 30, height: 30 }} />
+                <Text style={{ fontSize: 15, color: 'black' }}>Keep Shopping</Text>
+              </TouchableOpacity>
+
+            </LinearGradient>
+
+            <LinearGradient
+              colors={['white', 'aliceblue']}
+              style={styles.nextRedirectItem}
+            >
+              <TouchableOpacity onPress={() => navigation.navigation.navigate('Trending')} style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%'
+              }}>
+                <Image source={{ uri: "https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/48/22C3E6/external-trending-content-creator-tanah-basah-glyph-tanah-basah.png" }} style={{ width: 30, height: 30 }} />
+                <Text style={{ fontSize: 15, color: 'black' }}>Watch Videos</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+
+            <LinearGradient
+              colors={['white', 'aliceblue']}
+              style={styles.nextRedirectItem}
+            >
+              <TouchableOpacity onPress={() => navigation.navigation.navigate('Order')} style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%'
+              }}>
+                <Image source={{ uri: "https://img.icons8.com/external-phatplus-solid-phatplus/64/22C3E6/external-logistics-business-online-phatplus-solid-phatplus.png" }} style={{ width: 30, height: 30 }} />
+                <Text style={{ fontSize: 15, color: 'black' }}>See Orders</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
+
+        </>
+      )
+    }
+  }
+
+  const ProceedButton = () => {
+    if (data.length == 0) {
+      return <>
+
+      </>
+
+    }
+    else {
+      return <>
+        <TouchableOpacity style={{
+          color: "black",
+          backgroundColor: "aliceblue",
+          padding: 10,
+          width: "95%",
+          margin: 10,
+          borderWidth: 1,
+          borderRadius: 8,
+          borderColor: "#3a748a",
+          alignContent: 'center',
+          justifyContent: 'center'
+        }} onPress={(props) => {
+          // console.log(navigation.navigation)
+          navigation.navigation.navigate("PreBuyPipe")
+
+        }}><Text style={{
+          fontWeight: "900",
+          fontSize: 20,
+          textAlign: 'center',
+          color: "#3a748a"
+        }}>Proceed to Buy ({data.length} items)</Text></TouchableOpacity>
+
+      </>
+    }
+  }
+
+
   return (
 
     <SafeAreaView style={styles.outer_container}>
@@ -216,14 +324,34 @@ export const CartView = (navigation) => {
 
       {/* Cart Details Card */}
 
-      <View style={styles.container}>
+      <LinearGradient
+        colors={['white', 'aliceblue']}
+        style={styles.container}>
+        <View style={{
+          height: 150,
+          width: 150,
+          borderRadius: 80,
+          backgroundColor: '#A4EBF3',
+          left: -75,
+          bottom: -75,
+          position: 'absolute',
+          transform: [{ translateY: 0 }],
+        }}></View>
+        <View style={{
+          height: 150,
+          width: 150,
+          borderRadius: 80,
+          backgroundColor: '#A4EBF3',
+          right: -75,
+          top: -75,
+          position: 'absolute',
+          transform: [{ translateY: 0 }],
+        }}></View>
         <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
-        <TouchableOpacity style={{ color: "black", backgroundColor: "white", padding: 10, width: "95%", margin: 10, borderWidth: 1, borderColor: 'green', borderRadius: 8, alignContent: 'center', justifyContent: 'center' }} onPress={(props) => {
-          // console.log(navigation.navigation)
-          navigation.navigation.navigate("PreBuyPipe")
 
-        }}><Text style={{ fontWeight: "900", fontSize: 20, textAlign: 'center', color: "green" }}>Proceed to Buy ({data.length} items)</Text></TouchableOpacity>
-      </View>
+        <ProceedButton />
+
+      </LinearGradient>
       <ItemList />
     </SafeAreaView>
 
@@ -232,14 +360,29 @@ export const CartView = (navigation) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
+    width: "95%",
+    borderRadius: 10,
+    marginVertical: 10,
+    paddingLeft: 10,
+    overflow: 'hidden',
+    shadowColor: '#3a748a',
+    elevation: 10,
     marginVertical: 10,
     marginHorizontal: 10,
-    borderWidth: 1,
     borderRadius: 8,
     height: ITEM_HEIGHT * 0.2
+
+  },
+  nextRedirectItem: {
+    height: 150,
+    width: 120,
+    borderRadius: 10,
+    shadowColor: '#3a748a',
+    elevation: 10,
+    marginLeft: 10,
   },
   cartContainer: {
     backgroundColor: '#fff',
