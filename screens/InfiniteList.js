@@ -103,28 +103,40 @@ const InfiniteList = (props) => {
 
 
     if (props.ignoreSearch) {
+        // console.log("aaaaa");
         return (
-            <>
                 <FlatList
                     data={props.catagorySearchProducts}
                     renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
                     initialNumToRender={1}
-                    numColumns={2}
                     // TODO: Fix in production
                     keyExtractor={item => Math.random()}
-                    onEndReached={loadMoreItems}
+                    // ListHeaderComponent={
+                    //     <Header
+                    //         setHiddenStateProducts={setHiddenStateProduct}
+                    //         setHideHeader={props.setHideHeader}
+                    //         setIgnoreSearch={props.setIgnoreSearch}
+                    //         catagorySearchProducts={props.catagorySearchProducts}
+                    //         setCatagorySearchProducts={props.setCatagorySearchProducts}
+                    //     />}
+                    // ListFooterComponent={renderFooter}
+                    // onEndReached={loadMoreItems}
                     onEndReachedThreshold={1}
+                    refreshing={refreshing}
+                    onRefresh={resetList}
+                    horizontal={false}
+                    numColumns={1}
+                    // style={{ alignSelf: 'center' }}
+
                 />
-            </>
         )
 
     }
     else {
 
         if (!props.hideHeader) {
-
+            // console.log("bbbb");
             return (
-
                 <FlatList
                     data={products}
                     renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
@@ -151,7 +163,7 @@ const InfiniteList = (props) => {
             )
         }
         else {
-
+            // console.log("cccccc");
             return (
                 <>
                     <FlatList
