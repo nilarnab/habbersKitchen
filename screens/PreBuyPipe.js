@@ -7,6 +7,7 @@ import GetLocation from 'react-native-get-location';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 import MapView, { Marker } from "react-native-maps";
+import RazorpayCheckout from 'react-native-razorpay';
 import { parse } from '@babel/core';
 import { BASE_URL } from '../env';
 
@@ -788,7 +789,32 @@ const PreBuyComp = (props) => {
             setStage(stage + 1)
         }
     }
-
+    const OnlinePayment=()=>{
+        var options = {
+            description: 'Credits towards consultation',
+            image: 'https://i.imgur.com/3g7nmJC.png',
+            currency: 'INR',
+            key: 'rzp_test_1DP5mmOlF5G5ag', // Your api key
+            amount: '500',
+            name: 'Buybold',
+            prefill: {
+              email: 'void@razorpay.com',
+              contact: '9191919191',
+              name: 'Razorpay Software',
+            },
+            theme: {color: '#87ceeb'},
+          };
+          RazorpayCheckout.open(options)
+            .then(data => {
+              // handle success
+              alert(`Success: ${data.razorpay_payment_id}`);
+            })
+            .catch(error => {
+              // handle failure
+              alert(`Error: ${error.code} | ${error.description}`);
+            });
+        
+      }
     const PaymentGateway = () => {
         return <>
             <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -806,6 +832,21 @@ const PreBuyComp = (props) => {
                 }}>
                     <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/cash-in-hand.png' }} style={{ height: 50, width: 50 }} />
                     <Text style={{ fontWeight: 'bold', color: 'green' }}>Cash on Delivery</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={async () => {
+                    // await PlaceOrder()
+                   OnlinePayment();
+                }} style={{
+                    alignItems: 'center',
+                    padding: 20,
+                    borderWidth: 1,
+                    borderColor: 'green',
+                    borderRadius: 10,
+                    width: 100,
+
+                }}>
+                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/card-wallet.png' }} style={{ height: 50, width: 50 }} />
+                    <Text style={{ fontWeight: 'bold', color: 'green' }}>Pay Online</Text>
                 </TouchableOpacity>
             </SafeAreaView>
         </>
