@@ -25,6 +25,7 @@ export default Trending = (props) => {
     const [caughtUp, setCaughtUp] = useState(false)
     const [query, setQuery] = useState('')
     var flatListRef = useRef(null)
+    const [isMuted, setIsMuted] = useState(true)
 
     const fetchTrending = async (page, query) => {
         console.log('fetching trending with', page, query)
@@ -231,11 +232,11 @@ export default Trending = (props) => {
                     marginLeft: 5,
                     borderRadius: 20,
                     shadowColor: "#3a748a",
-                    elevation: 10,
+                    elevation: 5,
                     overflow: 'hidden',
                 }} colors={['white', 'aliceblue']}>
 
-                    <View style={{
+                    {/* <View style={{
                         height: 150,
                         width: 150,
                         borderRadius: 80,
@@ -254,7 +255,7 @@ export default Trending = (props) => {
                         top: -75,
                         position: 'absolute',
                         transform: [{ translateY: 0 }],
-                    }}></View>
+                    }}></View> */}
 
                     <View
                         style={{
@@ -314,7 +315,7 @@ export default Trending = (props) => {
                     <Video key={index}
                         source={{ uri: item.videoUrl }}
                         rate={1.0}
-                        isMuted={true}
+                        isMuted={isMuted}
                         resizeMode="cover"
                         shouldPlay
                         repeat
@@ -331,6 +332,61 @@ export default Trending = (props) => {
             }
         }
 
+        const MuteButton = () => {
+            if (isMuted) {
+                return <>
+                    <TouchableOpacity onPress={() => {
+                        setIsMuted(false)
+                    }} style={{
+                        marginTop: 10,
+                        padding: 10,
+                        borderColor: 'aliceblue',
+                        height: 'auto',
+                        width: 'auto',
+                        elevation: 10,
+                        borderRadius: 50,
+                        backgroundColor: 'white'
+                    }}>
+                        <View style={{
+                            flexDirection: 'row'
+                        }}>
+                            <Image source={{ uri: 'https://img.icons8.com/ios-filled/100/null/medium-volume--v1.png' }} style={{ height: 20, width: 20 }} />
+                            <Text style={{
+                                color: 'black',
+                                marginLeft: 10,
+                            }}>Unmute</Text>
+                        </View>
+                    </TouchableOpacity>
+                </>
+            }
+            else {
+                return <>
+                    <TouchableOpacity onPress={() => {
+                        setIsMuted(true)
+                    }} style={{
+                        marginTop: 10,
+                        padding: 10,
+                        borderColor: 'aliceblue',
+                        height: 'auto',
+                        width: 'auto',
+                        elevation: 10,
+                        borderRadius: 50,
+                        backgroundColor: 'white'
+                    }}>
+                        <View style={{
+                            flexDirection: 'row'
+                        }}>
+                            <Image source={{ uri: 'https://img.icons8.com/ios-filled/100/null/no-audio--v1.png' }} style={{ height: 20, width: 20 }} />
+                            <Text style={{
+                                color: 'black',
+                                marginLeft: 10,
+                            }}>Mute</Text>
+                        </View>
+                    </TouchableOpacity>
+                </>
+            }
+        }
+
         return (
             <>
                 <LinearGradient style={{
@@ -341,9 +397,9 @@ export default Trending = (props) => {
                     borderBottomWidth: 0.2,
                     alignItems: 'center',
                     overflow: 'hidden',
-                }} colors={['white', 'white']}>
+                }} colors={['white', 'aliceblue', 'white']}>
 
-                    <View style={{
+                    {/* <View style={{
                         height: 100,
                         width: 100,
                         borderRadius: 80,
@@ -363,7 +419,7 @@ export default Trending = (props) => {
                         bottom: -75,
                         position: 'absolute',
                         transform: [{ translateY: 0 }],
-                    }}></View>
+                    }}></View> */}
 
                     <View style={styles.textContainer}>
                         <Text style={styles.titleMainStyle}>{item.title}</Text>
@@ -371,6 +427,8 @@ export default Trending = (props) => {
                     </View>
 
                     <VidRendrable />
+
+                    <MuteButton />
 
                     <View style={styles.textContainer}>
                         <Text style={styles.titleStyle}>Buy From Here</Text>

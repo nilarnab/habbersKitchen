@@ -119,8 +119,8 @@ const ProductView = ({ item, navigation }) => {
                 paddingHorizontal: 10,
             }}>
                 <View style={{
-                    height: 350,
-                    width: 350,
+                    height: 250,
+                    width: 250,
                     borderRadius: 250,
                     backgroundColor: '#CCF2F4',
                     alignSelf: 'center',
@@ -128,7 +128,7 @@ const ProductView = ({ item, navigation }) => {
                     bottom: 0,
                     shadowColor: "black",
                     elevation: 10,
-                    transform: [{ translateY: 150 }],
+                    transform: [{ translateY: 100 }],
                 }}></View>
 
                 <View style={{
