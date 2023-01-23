@@ -80,7 +80,7 @@ const App: () => Node = () => {
           />
           <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
           <Stack.Screen name="Pay" component={Payment} />
-          <Stack.Screen name="PreBuyPipe" component={PreBuyComp} />
+          <Stack.Screen name="PreBuyPipe" component={PreBuyComp} options={{ headerShown: false }} />
           <Stack.Screen name="OrderStatus" component={OrderStatus} />
           <Stack.Screen name="OldOrderStatus" component={OldOrderStatus} />
           <Stack.Screen name="Wishlist" component={Wishlistview} />
