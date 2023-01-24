@@ -13,7 +13,6 @@ import { BASE_URL } from '../env';
 
 import { Dimensions } from 'react-native';
 
-// const BASE_URL = 'http://159.223.90.95:3000/'
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';

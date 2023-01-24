@@ -51,7 +51,6 @@ export default Trending = (props) => {
         }
 
         setLoading(false)
-
     }
 
     useEffect(() => {
