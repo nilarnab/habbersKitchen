@@ -1,4 +1,3 @@
-
 // export const BASE_URL = 'http://192.168.137.1:3000/' // -> local
 
 export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server

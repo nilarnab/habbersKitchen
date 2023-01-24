@@ -20,14 +20,15 @@ export default Trending = (props) => {
     const [playable2, setPlayable2] = useState(0)
     const [page, setPage] = useState(1)
     const navigation = props.navigation
-    const [refresing, setRefreshing] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
     const [loading, setLoading] = useState(false)
     const [caughtUp, setCaughtUp] = useState(false)
     const [query, setQuery] = useState('')
-    var flatListRef = useRef(null)
+    const flatListRef = React.useRef()
     const [isMuted, setIsMuted] = useState(true)
+    const [lastRequestByRefresh, setLastRequestByRefresh] = useState(false)
 
-    const fetchTrending = async (page, query) => {
+    const fetchTrending = async (page, query, refresh) => {
         console.log('fetching trending with', page, query)
 
         setLoading(true)
@@ -43,10 +44,24 @@ export default Trending = (props) => {
             if (!caughtUp) {
                 var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&query=${query}`, { method: 'GET' })
                 var feedDataJson = await feedData.json()
+                var scrollToTop = feedDataJson.scroll_to_top
+
+                if (!refresh) {
+                    if (scrollToTop) {
+                        console.log('scrolling to top')
+                        flatListRef.current.scrollToIndex({ animated: false, index: 0 })
+                    }
+                }
+                else {
+                    flatListRef.current.scrollToEnd({ animated: false })
+                }
+
                 setTrendingData(feedDataJson.response)
                 setCaughtUp(feedDataJson.caughtup)
 
+
                 console.log('list length', feedDataJson.response.length)
+                setPage(page)
             }
         }
 
@@ -169,19 +184,27 @@ export default Trending = (props) => {
     }
 
     const onRefresh = async () => {
-        console.log('refresh !')
+        console.log('refresh !', page)
         setRefreshing(true)
         var new_page = Math.max(1, page - 1)
-        await fetchTrending(new_page, query)
+        setLastRequestByRefresh(true)
+        console.log("last request by refresh is set as true")
+        await fetchTrending(new_page, query, true)
         setPage(new_page)
         setRefreshing(false)
     }
 
+
+
     const onEndReached = async () => {
-        setLoading(true)
-        await fetchTrending(page + 1, query)
-        setPage(page + 1)
-        // flatListRef.scrollToOffset({ animated: true, offset: 0 });
+        console.log('end reached !', page, 'last request by refresh: ', lastRequestByRefresh)
+        if (!lastRequestByRefresh) {
+            setLoading(true)
+            await fetchTrending(page + 1, query, false)
+        }
+        else {
+            setLastRequestByRefresh(false)
+        }
     }
 
     const onViewCallBack = React.useCallback((viewableItems) => {
@@ -486,7 +509,7 @@ export default Trending = (props) => {
             <Header setQuery={setQuery} />
             <FlatList
                 data={trendingData}
-                ref={(ref) => { flatListRef = ref }}
+                ref={flatListRef}
                 renderItem={FlatListItem}
                 keyExtractor={(item, index) => index.toString()}
                 onViewableItemsChanged={onViewCallBack}
@@ -494,7 +517,8 @@ export default Trending = (props) => {
                 ListFooterComponent={<>
                     <EndReachedComponent />
                 </>}
-                onStartReached={onRefresh}
+                onRefresh={onRefresh}
+                refreshing={refreshing}
                 onEndReached={onEndReached}
 
                 // external
