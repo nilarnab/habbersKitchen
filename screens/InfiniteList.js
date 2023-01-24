@@ -105,30 +105,29 @@ const InfiniteList = (props) => {
     if (props.ignoreSearch) {
         // console.log("aaaaa");
         return (
-                <FlatList
-                    data={props.catagorySearchProducts}
-                    renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
-                    initialNumToRender={1}
-                    // TODO: Fix in production
-                    keyExtractor={item => Math.random()}
-                    // ListHeaderComponent={
-                    //     <Header
-                    //         setHiddenStateProducts={setHiddenStateProduct}
-                    //         setHideHeader={props.setHideHeader}
-                    //         setIgnoreSearch={props.setIgnoreSearch}
-                    //         catagorySearchProducts={props.catagorySearchProducts}
-                    //         setCatagorySearchProducts={props.setCatagorySearchProducts}
-                    //     />}
-                    // ListFooterComponent={renderFooter}
-                    // onEndReached={loadMoreItems}
-                    onEndReachedThreshold={1}
-                    refreshing={refreshing}
-                    onRefresh={resetList}
-                    horizontal={false}
-                    numColumns={1}
-                    // style={{ alignSelf: 'center' }}
-
-                />
+            <FlatList
+                data={props.catagorySearchProducts}
+                renderItem={(item) => <ProductView item={item.item} navigation={navigation} />}
+                initialNumToRender={1}
+                // TODO: Fix in production
+                keyExtractor={item => Math.random()}
+                // ListHeaderComponent={
+                //     <Header
+                //         setHiddenStateProducts={setHiddenStateProduct}
+                //         setHideHeader={props.setHideHeader}
+                //         setIgnoreSearch={props.setIgnoreSearch}
+                //         catagorySearchProducts={props.catagorySearchProducts}
+                //         setCatagorySearchProducts={props.setCatagorySearchProducts}
+                //     />}
+                // ListFooterComponent={renderFooter}
+                // onEndReached={loadMoreItems}
+                onEndReachedThreshold={1}
+                refreshing={refreshing}
+                onRefresh={resetList}
+                horizontal={false}
+                numColumns={2}
+                style={{ width: '100%' }}
+            />
         )
 
     }
@@ -157,7 +156,9 @@ const InfiniteList = (props) => {
                     refreshing={refreshing}
                     onRefresh={resetList}
                     numColumns={2}
-                    style={{ alignSelf: 'center' }}
+                    style={{ width: '100%' }}
+                // style={{ alignSelf: 'center' }}
+
 
                 />
             )
@@ -173,8 +174,9 @@ const InfiniteList = (props) => {
                         numColumns={2}
                         // TODO: Fix in production
                         keyExtractor={item => Math.random()}
-                        onEndReached={loadMoreItems}
+                        // onEndReached={loadMoreItems}
                         onEndReachedThreshold={1}
+                        style={{ width: '100%' }}
                     />
                 </>
             )

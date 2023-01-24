@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
         shadowColor: '#3a748a',
         shadowOffset: { width: 20, height: 10 },
         elevation: 15,
+        backgroundColor: 'green'
     },
     itemImageStyle: {
         width: '100%',
