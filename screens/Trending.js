@@ -6,6 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Video, { DRMType } from 'react-native-video';
 import { navigate } from "../RootNavigator";
 import LinearGradient from 'react-native-linear-gradient';
+// import { ActivityIndicator } from 'react-native';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
 
@@ -27,6 +28,8 @@ export default Trending = (props) => {
     const flatListRef = React.useRef()
     const [isMuted, setIsMuted] = useState(true)
     const [lastRequestByRefresh, setLastRequestByRefresh] = useState(false)
+    const [videoGettingReady, setVideoGettingReady] = useState(false)
+    const [scategoryData, setscategoryData] = useState([]);
 
     const fetchTrending = async (page, query, refresh) => {
         console.log('fetching trending with', page, query)
@@ -42,9 +45,11 @@ export default Trending = (props) => {
         }
         else {
             if (!caughtUp) {
-                var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&query=${query}`, { method: 'GET' })
+                var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
                 var feedDataJson = await feedData.json()
                 var scrollToTop = feedDataJson.scroll_to_top
+
+                console.log('got feed data', feedData)
 
                 if (!refresh) {
                     if (scrollToTop) {
@@ -73,6 +78,66 @@ export default Trending = (props) => {
         fetchTrending(1, query)
 
     }, [])
+
+    useEffect(() => {
+        console.log('fetcing serarchable categories')
+        fetch(BASE_URL + 'trending/get_searchable_categories')
+            .then(res => res.json())
+            .then(result => { setscategoryData(result.response); console.log(result.response) })
+    }, []);
+
+
+    const bigCatagoryActionCenter = async ({ item }) => {
+
+        if (item["action"] == 'SEARCH') {
+            // console.log("search for", item['title'])
+            setQuery(item['query'])
+            fetchTrending(1, item['query'])
+        }
+    }
+
+    const SearchableCategories = () => {
+
+        const CatagoryItem = ({ item }) => {
+
+            if ("image" in item) {
+                return (
+                    <>
+                        <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+                            <Image source={{ uri: item.image }} resizeMode="cover" style={styles.catItemImage} />
+
+                            <Text style={styles.catItemText}>{item.title}</Text>
+
+                        </TouchableOpacity>
+                    </>
+                )
+            }
+            else {
+                return (
+                    <>
+                        <TouchableOpacity style={styles.catItem} onPress={() => bigCatagoryActionCenter({ item })}>
+                            {/* <Text>{item.title}</Text> */}
+                        </TouchableOpacity>
+
+                    </>
+                )
+            }
+        }
+
+        return (<>
+            <View style={styles.catContainer}>
+                <FlatList
+                    horizontal
+                    data={scategoryData}
+                    renderItem={CatagoryItem}
+                    initialNumToRender={1}
+                    // TODO: Fix in production
+                    keyExtractor={item => Math.random()}
+
+                />
+            </View>
+        </>)
+    }
 
     const SearchBar = () => {
         const [textVal, setTextVal] = useState('')
@@ -104,7 +169,7 @@ export default Trending = (props) => {
                 marginLeft: 20
             }}>
                 <TextInput
-                    onChangeText={(text) => { console.log(text); setTextVal(text) }}
+                    onChangeText={(text) => { setTextVal(text) }}
                     value={textVal}
                     placeholder={'Search your reel ! '}
                     style={{
@@ -180,6 +245,7 @@ export default Trending = (props) => {
                 </View>
 
             </View>
+            <SearchableCategories />
         </>)
     }
 
@@ -215,7 +281,11 @@ export default Trending = (props) => {
             if (changed[i].isViewable == true) {
 
                 if (i == 0) {
-                    setPlayable(changed[i].index)
+                    console.log('setting playable to: ', changed[i].index)
+                    setVideoGettingReady(true)
+                    if (playable != changed[i].index) {
+                        setPlayable(changed[i].index)
+                    }
                 }
                 else {
                     break
@@ -319,6 +389,27 @@ export default Trending = (props) => {
     }
 
 
+    const VideoGettingReady = () => {
+        if (videoGettingReady) {
+            return <>
+                <View style={{
+                    flexDirection: 'row',
+                    marginTop: 10,
+                }}>
+                    <ActivityIndicator size="large" color="red" />
+                    <Text style={{
+                        fontSize: 15,
+                        color: 'black',
+                        paddingTop: 8,
+                        marginLeft: 10,
+                    }}>Video is getting ready</Text>
+                </View>
+            </>
+
+        }
+    }
+
+
     const FlatListItem = ({ index, item }) => {
 
         var playVid = true
@@ -330,6 +421,17 @@ export default Trending = (props) => {
             playVid = false
         }
 
+        const onVideoBuffer = (status) => {
+            console.log('video buffer status: ', status)
+        }
+
+        const onReadyForDisplay = (status) => {
+            console.log('video ready for display status: ', status)
+            setVideoGettingReady(false)
+        }
+
+
+
         const VidRendrable = () => {
 
             if (playVid) {
@@ -338,6 +440,8 @@ export default Trending = (props) => {
                         source={{ uri: item.videoUrl }}
                         rate={1.0}
                         isMuted={isMuted}
+                        onVideoBuffer={onVideoBuffer}
+                        onReadyForDisplay={onReadyForDisplay}
                         resizeMode="cover"
                         shouldPlay
                         repeat
@@ -355,57 +459,77 @@ export default Trending = (props) => {
         }
 
         const MuteButton = () => {
-            if (isMuted) {
-                return <>
-                    <TouchableOpacity onPress={() => {
-                        setIsMuted(false)
-                    }} style={{
-                        marginTop: 10,
-                        padding: 10,
-                        borderColor: 'aliceblue',
-                        height: 'auto',
-                        width: 'auto',
-                        elevation: 10,
-                        borderRadius: 50,
-                        backgroundColor: 'white'
-                    }}>
+            if (playVid) {
+                if (videoGettingReady) {
+                    return <>
                         <View style={{
-                            flexDirection: 'row'
+                            marginTop: 10,
+                            padding: 10,
+                            borderColor: 'aliceblue',
+                            height: 'auto',
+                            width: 'auto',
+                            elevation: 10,
+                            borderRadius: 50,
+                            backgroundColor: 'white'
                         }}>
-                            <Image source={{ uri: 'https://img.icons8.com/ios-filled/100/null/medium-volume--v1.png' }} style={{ height: 20, width: 20 }} />
-                            <Text style={{
-                                color: 'black',
-                                marginLeft: 10,
-                            }}>Unmute</Text>
+                            <ActivityIndicator size="small" color="red" />
                         </View>
-                    </TouchableOpacity>
-                </>
-            }
-            else {
-                return <>
-                    <TouchableOpacity onPress={() => {
-                        setIsMuted(true)
-                    }} style={{
-                        marginTop: 10,
-                        padding: 10,
-                        borderColor: 'aliceblue',
-                        height: 'auto',
-                        width: 'auto',
-                        elevation: 10,
-                        borderRadius: 50,
-                        backgroundColor: 'white'
-                    }}>
-                        <View style={{
-                            flexDirection: 'row'
-                        }}>
-                            <Image source={{ uri: 'https://img.icons8.com/ios-filled/100/null/no-audio--v1.png' }} style={{ height: 20, width: 20 }} />
-                            <Text style={{
-                                color: 'black',
-                                marginLeft: 10,
-                            }}>Mute</Text>
-                        </View>
-                    </TouchableOpacity>
-                </>
+                    </>
+                }
+                else {
+                    if (isMuted) {
+                        return <>
+                            <TouchableOpacity onPress={() => {
+                                setIsMuted(false)
+                            }} style={{
+                                marginTop: 10,
+                                padding: 10,
+                                borderColor: 'aliceblue',
+                                height: 'auto',
+                                width: 'auto',
+                                elevation: 10,
+                                borderRadius: 50,
+                                backgroundColor: 'white'
+                            }}>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <Image source={{ uri: 'https://img.icons8.com/ios-filled/100/null/medium-volume--v1.png' }} style={{ height: 20, width: 20 }} />
+                                    <Text style={{
+                                        color: 'black',
+                                        marginLeft: 10,
+                                    }}>Unmute</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </>
+                    }
+                    else {
+                        return <>
+                            <TouchableOpacity onPress={() => {
+                                setIsMuted(true)
+                            }} style={{
+                                marginTop: 10,
+                                padding: 10,
+                                borderColor: 'aliceblue',
+                                height: 'auto',
+                                width: 'auto',
+                                elevation: 10,
+                                borderRadius: 50,
+                                backgroundColor: 'white'
+                            }}>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <Image source={{ uri: 'https://img.icons8.com/ios-filled/100/null/no-audio--v1.png' }} style={{ height: 20, width: 20 }} />
+                                    <Text style={{
+                                        color: 'black',
+                                        marginLeft: 10,
+                                    }}>Mute</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </>
+                    }
+                }
             }
         }
 
@@ -450,7 +574,14 @@ export default Trending = (props) => {
 
                     <VidRendrable />
 
-                    <MuteButton />
+                    {/* <VideoGettingReady /> */}
+
+                    <View style={{
+                        flexDirection: 'row',
+                    }}>
+
+                        <MuteButton />
+                    </View>
 
                     <View style={styles.textContainer}>
                         <Text style={styles.titleStyle}>Buy From Here</Text>
@@ -549,7 +680,7 @@ const styles = StyleSheet.create({
     textContainer: {
         height: 'auto',
         width: '100%',
-        marginTop: 10,
+        marginTop: 5,
         marginBottom: 5,
         paddingHorizontal: 10,
     },
@@ -574,7 +705,85 @@ const styles = StyleSheet.create({
     descr2Style: {
         fontSize: 12,
         color: 'grey'
-    }
+    },
+
+    // searchable categoreies
+    catContainer: {
+        height: 'auto',
+        width: '100%',
+        flexDirection: "row",
+        marginHorizontal: "auto",
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        marginLeft: 0,
+        marginVertical: 0,
+        paddingTop: 5,
+        backgroundColor: 'white'
+    },
+    catItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'aliceblue',
+        borderRadius: 10,
+        height: 'auto',
+        width: 'auto',
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        marginHorizontal: 10,
+        marginVertical: 5,
+        flexDirection: 'row',
+        backgroundColor: 'aliceblue'
+    },
+    catItemImage: {
+        width: 30,
+        height: 30,
+        borderRadius: 8
+    },
+    catItemText: {
+        marginLeft: 5,
+        color: 'black',
+    },
+    catItemQuad: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        color: 'black',
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        borderRadius: 25,
+        padding: 11,
+        height: 100,
+        width: 100,
+        margin: 4
+
+    },
+
+    catagoryText: {
+        fontWeight: '800',
+        fontSize: 25,
+        marginTop: 20,
+        marginLeft: 12,
+    },
+
+    catItemSmall: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderRadius: 0,
+        height: 30,
+        width: 30,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.29,
+        shadowRadius: 4.65,
+        elevation: 0,
+        margin: 2
+
+    },
 
 })
 
