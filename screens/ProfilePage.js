@@ -606,11 +606,6 @@ const Rendarable = ({ recVisited }) => {
         </>
     }
 
-
-
-
-
-
     // console.log([recVisited,...SECTIONS])
     return (
         <SafeAreaView style={{ flex: 1 }}>
