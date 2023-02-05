@@ -31,6 +31,13 @@ export default Trending = (props) => {
     const [videoGettingReady, setVideoGettingReady] = useState(false)
     const [scategoryData, setscategoryData] = useState([]);
     const [hideHeader, setHideHeader] = useState(false);
+    var refVideo = React.useRef(null);
+    const [videoPlayedTill, setVideoPlayedTill] = useState(0);
+    const [restore, setRestore] = useState(false);
+
+    // using aync storayge to store last search query
+    // using async storage to store played till
+
 
     /* Side bar */
     // -----------------------------
@@ -39,20 +46,10 @@ export default Trending = (props) => {
     const fadeAnim = useRef(new Animated.Value(0)).current
 
     const fetchTrending = async (page, query, refresh) => {
-        console.log('fetching trending with', page, query)
 
-        // if (query == '') {
-        //     console.log('quer is empty')
-        //     setSearchOn(false)
-        // }
-        // else {
-        //     console.log('quer is not empty')
-        //     setSearchOn(true)
 
-        //     console.log('search on', searchOn)
-        // }
-
-        // console.log('search on', searchOn)
+        // storing last search query
+        await AsyncStorage.setItem('last_search_trending', query)
 
         setLoading(true)
 
@@ -68,8 +65,6 @@ export default Trending = (props) => {
                 var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
                 var feedDataJson = await feedData.json()
                 var scrollToTop = feedDataJson.scroll_to_top
-
-                console.log('got feed data', feedData)
 
                 if (!refresh) {
                     if (scrollToTop) {
@@ -89,24 +84,21 @@ export default Trending = (props) => {
                 setPage(page)
             }
         }
-        setQuery(query)
-        console.log("new query", query)
         setLoading(false)
     }
 
     useEffect(() => {
-        const backAction = () => {
-            console.log('back button pressed', query)
-            fetchTrending(1, '')
-            // if (searchOn) {
-            //     setQuery('')
-            //     fetchTrending(1, '')
+        const backAction = async () => {
 
-            // }
-            // else {
-            //     console.log('exiting app')
-            //     // BackHandler.exitApp()
-            // }
+            var last_query = await AsyncStorage.getItem('last_search_trending')
+
+            if (last_query == null) {
+                // exit app
+                BackHandler.exitApp()
+            }
+
+
+            fetchTrending(1, '')
 
             return true;
 
@@ -151,14 +143,15 @@ export default Trending = (props) => {
     useEffect(() => {
 
         fetchTrending(1, query)
+        AsyncStorage.setItem('last_search_trending', '')
+        AsyncStorage.setItem('videoPlayedTill', '0')
 
     }, [])
 
     useEffect(() => {
-        console.log('fetcing serarchable categories')
         fetch(BASE_URL + 'trending/get_searchable_categories')
             .then(res => res.json())
-            .then(result => { setscategoryData(result.response); console.log(result.response) })
+            .then(result => { setscategoryData(result.response); })
     }, []);
 
 
@@ -168,7 +161,6 @@ export default Trending = (props) => {
             // console.log("search for", item['title'])
             setQuery(item['query'])
             setHideHeader(true)
-            console.log('search on', hideHeader)
 
             fetchTrending(1, item['query'])
         }
@@ -373,20 +365,15 @@ export default Trending = (props) => {
     }
 
     const onRefresh = async () => {
-        console.log('refresh !', page)
         setRefreshing(true)
         var new_page = Math.max(1, page - 1)
         setLastRequestByRefresh(true)
-        console.log("last request by refresh is set as true")
         await fetchTrending(new_page, query, true)
         setPage(new_page)
         setRefreshing(false)
     }
 
-
-
     const onEndReached = async () => {
-        console.log('end reached !', page, 'last request by refresh: ', lastRequestByRefresh)
         if (!lastRequestByRefresh) {
             setLoading(true)
             await fetchTrending(page + 1, query, false)
@@ -396,18 +383,19 @@ export default Trending = (props) => {
         }
     }
 
-    const onViewCallBack = React.useCallback((viewableItems) => {
+    const onViewCallBack = React.useCallback(async (viewableItems) => {
 
         var changed = viewableItems.changed
+        await AsyncStorage.setItem('videoPlayedTill', '0')
 
         for (var i = 0; i < changed.length; i++) {
             if (changed[i].isViewable == true) {
 
                 if (i == 0) {
-                    console.log('setting playable to: ', changed[i].index)
                     setVideoGettingReady(true)
                     if (playable != changed[i].index) {
                         setPlayable(changed[i].index)
+                        setVideoPlayedTill(0)
                     }
                 }
                 else {
@@ -532,6 +520,35 @@ export default Trending = (props) => {
         }
     }
 
+    const onVideoProgress = async (status) => {
+        var VideoPlayedTill = parseFloat(await AsyncStorage.getItem('videoPlayedTill'))
+        console.log('playing at', status.currentTime)
+
+        if (status.currentTime > VideoPlayedTill) {
+            console.log('setting')
+            AsyncStorage.setItem('videoPlayedTill', status.currentTime.toString())
+        }
+        else {
+            console.log('trying to restore', VideoPlayedTill)
+
+            refVideo.seek(parseFloat(VideoPlayedTill), 4)
+            console.log('seek complete')
+
+            if (restore) {
+
+                setRestore(false)
+
+            }
+        }
+    }
+
+    const onReadyForDisplay = async (status) => {
+        console.log('ready for display')
+
+        setVideoGettingReady(false)
+
+    }
+
 
     const FlatListItem = ({ index, item }) => {
 
@@ -545,13 +562,9 @@ export default Trending = (props) => {
         }
 
         const onVideoBuffer = (status) => {
-            console.log('video buffer status: ', status)
         }
 
-        const onReadyForDisplay = (status) => {
-            console.log('video ready for display status: ', status)
-            setVideoGettingReady(false)
-        }
+
 
 
 
@@ -562,15 +575,17 @@ export default Trending = (props) => {
                     <Video key={index}
                         source={{ uri: item.videoUrl }}
                         rate={1.0}
-                        isMuted={isMuted}
+                        muted={isMuted}
                         onVideoBuffer={onVideoBuffer}
                         onReadyForDisplay={onReadyForDisplay}
                         resizeMode="cover"
+                        onProgress={onVideoProgress}
                         shouldPlay
-                        repeat
+                        ref={ref => (refVideo = ref)}
                         poster={item.posterimage}
                         style={styles.videoContainer}
                         paused={!playVid}
+                        repeat={false}
                     />
                 </>
             }
@@ -604,6 +619,7 @@ export default Trending = (props) => {
                         return <>
                             <TouchableOpacity onPress={() => {
                                 setIsMuted(false)
+                                setRestore(true)
                             }} style={{
                                 marginTop: 10,
                                 padding: 10,
@@ -630,6 +646,7 @@ export default Trending = (props) => {
                         return <>
                             <TouchableOpacity onPress={() => {
                                 setIsMuted(true)
+                                setRefreshing(true)
                             }} style={{
                                 marginTop: 10,
                                 padding: 10,
@@ -666,7 +683,7 @@ export default Trending = (props) => {
                     borderBottomWidth: 0.2,
                     alignItems: 'center',
                     overflow: 'hidden',
-                }} colors={['white', 'aliceblue', 'white']}>
+                }} colors={['white', 'white', 'white']}>
 
                     {/* <View style={{
                         height: 100,
