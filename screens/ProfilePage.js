@@ -189,7 +189,7 @@ const Rendarable = ({ recVisited }) => {
                         left: 10,
                         top: 10,
                         position: 'absolute',
-                        borderColor: 'aliceblue',
+                        borderColor: '#A4EBF3',
                         borderWidth: 2,
                         borderRadius: 5,
                         justifyContent: 'center',
@@ -217,7 +217,7 @@ const Rendarable = ({ recVisited }) => {
                         left: 10,
                         top: 10,
                         position: 'absolute',
-                        borderColor: 'aliceblue',
+                        borderColor: '#A4EBF3',
                         borderWidth: 2,
                         borderRadius: 5,
                         backgroundColor: 'green',
@@ -296,8 +296,9 @@ const Rendarable = ({ recVisited }) => {
                         width: '80%',
                         heidth: 'auto',
                         paddingVertical: 50,
-                        backgroundColor: 'white',
+                        borderColor: '#A4EBF3',
                         borderRadius: 10,
+                        borderWidth: 1,
                         marginVertical: 10,
                         paddingLeft: 10,
                         overflow: 'hidden',
@@ -305,7 +306,7 @@ const Rendarable = ({ recVisited }) => {
                         elevation: 10,
                     }}>
 
-                    <View style={{
+                    {/* <View style={{
                         height: 150,
                         width: 150,
                         borderRadius: 80,
@@ -324,7 +325,7 @@ const Rendarable = ({ recVisited }) => {
                         top: -75,
                         position: 'absolute',
                         transform: [{ translateY: 0 }],
-                    }}></View>
+                    }}></View> */}
 
                     <EditButton />
 

@@ -10,6 +10,7 @@ import SideBar from '../SideBar';
 // import { ActivityIndicator } from 'react-native';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
+import { Dimensions } from 'react-native';
 
 
 
@@ -28,12 +29,10 @@ export default Trending = (props) => {
     const flatListRef = React.useRef()
     const [isMuted, setIsMuted] = useState(true)
     const [lastRequestByRefresh, setLastRequestByRefresh] = useState(false)
-    const [videoGettingReady, setVideoGettingReady] = useState(false)
     const [scategoryData, setscategoryData] = useState([]);
-    const [hideHeader, setHideHeader] = useState(false);
     var refVideo = React.useRef(null);
-    const [videoPlayedTill, setVideoPlayedTill] = useState(0);
-    const [restore, setRestore] = useState(false);
+
+    const isFocused = useIsFocused()
 
     // using aync storayge to store last search query
     // using async storage to store played till
@@ -45,8 +44,27 @@ export default Trending = (props) => {
     const [mainWidth, setMainWidth] = useState('100%')
     const fadeAnim = useRef(new Animated.Value(0)).current
 
+    useEffect(() => {
+        console.log('this use effect is running')
+        const checkSession = async () => {
+
+            const userId = await AsyncStorage.getItem("user_id")
+
+            if (userId == null) {
+                console.log("no cache data in trending")
+                props.navigation.navigate("Phone")
+            }
+            else {
+                console.log("cache data in trending", userId)
+            }
+        }
+
+        checkSession()
+    }, [isFocused])
+
     const fetchTrending = async (page, query, refresh) => {
 
+        console.log('fetching trending', page, query, refresh)
 
         // storing last search query
         await AsyncStorage.setItem('last_search_trending', query)
@@ -88,6 +106,16 @@ export default Trending = (props) => {
     }
 
     useEffect(() => {
+        if (isFocused) {
+            // setPlayable(0)
+        }
+        else {
+            // stopping video in background
+            setPlayable(-1)
+        }
+    })
+
+    useEffect(() => {
         const backAction = async () => {
 
             var last_query = await AsyncStorage.getItem('last_search_trending')
@@ -97,7 +125,8 @@ export default Trending = (props) => {
                 BackHandler.exitApp()
             }
 
-
+            await AsyncStorage.setItem('last_search_trending', '')
+            setQuery('')
             fetchTrending(1, '')
 
             return true;
@@ -142,17 +171,21 @@ export default Trending = (props) => {
 
     useEffect(() => {
 
-        fetchTrending(1, query)
-        AsyncStorage.setItem('last_search_trending', '')
-        AsyncStorage.setItem('videoPlayedTill', '0')
+        if (isFocused) {
+            fetchTrending(1, query)
+            AsyncStorage.setItem('last_search_trending', '')
+            // AsyncStorage.setItem('videoPlayedTill', '0')
+        }
 
-    }, [])
+    }, [isFocused])
 
     useEffect(() => {
-        fetch(BASE_URL + 'trending/get_searchable_categories')
-            .then(res => res.json())
-            .then(result => { setscategoryData(result.response); })
-    }, []);
+        if (isFocused) {
+            fetch(BASE_URL + 'trending/get_searchable_categories')
+                .then(res => res.json())
+                .then(result => { setscategoryData(result.response); })
+        }
+    }, [isFocused]);
 
 
     const bigCatagoryActionCenter = async ({ item }) => {
@@ -160,7 +193,6 @@ export default Trending = (props) => {
         if (item["action"] == 'SEARCH') {
             // console.log("search for", item['title'])
             setQuery(item['query'])
-            setHideHeader(true)
 
             fetchTrending(1, item['query'])
         }
@@ -383,20 +415,20 @@ export default Trending = (props) => {
         }
     }
 
+
     const onViewCallBack = React.useCallback(async (viewableItems) => {
 
         var changed = viewableItems.changed
-        await AsyncStorage.setItem('videoPlayedTill', '0')
+        // await AsyncStorage.setItem('videoPlayedTill', '0')
 
         for (var i = 0; i < changed.length; i++) {
             if (changed[i].isViewable == true) {
-
+                console.log('viewable', changed[i].index)
                 if (i == 0) {
-                    setVideoGettingReady(true)
-                    if (playable != changed[i].index) {
-                        setPlayable(changed[i].index)
-                        setVideoPlayedTill(0)
-                    }
+
+                    setPlayable(changed[i].index)
+                    console.log('now playable', changed[i].index)
+
                 }
                 else {
                     break
@@ -500,52 +532,29 @@ export default Trending = (props) => {
     }
 
 
-    const VideoGettingReady = () => {
-        if (videoGettingReady) {
-            return <>
-                <View style={{
-                    flexDirection: 'row',
-                    marginTop: 10,
-                }}>
-                    <ActivityIndicator size="large" color="red" />
-                    <Text style={{
-                        fontSize: 15,
-                        color: 'black',
-                        paddingTop: 8,
-                        marginLeft: 10,
-                    }}>Video is getting ready</Text>
-                </View>
-            </>
-
-        }
-    }
-
     const onVideoProgress = async (status) => {
-        var VideoPlayedTill = parseFloat(await AsyncStorage.getItem('videoPlayedTill'))
-        console.log('playing at', status.currentTime)
+        // var VideoPlayedTill = parseFloat(await AsyncStorage.getItem('videoPlayedTill'))
+        // console.log('playing at', status.currentTime)
 
-        if (status.currentTime > VideoPlayedTill) {
-            console.log('setting')
-            AsyncStorage.setItem('videoPlayedTill', status.currentTime.toString())
-        }
-        else {
-            console.log('trying to restore', VideoPlayedTill)
+        // if (status.currentTime > VideoPlayedTill) {
+        //     console.log('setting')
+        //     AsyncStorage.setItem('videoPlayedTill', status.currentTime.toString())
+        // }
+        // else {
+        //     console.log('trying to restore', VideoPlayedTill)
 
-            refVideo.seek(parseFloat(VideoPlayedTill), 4)
-            console.log('seek complete')
+        //     refVideo.seek(parseFloat(VideoPlayedTill), 4)
+        //     console.log('seek complete')
 
-            if (restore) {
+        //     if (restore) {
 
-                setRestore(false)
+        //         setRestore(false)
 
-            }
-        }
+        //     }
+        // }
     }
 
     const onReadyForDisplay = async (status) => {
-        console.log('ready for display')
-
-        setVideoGettingReady(false)
 
     }
 
@@ -597,6 +606,9 @@ export default Trending = (props) => {
         }
 
         const MuteButton = () => {
+            // disabling mute button
+            return <></>
+
             if (playVid) {
                 if (videoGettingReady) {
                     return <>
@@ -676,7 +688,7 @@ export default Trending = (props) => {
         return (
             <>
                 <LinearGradient style={{
-                    height: 'auto',
+                    height: Dimensions.get("window").height - 300,
                     width: '100%',
                     paddingVertical: 20,
                     borderColorBottom: 'lightgrey',
@@ -796,6 +808,9 @@ export default Trending = (props) => {
                 }}>
                     <Header setQuery={setQuery} />
                     <FlatList
+                        snapToAlignment={'start'}
+                        decelerationRate={'fast'}
+                        snapToInterval={Dimensions.get("window").height - 300}
                         data={trendingData}
                         ref={flatListRef}
                         renderItem={FlatListItem}

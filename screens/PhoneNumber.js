@@ -6,8 +6,11 @@ import auth from '@react-native-firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 
+import LinearGradient from 'react-native-linear-gradient';
 import { BASE_URL } from '../env'
 import { APP_NAME } from '../env';
+
+import UniversalLoader from './UniversalLoader';
 
 
 export default function PhoneNumber(props) {
@@ -122,7 +125,27 @@ export default function PhoneNumber(props) {
                 // console.log("user not logged in, trying")
                 await confirm.confirm(authToken);
                 // console.log("auth complete")
-                props.navigation.navigate('Main')
+                var user = auth().currentUser
+                if (user) {
+                    // console.log("user state changed to logged in")
+                    uid = user.uid
+                    phone = user.phoneNumber
+                    // console.log("starting session with", uid, phone)
+
+                    // now suppposed to start a new session in mongo db
+                    var user_data = await startSession(uid, phone)
+
+                    // now populate cache storage 
+                    await addUserToCache(uid, user_data)
+
+                    // complete
+                    props.navigation.navigate("Main");
+                }
+                else {
+                    // reset state if you need to  
+                    // console.log("not logged int")
+                    // dispatch({ type: "reset_user" });
+                }
 
             } catch (error) {
                 setConfirm(null);
@@ -134,83 +157,256 @@ export default function PhoneNumber(props) {
     }
 
     const Loader = () => {
-        if (loading) {
-            return (
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <Bars size={25} color="green" />
-                </View>
-            )
+
+        if (!confirm) {
+
+            if (loading) {
+                return <>
+                    <UniversalLoader verbose={1} volume={'pre-login'} color={'#2178bf'} size={'small'} />
+                </>
+            }
         }
         else {
-            return (
-                <>
-
+            if (loading) {
+                return <>
+                    <UniversalLoader verbose={0} />
                 </>
-            )
+            }
+
         }
+
+
+
+
     }
 
 
     if (confirm) {
 
 
-        return (
-            <>
-                <View style={{ alignItems: 'center', marginTop: '10%' }}>
+        return <>
+            <SafeAreaView style={{
+                backgroundColor: 'white',
+                height: '100%',
+                width: '100%'
+            }}>
+                <Image source={{ uri: 'https://i.ibb.co/HdC2YQK/Whats-App-Image-2023-02-08-at-8-39-29-PM.jpg' }} style={{
+                    height: '60%',
+                    width: '100%',
+                    transform: [{ translateY: 50 }],
+                }} />
+                <LinearGradient
+                    colors={['white', 'white']}
+                    style={{
+                        alignItems: 'center',
+                        position: 'absolute',
+                        height: '40%',
+                        width: '100%',
+                        bottom: 0,
+                        borderTopLeftRadius: 30,
+                        borderTopRightRadius: 30,
+                        shadowColor: 'black',
+                        elevation: 10,
+                        paddingTop: 40,
+                        borderColor: 'lightgrey',
+                        borderWidth: 1,
+                    }}>
 
-                    <TextInput
-                        onChangeText={(text) => { setAuthToken(text) }}
-                        placeholder="Otp"
-                        autoComplete="sms-otp" // android
-                        textContentType="oneTimeCode" // ios
-                        placeholderTextColor="gray"
-                        style={{ color: 'black', borderBottomColor: 'gray', borderBottomWidth: 1, width: '40%' }}>
-                    </TextInput>
+                    <View
+                        style={{
+                            backgroundColor: 'lightgray',
+                            height: 1,
+                            width: '90%',
+                            transform: [{ translateY: 15 }],
+                        }}></View>
+
+                    <View>
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                fontWeight: 'bold',
+                                color: 'black',
+                                backgroundColor: 'white',
+                                paddingHorizontal: 10,
+                            }}>You should get an otp</Text>
+
+                    </View>
+
                     <Loader />
-                    <Button title='send otp' onPress={async () => {
-                        setLoading(true)
-                        await confirmVerificationCode(authToken)
-                        setLoading(false)
-                    }}></Button>
-                </View>
-            </>
-        )
-    }
-    else {
-        return (
-            <SafeAreaView style={{ backgroundColor: 'white', height: '100%', width: '100%' }}>
-                <View style={{ alignItems: 'center', marginTop: '20%', }}>
 
-                    <Text style={{ fontSize: 30, color: 'grey' }}>Hey, watcha doing !</Text>
-
-
-                    <Text style={{ fontSize: 40, marginVertical: 30, fontWeight: 'bold', color: 'grey' }}>Welcome to {APP_NAME}</Text>
-
-                    <Loader />
-
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>Enter Phone Number</Text>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>+91</Text>
+                    <View
+                        style={{
+                            borderColor: 'lightgray',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                            width: '40%',
+                            flexDirection: 'row',
+                            marginTop: 20,
+                        }}>
                         <TextInput
-                            onChangeText={(text) => { setPhoneNumber('+91' + text) }}
-                            placeholder=""
+                            onChangeText={(text) => { setAuthToken(text) }}
+                            placeholder="Otp"
+                            autoComplete="sms-otp" // android
+                            textContentType="oneTimeCode" // ios
                             placeholderTextColor="gray"
-                            autoComplete="tel" // android
-                            textContentType="telephoneNumber" // ios
-                            keyboardType="phone-pad"
                             style={{
                                 color: 'black',
-                                borderBottomColor: 'gray',
-                                borderBottomWidth: 1,
-                                width: '60%',
-                                textContentType: 'telephoneNumber',
-                                marginLeft: 10,
-                                fontSize: 20,
+                                width: '100%',
+                                paddingLeft: 10,
                             }}>
                         </TextInput>
                     </View>
+
+                    <TouchableOpacity title='send otp' onPress={async () => {
+                        setLoading(true)
+                        await confirmVerificationCode(authToken)
+                        setLoading(false)
+                    }}
+                        style={{
+                            marginTop: 10,
+                            marignHorizontal: 20,
+                            backgroundColor: 'white',
+                            color: 'white',
+                            borderRadius: 10,
+                            padding: 10,
+                            width: '40%',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#2178bf',
+                            alignSelf: 'center'
+                        }}>
+                        <Text style={{ color: 'white', fontSize: 18 }}>
+                            Verify
+                        </Text>
+                    </TouchableOpacity>
+
+
                     <View style={{ marginTop: 20 }}>
+                        <Text style={{ fontSize: 15, color: 'red' }}>{errorMesssage}</Text>
+                    </View>
+
+                    <View
+                        style={{
+                            backgroundColor: 'lightgray',
+                            height: 1,
+                            width: '90%',
+                        }}></View>
+
+                </LinearGradient>
+
+            </SafeAreaView>
+        </>
+
+    }
+    else {
+        return (
+            <SafeAreaView style={{
+                backgroundColor: 'white',
+                height: '100%',
+                width: '100%'
+            }}>
+                <Image source={{ uri: 'https://i.ibb.co/HdC2YQK/Whats-App-Image-2023-02-08-at-8-39-29-PM.jpg' }} style={{
+                    height: '60%',
+                    width: '100%',
+                    transform: [{ translateY: 50 }],
+                }} />
+                <LinearGradient
+                    colors={['white', 'white']}
+                    style={{
+                        alignItems: 'center',
+                        position: 'absolute',
+                        height: '40%',
+                        width: '100%',
+                        bottom: 0,
+                        borderTopLeftRadius: 30,
+                        borderTopRightRadius: 30,
+                        shadowColor: 'black',
+                        elevation: 10,
+                        paddingTop: 40,
+                        borderColor: 'lightgrey',
+                        borderWidth: 1,
+                    }}>
+
+                    <View
+                        style={{
+                            backgroundColor: 'lightgray',
+                            height: 1,
+                            width: '90%',
+                            transform: [{ translateY: 15 }],
+                        }}></View>
+
+                    <View>
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                fontWeight: 'bold',
+                                color: 'black',
+                                backgroundColor: 'white',
+                                paddingHorizontal: 10,
+                            }}>Welcome, lets login</Text>
+
+                    </View>
+                    <View style={{
+                        marginTop: 15,
+                    }}>
+                        <Loader />
+                    </View>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: '80%',
+                        marginTop: 15
+                    }}>
+
+                        <View
+                            style={{
+                                borderColor: 'lightgray',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                width: 'auto',
+                                flexDirection: 'row',
+                                marginRight: 10,
+                                height: 'auto',
+                                padding: 5,
+                            }}>
+                            <Image source={{ uri: 'https://img.icons8.com/color/48/null/india.png' }} style={{ height: 40, width: 40 }} />
+                        </View>
+                        <View
+                            style={{
+                                borderColor: 'lightgray',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                width: '80%',
+                                flexDirection: 'row',
+                            }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+                                color: 'black',
+                                padding: 15
+                            }}>+91</Text>
+                            <TextInput
+                                onChangeText={(text) => { setPhoneNumber('+91' + text) }}
+                                placeholder="Enter your phone number"
+                                placeholderTextColor="gray"
+                                autoComplete="tel" // android
+                                textContentType="telephoneNumber" // ios
+                                keyboardType="phone-pad"
+                                style={{
+                                    color: 'black',
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: 0,
+                                    width: '70%',
+                                    textContentType: 'telephoneNumber',
+                                    // marginLeft:,
+                                    fontSize: 15,
+                                }}>
+                            </TextInput>
+                        </View>
+
+                    </View>
+                    <View style={{ marginTop: 20, width: '100%' }}>
                         <TouchableOpacity onPress={async () => {
                             setLoading(true)
                             await signIn(phoneNumber)
@@ -219,23 +415,31 @@ export default function PhoneNumber(props) {
                             marginTop: 10,
                             marignHorizontal: 20,
                             backgroundColor: 'white',
-                            color: 'green',
+                            color: 'white',
                             borderRadius: 10,
                             padding: 10,
-                            width: '100%',
-                            borderColor: 'green',
-                            borderWidth: 1,
+                            width: '80%',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            backgroundColor: '#2178bf',
+                            alignSelf: 'center'
                         }}>
-                            <Text style={{ color: 'green', fontSize: 20 }}>Send OTP</Text>
+                            <Text style={{ color: 'white', fontSize: 18 }}>Send OTP</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ marginTop: 20 }}>
                         <Text style={{ fontSize: 15, color: 'red' }}>{errorMesssage}</Text>
                     </View>
-                </View>
+
+                    <View
+                        style={{
+                            backgroundColor: 'lightgray',
+                            height: 1,
+                            width: '90%',
+                        }}></View>
+
+                </LinearGradient>
 
             </SafeAreaView>
 

@@ -118,7 +118,7 @@ const ProductView = ({ item, navigation }) => {
                 paddingVertical: 10,
                 paddingHorizontal: 10,
             }}>
-                <View style={{
+                {/* <View style={{
                     height: 250,
                     width: 250,
                     borderRadius: 250,
@@ -140,7 +140,7 @@ const ProductView = ({ item, navigation }) => {
                     position: 'absolute',
                     bottom: 0,
                     transform: [{ translateY: 40 }],
-                }}></View>
+                }}></View> */}
 
                 <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
                 <View style={styles.contentWrapperStyle}>

@@ -327,7 +327,7 @@ export const CartView = (navigation) => {
       <LinearGradient
         colors={['white', 'aliceblue']}
         style={styles.container}>
-        <View style={{
+        {/* <View style={{
           height: 150,
           width: 150,
           borderRadius: 80,
@@ -346,7 +346,7 @@ export const CartView = (navigation) => {
           top: -75,
           position: 'absolute',
           transform: [{ translateY: 0 }],
-        }}></View>
+        }}></View> */}
         <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
 
         <ProceedButton />
