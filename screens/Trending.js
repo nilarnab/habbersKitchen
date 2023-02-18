@@ -7,6 +7,7 @@ import Video, { DRMType } from 'react-native-video';
 import { navigate } from "../RootNavigator";
 import LinearGradient from 'react-native-linear-gradient';
 import SideBar from '../SideBar';
+import Reels from './Reels';
 // import { ActivityIndicator } from 'react-native';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
 
@@ -786,6 +787,7 @@ export default Trending = (props) => {
 
     }
 
+    return <Reels videos={trendingData} fetch={fetchTrending}/>
 
     return (<>
         <SafeAreaView>
