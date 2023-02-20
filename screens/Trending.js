@@ -9,6 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import SideBar from '../SideBar';
 // import { ActivityIndicator } from 'react-native';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
+import fetch_home from '../methods/fetch';
 
 import { Dimensions } from 'react-native';
 
@@ -80,7 +81,7 @@ export default Trending = (props) => {
         }
         else {
             if (!caughtUp) {
-                var feedData = await fetch(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
+                var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
                 var feedDataJson = await feedData.json()
                 var scrollToTop = feedDataJson.scroll_to_top
 
@@ -180,11 +181,17 @@ export default Trending = (props) => {
     }, [isFocused])
 
     useEffect(() => {
-        if (isFocused) {
-            fetch(BASE_URL + 'trending/get_searchable_categories')
-                .then(res => res.json())
-                .then(result => { setscategoryData(result.response); })
+
+        const focusAction = async () => {
+            if (isFocused) {
+                var resp = await fetch_home(BASE_URL + 'trending/get_searchable_categories')
+                resp = await resp.json()
+                setscategoryData(resp.response)
+            }
         }
+
+        focusAction();
+
     }, [isFocused]);
 
 
