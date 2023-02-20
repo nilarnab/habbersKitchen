@@ -1,12 +1,12 @@
-import React, {useRef, useState} from 'react';
-import {Dimensions, FlatList} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Dimensions, FlatList } from 'react-native';
 
 import ReelCard from './ReelCard';
 const ScreenHeight = Dimensions.get('window').height;
 
 function Reels({
   videos,
-  backgroundColor = 'black',
+  backgroundColor = 'white',
   headerTitle,
   headerIconName,
   headerIconColor,
@@ -29,7 +29,7 @@ function Reels({
 }) {
   const FlatlistRef = useRef(null);
   const [ViewableItem, SetViewableItem] = useState('');
-  const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 70});
+  const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 70 });
   const applyProps = {
     backgroundColor: backgroundColor,
     headerTitle: headerTitle,
@@ -55,17 +55,18 @@ function Reels({
 
   // Viewable configuration
   const onViewRef = useRef(viewableItems => {
-    console.log("lol",viewableItems);
+    // console.log("lol", viewableItems);
     if (viewableItems?.viewableItems?.length > 0)
       SetViewableItem(viewableItems.viewableItems[0].key || 0);
   });
-  // console.log("data-here",videos)
+  // console.log("data-here", videos)
   return (
     <FlatList
       ref={FlatlistRef}
       data={videos}
       keyExtractor={item => item.title.toString()}
-      renderItem={({item, index}) => (
+      onEndReached={() => { console.log('end reached') }}
+      renderItem={({ item, index }) => (
         <ReelCard
           {...item}
           index={index}
@@ -86,6 +87,7 @@ function Reels({
         offset: ScreenHeight * index,
         index,
       })}
+      snapToInterval={(ScreenHeight - 70) * 0.8}
       pagingEnabled
       decelerationRate={0.9}
       onViewableItemsChanged={onViewRef.current}

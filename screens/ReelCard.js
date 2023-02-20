@@ -1,6 +1,6 @@
 // packages Imports
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, Dimensions, Text, Pressable} from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Text, Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Video from 'react-native-video';
 
@@ -9,7 +9,9 @@ import Header from './Header';
 import helper from '../utils/helper';
 // Screen Dimensions
 const ScreenWidth = Dimensions.get('window').width;
-const ScreenHeight = Dimensions.get('window').height;
+const ScreenHeight = Dimensions.get('window').height - 50;
+
+import LinearGradient from 'react-native-linear-gradient';
 
 function ReelCard({
   uri,
@@ -17,13 +19,16 @@ function ReelCard({
   videoUrl,
   fetch,
   title,
+  description1,
+  description2,
+  products,
   ViewableItem,
   liked = false,
   disliked = false,
   index,
 
   // Container Props
-  backgroundColor = 'black',
+  backgroundColor = 'white',
 
   // Header Props
   headerTitle = 'Reels',
@@ -32,31 +37,31 @@ function ReelCard({
   headerIconSize,
   headerIcon,
   headerComponent,
-  onHeaderIconPress = () => {},
+  onHeaderIconPress = () => { },
 
   // Options Props
   optionsComponent,
   pauseOnOptionsShow = true,
-  onSharePress = () => {},
-  onCommentPress = () => {},
-  onLikePress = () => {},
-  onDislikePress = () => {},
+  onSharePress = () => { },
+  onCommentPress = () => { },
+  onLikePress = () => { },
+  onDislikePress = () => { },
 
   // Player Props
-  onFinishPlaying = () => {},
+  onFinishPlaying = () => { },
 
   // Slider Props
-  minimumTrackTintColor = 'white',
+  minimumTrackTintColor = 'black',
   maximumTrackTintColor = 'grey',
-  thumbTintColor = 'white',
+  thumbTintColor = 'black',
 
   // Time Props
-  timeElapsedColor = 'white',
-  totalTimeColor = 'white',
+  timeElapsedColor = 'black',
+  totalTimeColor = 'black',
 }) {
   // ref for Video Player
   const VideoPlayer = useRef(null);
-  console.log('check--here',videoUrl)
+  // console.log('check--here',videoUrl)
 
   // States
   const [VideoDimensions, SetVideoDimensions] = useState({
@@ -66,7 +71,61 @@ function ReelCard({
   const [Progress, SetProgress] = useState(0);
   const [Duration, SetDuration] = useState(0);
   const [Paused, SetPaused] = useState(false);
-  const [ShowOptions, SetShowOptions] = useState(false);
+  const [ShowOptions, SetShowOptions] = useState(true);
+
+  /* Our changes */
+
+  const FlatListHorizontalItem = ({ index, item }) => {
+    const OpenSpecificView = () => {
+      navigate("ProductSpecific", { item, navigation });
+    };
+
+    return (
+
+      <TouchableOpacity onPress={OpenSpecificView}>
+        <LinearGradient style={styles.horizontalItem} colors={['white', 'aliceblue']}>
+
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <View style={{
+              width: 90,
+              marginLeft: 5,
+            }}>
+              <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20 }} />
+            </View>
+
+            <View style={{
+              width: '50%',
+              justifyContent: 'center',
+            }}>
+
+              <Text style={styles.titleStyle}>{item.name}</Text>
+            </View>
+
+          </View>
+
+          <View>
+            <Text style={{
+              fontSize: 15,
+              color: 'grey'
+            }}>
+              Now at only
+            </Text>
+            <Text style={{
+              fontSize: 25,
+              color: 'black'
+            }}>{item.price} /-</Text>
+          </View>
+
+        </LinearGradient>
+      </TouchableOpacity>
+    )
+  }
+  // ---------------------
+
+
 
   // Play/Pause video according to viisibility
   useEffect(() => {
@@ -88,7 +147,7 @@ function ReelCard({
       try {
         if (VideoPlayer.current)
           VideoPlayer.current.seek((seekTime * Duration) / 100 / 1000);
-      } catch (error) {}
+      } catch (error) { }
     },
     [Duration, ShowOptions],
   );
@@ -100,12 +159,12 @@ function ReelCard({
       let duration = Math.round(playbackStatus.seekableDuration);
       if (currentTime)
         if (duration) SetProgress((currentTime / duration) * 100);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // function for getting video dimensions on load complete
   const onLoadComplete = event => {
-    const {naturalSize} = event;
+    const { naturalSize } = event;
 
     try {
       const naturalWidth = naturalSize.width;
@@ -122,14 +181,14 @@ function ReelCard({
         });
       }
       SetDuration(event.duration * 1000);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // function for showing options
   const onMiddlePress = async () => {
     try {
       SetShowOptions(!ShowOptions);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // fuction to Go back 10 seconds
@@ -139,7 +198,7 @@ function ReelCard({
         let toSeek = Math.floor((Progress * Duration) / 100) / 1000;
         if (toSeek > 10) VideoPlayer.current.seek(toSeek - 10);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // fuction to skip 10 seconds
@@ -149,21 +208,21 @@ function ReelCard({
         let toSeek = Math.floor((Progress * Duration) / 100) / 1000;
         VideoPlayer.current.seek(toSeek + 10);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // Manage error here
-  const videoError = error => {};
+  const videoError = error => { };
 
   // useMemo for Slider
   const GetSlider = useMemo(
     () => (
       <View style={styles.SliderContainer}>
-        <Text style={[styles.TimeOne, {color: timeElapsedColor}]}>
+        <Text style={[styles.TimeOne, { color: timeElapsedColor }]}>
           {helper.GetDurationFormat(Math.floor((Progress * Duration) / 100))}
         </Text>
         <Slider
-          style={{height: 40, width: '100%'}}
+          style={{ height: 40, width: '100%' }}
           minimumValue={0}
           maximumValue={100}
           minimumTrackTintColor={minimumTrackTintColor}
@@ -172,7 +231,7 @@ function ReelCard({
           value={Progress}
           onSlidingComplete={data => SeekUpdate(data)}
         />
-        <Text style={[styles.TimeTwo, {color: totalTimeColor}]}>
+        <Text style={[styles.TimeTwo, { color: totalTimeColor }]}>
           {helper.GetDurationFormat(Duration || 0)}
         </Text>
       </View>
@@ -252,34 +311,76 @@ function ReelCard({
   );
 
   return (
-    <Pressable
-      style={[styles.container, {backgroundColor: backgroundColor}]}
-      onPress={()=>{}}>
-      <Video
-        ref={VideoPlayer}
-        source={{uri:videoUrl}}
-        style={VideoDimensions}
-        resizeMode="contain"
-        onError={videoError}
-        controls={true}
-        playInBackground={false}
-        progressUpdateInterval={1000}
-        paused={Paused}
-        muted={false}
-        repeat={false}
-        onLoad={onLoadComplete}
-        onProgress={PlayBackStatusUpdate}
-        onEnd={() => onFinishPlaying(index)}
-      />
+    <>
+      <Pressable
+        style={[styles.container, { backgroundColor: backgroundColor }]}
+        onPress={() => { }}>
 
-      {ShowOptions ? (
-         <>
-           {GetHeader}
-           {GetButtons}
-           {GetSlider}
-         </>
-       ) : null}
-     </Pressable>
+        <View style={
+          styles.textContainer}>
+          <Text
+            style={{
+              fontSize: 20,
+              color: 'black',
+              fontWeight: 'bold'
+            }}>{title}</Text>
+
+          <Text
+            style={{
+              fontSize: 15,
+              color: 'black',
+            }}>{description1}</Text>
+
+          <Text
+            style={{
+              fontSize: 15,
+              color: 'black',
+            }}>{description2}</Text>
+        </View>
+
+        <Video
+          ref={VideoPlayer}
+          source={{ uri: videoUrl }}
+          style={VideoDimensions}
+          resizeMode="contain"
+          onError={videoError}
+          controls={false}
+          playInBackground={false}
+          progressUpdateInterval={1000}
+          paused={Paused}
+          muted={true}
+          repeat={false}
+          onLoad={onLoadComplete}
+          onProgress={PlayBackStatusUpdate}
+          onEnd={() => onFinishPlaying(index)}
+        />
+
+        {ShowOptions ? (
+          <>
+            {GetSlider}
+          </>
+        ) : null}
+
+        <View style={styles.horizontalListHolder}>
+          <FlatList
+            horizontal
+            data={products}
+            renderItem={FlatListHorizontalItem}
+            keyExtractor={(item, index) => index.toString()}
+            style={{
+              height: 150,
+              width: '100%',
+              marginVertical: 5,
+              marginLeft: 5,
+            }}
+          />
+        </View>
+
+      </Pressable>
+
+
+
+    </>
   );
 }
 
@@ -290,11 +391,13 @@ export default ReelCard;
 const styles = StyleSheet.create({
   container: {
     width: ScreenWidth,
-    height: ScreenHeight,
+    height: 'auto',
     justifyContent: 'center',
+    alignContent: 'center',
+    paddingTop: 50,
+    // paddingTop: '20%'
   },
   SliderContainer: {
-    position: 'absolute',
     width: ScreenWidth,
     height: 55,
     bottom: 0,
@@ -343,4 +446,26 @@ const styles = StyleSheet.create({
     height: ScreenHeight,
     zIndex: 99,
   },
+
+  textContainer: {
+    marginHorizontal: 10,
+    marginBottom: 5,
+  },
+  horizontalListHolder: {
+    marginTop: 10,
+  },
+  horizontalItem: {
+    height: 'auto',
+    width: 200,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderColor: 'lightgrey',
+    // borderWidth: 0.5,
+    marginLeft: 5,
+    borderRadius: 20,
+    overflow: 'hidden',
+  }
 });

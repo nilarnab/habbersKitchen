@@ -384,7 +384,7 @@ export default Trending = (props) => {
 
         return (<>
             <View style={{
-                height: 'auto',
+                height: 70,
                 width: '100%',
                 paddingHorizontal: 5,
                 backgroundColor: 'white'
@@ -794,8 +794,6 @@ export default Trending = (props) => {
 
     }
 
-    return <Reels videos={trendingData} fetch={fetchTrending}/>
-
     return (<>
         <SafeAreaView>
             <View style={{
@@ -816,35 +814,7 @@ export default Trending = (props) => {
                     elevation: 1
                 }}>
                     <Header setQuery={setQuery} />
-                    <FlatList
-                        snapToAlignment={'start'}
-                        decelerationRate={'fast'}
-                        snapToInterval={Dimensions.get("window").height - 300}
-                        data={trendingData}
-                        ref={flatListRef}
-                        renderItem={FlatListItem}
-                        keyExtractor={(item, index) => index.toString()}
-                        onViewableItemsChanged={onViewCallBack}
-                        viewabilityConfig={viewConfigRef.current}
-                        ListFooterComponent={<>
-                            <EndReachedComponent />
-                        </>}
-                        onRefresh={onRefresh}
-                        refreshing={refreshing}
-                        onEndReached={onEndReached}
-
-                        // external
-                        showDefaultLoadingIndicators={true} // optional
-                        onStartReachedThreshold={10} // optional
-                        onEndReachedThreshold={0.5} // optional
-                        activityIndicatorColor={'black'} // optional
-                        HeaderLoadingIndicator={() => { /** Your loading indicator */ }} // optional
-                        FooterLoadingIndicator={() => { /** Your loading indicator */ }} // optional
-                        enableAutoscrollToTop={true} // optional | default - false
-                        style={{
-                            backgroundColor: 'white',
-                        }}
-                    />
+                    <Reels videos={trendingData} fetch={fetchTrending} />
                 </View>
             </View>
         </SafeAreaView>
