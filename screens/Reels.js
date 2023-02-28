@@ -4,6 +4,9 @@ import { Dimensions, FlatList } from 'react-native';
 import ReelCard from './ReelCard';
 const ScreenHeight = Dimensions.get('window').height;
 
+// trending page stride
+import { TRENDING_STRIDE } from '../env';
+
 function Reels({
   videos,
   backgroundColor = 'white',
@@ -87,7 +90,7 @@ function Reels({
         offset: ScreenHeight * index,
         index,
       })}
-      snapToInterval={(ScreenHeight - 70) * 0.8}
+      snapToInterval={TRENDING_STRIDE}
       pagingEnabled
       decelerationRate={0.9}
       onViewableItemsChanged={onViewRef.current}

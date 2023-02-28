@@ -5,3 +5,6 @@ export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 // names and conventions
 export const COMPNAY_NAME = 'BuyBold'
 export const APP_NAME = 'BuyBold'
+
+// trending page 
+export const TRENDING_STRIDE = 590

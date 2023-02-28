@@ -11,6 +11,12 @@ import helper from '../utils/helper';
 const ScreenWidth = Dimensions.get('window').width;
 const ScreenHeight = Dimensions.get('window').height - 50;
 
+// import stride length
+import { TRENDING_STRIDE } from '../env';
+
+// is Focused 
+import { useIsFocused } from '@react-navigation/native';
+
 import LinearGradient from 'react-native-linear-gradient';
 
 function ReelCard({
@@ -72,6 +78,72 @@ function ReelCard({
   const [Duration, SetDuration] = useState(0);
   const [Paused, SetPaused] = useState(false);
   const [ShowOptions, SetShowOptions] = useState(true);
+  const [isMuted, setIsMuted] = useState(false)
+  const [showMuted, setShowMuted] = useState(false)
+
+
+  const isFocused = useIsFocused()
+
+  // useEffect(() => {
+  //   console.log('called show muted', showMuted)
+
+
+
+  // }, [setShowMuted])
+
+  const muteButtonHandler = () => {
+    setShowMuted(true)
+    setTimeout(function () {
+      setShowMuted(false)
+    }, 1000)
+  }
+
+
+  const MuteButtonImage = () => {
+    if (isMuted) {
+      return <>
+        <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/null/high-volume--v1.png' }}
+          style={{ width: 20, height: 20 }} />
+      </>
+    }
+    else {
+      return <>
+        <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/null/no-audio.png' }}
+          style={{ width: 20, height: 20 }} />
+      </>
+    }
+  }
+
+  // mute button
+  const MuteButton = () => {
+
+    if (showMuted) {
+      return <>
+        <TouchableOpacity
+
+          style={{
+            height: 40,
+            width: 40,
+            borderRadius: 20,
+            position: 'absolute',
+            alignSelf: 'center',
+            transform: [{ translateY: -40 }],
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+            opacity: 0.8
+          }}
+        >
+          <MuteButtonImage />
+
+        </TouchableOpacity>
+      </>
+    }
+    else {
+      <></>
+    }
+
+  }
 
   /* Our changes */
 
@@ -132,6 +204,15 @@ function ReelCard({
     if (ViewableItem === title) SetPaused(false);
     else SetPaused(true);
   }, [ViewableItem]);
+
+  useEffect(() => {
+    if (isFocused) {
+      SetPaused(false)
+    }
+    else {
+      SetPaused(true)
+    }
+  }, [isFocused])
 
   // Pause when use toggle options to True
   useEffect(() => {
@@ -338,22 +419,31 @@ function ReelCard({
             }}>{description2}</Text>
         </View>
 
-        <Video
-          ref={VideoPlayer}
-          source={{ uri: videoUrl }}
-          style={VideoDimensions}
-          resizeMode="contain"
-          onError={videoError}
-          controls={false}
-          playInBackground={false}
-          progressUpdateInterval={1000}
-          paused={Paused}
-          muted={true}
-          repeat={false}
-          onLoad={onLoadComplete}
-          onProgress={PlayBackStatusUpdate}
-          onEnd={() => onFinishPlaying(index)}
-        />
+        <TouchableOpacity
+          onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
+
+        >
+
+          <Video
+            ref={VideoPlayer}
+            source={{ uri: videoUrl }}
+            style={VideoDimensions}
+            resizeMode="contain"
+            onError={videoError}
+            controls={false}
+            playInBackground={false}
+            progressUpdateInterval={1000}
+            paused={Paused}
+            muted={isMuted}
+            repeat={false}
+            onLoad={onLoadComplete}
+            onProgress={PlayBackStatusUpdate}
+            onEnd={() => { onFinishPlaying(index) }}
+          />
+
+        </TouchableOpacity>
+
+        <MuteButton />
 
         {ShowOptions ? (
           <>
@@ -391,7 +481,7 @@ export default ReelCard;
 const styles = StyleSheet.create({
   container: {
     width: ScreenWidth,
-    height: 'auto',
+    height: TRENDING_STRIDE,
     justifyContent: 'center',
     alignContent: 'center',
     paddingTop: 50,
