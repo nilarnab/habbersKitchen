@@ -100,7 +100,7 @@ function ReelCard({
 
 
   const MuteButtonImage = () => {
-    if (isMuted) {
+    if (!isMuted) {
       return <>
         <Image source={{ uri: 'https://img.icons8.com/ios-filled/50/null/high-volume--v1.png' }}
           style={{ width: 20, height: 20 }} />

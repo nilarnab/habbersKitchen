@@ -18,6 +18,7 @@ import SideBar from '../SideBar';
 import { BASE_URL } from '../env';
 import LinearGradient from 'react-native-linear-gradient';
 import auth from '@react-native-firebase/auth';
+import GetLocation from 'react-native-get-location';
 
 const SECTIONS = [
     {
@@ -379,6 +380,23 @@ const Rendarable = ({ recVisited }) => {
         const [confLocationButton, setConfLocationButton] = useState('Confirm location')
         const [locationRecieved, setLocationRecieved] = useState(false)
 
+        const findCoordinates = () => {
+
+            GetLocation.getCurrentPosition({
+                enableHighAccuracy: true,
+                timeout: 15000,
+            })
+                .then(location => {
+                    // console.log(location);
+                    setLat(location.latitude.toString())
+                    setLong(location.longitude.toString())
+
+                })
+                .catch(error => {
+                    const { code, message } = error;
+                    console.warn(code, message);
+                })
+        };
 
         useEffect(() => {
 
@@ -447,6 +465,7 @@ const Rendarable = ({ recVisited }) => {
 
         const submitLocation = async () => {
             setLoading(true)
+            setConfLocationButton('submitting ..')
 
             var message = ''
 
@@ -474,10 +493,12 @@ const Rendarable = ({ recVisited }) => {
 
             if (message == '') {
                 // setStage(1)
+                setConfLocationButton('Confirm Location')
             }
             else {
                 setConfLocationButton(message)
             }
+
         }
 
         return <>

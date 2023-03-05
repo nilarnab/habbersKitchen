@@ -27,6 +27,12 @@ const dictionary = {
         'by different vloggers',
         'to make the best decision',
         'looks like it is taking longer than usual',
+    ],
+
+    'trending': [
+        'fetching latest reels',
+        'waiting ..',
+        'pariently waiting ..',
     ]
 }
 

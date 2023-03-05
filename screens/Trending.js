@@ -11,6 +11,7 @@ import Reels from './Reels';
 // import { ActivityIndicator } from 'react-native';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
 import fetch_home from '../methods/fetch';
+import UniversalLoader from './UniversalLoader';
 
 import { Dimensions } from 'react-native';
 
@@ -794,6 +795,21 @@ export default Trending = (props) => {
 
     }
 
+    const Loader = () => {
+
+        if (loading) {
+            return <>
+                <View style={{
+                    alignSelf: 'center',
+                    marginTop: 20
+                }}>
+                    <UniversalLoader verbose={1} volume={'trending'} color={'#2178bf'} size={'small'} />
+                </View>
+            </>
+        }
+
+    }
+
     return (<>
         <SafeAreaView>
             <View style={{
@@ -814,7 +830,8 @@ export default Trending = (props) => {
                     elevation: 1
                 }}>
                     <Header setQuery={setQuery} />
-                    <Reels videos={trendingData} fetch={fetchTrending} />
+                    <Loader />
+                    <Reels videos={trendingData} fetch={fetchTrending} loading={loading} />
                 </View>
             </View>
         </SafeAreaView>
