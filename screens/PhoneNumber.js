@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 
 import LinearGradient from 'react-native-linear-gradient';
-import { BASE_URL } from '../env'
+import { BASE_URL, COLOR1, COLOR4 } from '../env'
 import { APP_NAME } from '../env';
 
 import UniversalLoader from './UniversalLoader';
@@ -149,7 +149,7 @@ export default function PhoneNumber(props) {
 
             } catch (error) {
                 setConfirm(null);
-                alert(error);
+                alert('Thats the wrong OTP!', 'Looks like you gave the wrong otp, try again');
             }
 
         }
@@ -162,7 +162,7 @@ export default function PhoneNumber(props) {
 
             if (loading) {
                 return <>
-                    <UniversalLoader verbose={1} volume={'pre-login'} color={'#2178bf'} size={'small'} />
+                    <UniversalLoader verbose={1} volume={'pre-login'} color={COLOR4} size={'small'} />
                 </>
             }
         }
@@ -186,7 +186,7 @@ export default function PhoneNumber(props) {
 
         return <>
             <SafeAreaView style={{
-                backgroundColor: 'white',
+                backgroundColor: COLOR1,
                 height: '100%',
                 width: '100%'
             }}>
@@ -196,7 +196,7 @@ export default function PhoneNumber(props) {
                     transform: [{ translateY: 50 }],
                 }} />
                 <LinearGradient
-                    colors={['white', 'white']}
+                    colors={[COLOR1, COLOR1]}
                     style={{
                         alignItems: 'center',
                         position: 'absolute',
@@ -226,7 +226,7 @@ export default function PhoneNumber(props) {
                                 fontSize: 16,
                                 fontWeight: 'bold',
                                 color: 'black',
-                                backgroundColor: 'white',
+                                backgroundColor: COLOR1,
                                 paddingHorizontal: 10,
                             }}>You should get an otp</Text>
 
@@ -248,6 +248,7 @@ export default function PhoneNumber(props) {
                             placeholder="Otp"
                             autoComplete="sms-otp" // android
                             textContentType="oneTimeCode" // ios
+                            keyboardType='numeric'
                             placeholderTextColor="gray"
                             style={{
                                 color: 'black',
@@ -265,17 +266,17 @@ export default function PhoneNumber(props) {
                         style={{
                             marginTop: 10,
                             marignHorizontal: 20,
-                            backgroundColor: 'white',
-                            color: 'white',
+                            backgroundColor: COLOR1,
+                            color: COLOR1,
                             borderRadius: 10,
                             padding: 10,
                             width: '40%',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: '#2178bf',
+                            backgroundColor: COLOR4,
                             alignSelf: 'center'
                         }}>
-                        <Text style={{ color: 'white', fontSize: 18 }}>
+                        <Text style={{ color: COLOR1, fontSize: 18 }}>
                             Verify
                         </Text>
                     </TouchableOpacity>
@@ -301,7 +302,7 @@ export default function PhoneNumber(props) {
     else {
         return (
             <SafeAreaView style={{
-                backgroundColor: 'white',
+                backgroundColor: COLOR1,
                 height: '100%',
                 width: '100%'
             }}>
@@ -311,7 +312,7 @@ export default function PhoneNumber(props) {
                     transform: [{ translateY: 50 }],
                 }} />
                 <LinearGradient
-                    colors={['white', 'white']}
+                    colors={[COLOR1, COLOR1]}
                     style={{
                         alignItems: 'center',
                         position: 'absolute',
@@ -341,7 +342,7 @@ export default function PhoneNumber(props) {
                                 fontSize: 16,
                                 fontWeight: 'bold',
                                 color: 'black',
-                                backgroundColor: 'white',
+                                backgroundColor: COLOR1,
                                 paddingHorizontal: 10,
                             }}>Welcome, lets login</Text>
 
@@ -414,17 +415,17 @@ export default function PhoneNumber(props) {
                         }} style={{
                             marginTop: 10,
                             marignHorizontal: 20,
-                            backgroundColor: 'white',
-                            color: 'white',
+                            backgroundColor: COLOR1,
+                            color: COLOR1,
                             borderRadius: 10,
                             padding: 10,
                             width: '80%',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: '#2178bf',
+                            backgroundColor: COLOR4,
                             alignSelf: 'center'
                         }}>
-                            <Text style={{ color: 'white', fontSize: 18 }}>Send OTP</Text>
+                            <Text style={{ color: COLOR1, fontSize: 18 }}>Send OTP</Text>
                         </TouchableOpacity>
                     </View>
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Animated, TextInput, ActivityIndicator, SafeAreaView, StyleSheet, Image, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Header from './NonSearchHeader'
 import SideBar from '../SideBar';
 
@@ -26,23 +26,23 @@ const PreBuyPipeStyles = {
     currentStepIndicatorSize: 50,
     separatorStrokeWidth: 2,
     currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: '#039942',
+    stepStrokeCurrentColor: 'green',
     stepStrokeWidth: 3,
-    stepStrokeFinishedColor: '#039942',
+    stepStrokeFinishedColor: 'green',
     stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#039942',
+    separatorFinishedColor: 'green',
     separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: '#039942',
+    stepIndicatorFinishedColor: 'green',
     stepIndicatorUnFinishedColor: '#ffffff',
     stepIndicatorCurrentColor: '#ffffff',
     stepIndicatorLabelFontSize: 13,
     currentStepIndicatorLabelFontSize: 13,
-    stepIndicatorLabelCurrentColor: '#039942',
+    stepIndicatorLabelCurrentColor: 'green',
     stepIndicatorLabelFinishedColor: '#ffffff',
     stepIndicatorLabelUnFinishedColor: '#aaaaaa',
     labelColor: '#999999',
     labelSize: 13,
-    currentStepLabelColor: '#039942'
+    currentStepLabelColor: 'green'
 }
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -56,11 +56,11 @@ const GoToOldOrder = ({ props }) => {
                 justifyContent: 'center',
                 marginLeft: 20,
                 borderWidth: 1,
-                borderColor: 'lightgrey',
+                borderColor: COLOR4,
                 padding: 5,
                 borderRadius: 5,
             }}>
-                <Text style={{ color: 'grey', fontSize: 15, fontWeight: 'bold' }}>View Old Orders</Text>
+                <Text style={{ color: COLOR4, fontSize: 15, fontWeight: 'bold' }}>View Old Orders</Text>
             </TouchableOpacity>
 
         </>
@@ -115,7 +115,7 @@ const ShowForm = ({ setCancelMode, cancelMode, cancelableOrder, navigation }) =>
                 <TouchableOpacity style={{
                     borderWidth: 1,
                     borderRadius: 5,
-                    borderColor: 'green',
+                    borderColor: COLOR4,
                     width: 'auto',
                     height: 'auto',
                     padding: 20,
@@ -126,7 +126,7 @@ const ShowForm = ({ setCancelMode, cancelMode, cancelableOrder, navigation }) =>
                         setLastChanceEnable(false)
                     }}
                 >
-                    <Text style={{ color: 'green', fontSize: 18 }}>Uhm, Okay, don't cancel the order</Text>
+                    <Text style={{ color: COLOR4, fontSize: 18 }}>Uhm, Okay, don't cancel the order</Text>
                 </TouchableOpacity>
             </>
         )
@@ -218,7 +218,7 @@ const ShowForm = ({ setCancelMode, cancelMode, cancelableOrder, navigation }) =>
                         <TouchableOpacity style={{
                             borderWidth: 1,
                             borderRadius: 5,
-                            borderColor: 'green',
+                            borderColor: COLOR4,
                             width: 'auto',
                             height: 'auto',
                             padding: 20,
@@ -229,7 +229,7 @@ const ShowForm = ({ setCancelMode, cancelMode, cancelableOrder, navigation }) =>
                                 setLastChanceEnable(false)
                             }}>
                             <Text
-                                style={{ color: 'green' }}>
+                                style={{ color: COLOR4 }}>
                                 Uh, changed my mind !
                             </Text>
 
@@ -391,10 +391,11 @@ const OrderStatus = (props) => {
                     <>
                         <TouchableOpacity style={{
                             borderWidth: 1,
-                            borderColor: '#039942',
+                            borderColor: COLOR4,
                             height: 100,
                             width: 300,
                             justifyContent: 'center',
+                            backgroundColor: COLOR3,
                             padding: 20,
                             borderRadius: 10,
                             margin: 10
@@ -477,7 +478,7 @@ const OrderStatus = (props) => {
 
                     </View>
 
-                    <View style={{ padding: 10, marginRight: 20, borderWidth: 1, borderColor: '#039942', borderRadius: 10, width: '100%', paddingBottom: 100, height: 'auto' }}>
+                    <View style={{ padding: 10, marginRight: 20, borderWidth: 1, borderColor: 'green', borderRadius: 10, width: '100%', paddingBottom: 100, height: 'auto' }}>
                         <Text>{Order.stage_description}</Text>
                     </View>
                 </SafeAreaView>

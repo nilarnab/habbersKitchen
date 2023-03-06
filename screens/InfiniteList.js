@@ -111,16 +111,6 @@ const InfiniteList = (props) => {
                 initialNumToRender={1}
                 // TODO: Fix in production
                 keyExtractor={item => Math.random()}
-                // ListHeaderComponent={
-                //     <Header
-                //         setHiddenStateProducts={setHiddenStateProduct}
-                //         setHideHeader={props.setHideHeader}
-                //         setIgnoreSearch={props.setIgnoreSearch}
-                //         catagorySearchProducts={props.catagorySearchProducts}
-                //         setCatagorySearchProducts={props.setCatagorySearchProducts}
-                //     />}
-                // ListFooterComponent={renderFooter}
-                // onEndReached={loadMoreItems}
                 onEndReachedThreshold={1}
                 refreshing={refreshing}
                 onRefresh={resetList}
@@ -194,6 +184,7 @@ const styles = StyleSheet.create({
     catagoryBlock: {
         fontWeight: '800',
         height: 0,
+        marginTop: 10,
         width: '100%',
         color: 'black',
         flexDirection: 'row',

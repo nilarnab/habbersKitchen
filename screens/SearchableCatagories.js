@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, Image, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
-import { BASE_URL } from '../env'
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env'
 
 
 
 const SearchableCatagories = (props) => {
     const [scategoryData, setscategoryData] = useState([]);
+
     useEffect(() => {
         // fecth will be here (guess so)
         fetch(BASE_URL + 'categoryDefine/getCategories?type=1')
@@ -121,6 +122,7 @@ const SearchableCatagories = (props) => {
             <View style={styles.catContainer}>
                 <FlatList
                     horizontal
+                    showsHorizontalScrollIndicator={false}
                     data={scategoryData}
                     renderItem={CatagoryItem}
                     initialNumToRender={1}
@@ -143,13 +145,13 @@ const styles = StyleSheet.create({
         marginHorizontal: "auto",
         justifyContent: 'center',
         flexWrap: 'wrap',
-        marginLeft: 11,
-        marginVertical: 10
+        marginBottom: 10,
+        backgroundColor: COLOR1
     },
     catItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'aliceblue',
+        backgroundColor: COLOR2,
         borderRadius: 10,
         height: 'auto',
         width: 'auto',
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     catItemQuad: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: COLOR2,
         color: 'black',
         flex: 1,
         flexDirection: 'row',
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     catItemSmall: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: COLOR2,
         borderRadius: 0,
         height: 30,
         width: 30,

@@ -9,7 +9,7 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import MapView, { Marker } from "react-native-maps";
 import RazorpayCheckout from 'react-native-razorpay';
 import { parse } from '@babel/core';
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR1, COLOR3, COLOR4 } from '../env';
 
 import { Dimensions } from 'react-native';
 
@@ -124,7 +124,7 @@ const AddressDetails = ({ setStage }, { stage }) => {
         else {
             return (
                 <>
-                    <ActivityIndicator size="large" color="green" />
+                    <ActivityIndicator size="large" color={COLOR4} />
                 </>
             )
         }
@@ -788,7 +788,7 @@ const PreBuyComp = (props) => {
             setStage(stage + 1)
         }
     }
-    const OnlinePayment=()=>{
+    const OnlinePayment = () => {
         var options = {
             description: 'Credits towards consultation',
             image: 'https://i.imgur.com/3g7nmJC.png',
@@ -797,23 +797,23 @@ const PreBuyComp = (props) => {
             amount: '500',
             name: 'Buybold',
             prefill: {
-              email: 'void@razorpay.com',
-              contact: '9191919191',
-              name: 'Razorpay Software',
+                email: 'void@razorpay.com',
+                contact: '9191919191',
+                name: 'Razorpay Software',
             },
-            theme: {color: '#87ceeb'},
-          };
-          RazorpayCheckout.open(options)
+            theme: { color: '#87ceeb' },
+        };
+        RazorpayCheckout.open(options)
             .then(data => {
-              // handle success
-              alert(`Success: ${data.razorpay_payment_id}`);
+                // handle success
+                alert(`Success: ${data.razorpay_payment_id}`);
             })
             .catch(error => {
-              // handle failure
-              alert(`Error: ${error.code} | ${error.description}`);
+                // handle failure
+                alert(`Error: ${error.code} | ${error.description}`);
             });
-        
-      }
+
+    }
     const PaymentGateway = () => {
         return <>
             <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -834,7 +834,7 @@ const PreBuyComp = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={async () => {
                     // await PlaceOrder()
-                   OnlinePayment();
+                    OnlinePayment();
                 }} style={{
                     alignItems: 'center',
                     padding: 20,
@@ -954,7 +954,7 @@ const PreBuyComp = (props) => {
         else {
             return (
                 <>
-                    <ActivityIndicator size="large" color="green" />
+                    <ActivityIndicator size="large" color={COLOR4} />
                 </>
             )
         }
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     buttonTextLocation: {
-        color: 'green'
+        color: COLOR4
     },
     inputStyle: {
         fontSize: 15,
@@ -1070,10 +1070,10 @@ const styles = StyleSheet.create({
         height: 50,
         width: 200,
         borderRadius: 8,
-        borderColor: 'green',
+        borderColor: COLOR4,
         margin: 20,
-        backgroundColor: 'white',
-        color: 'green',
+        backgroundColor: COLOR3,
+        color: COLOR4,
     },
     // Order summary design
     SumamryWrapper: {

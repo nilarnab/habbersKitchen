@@ -4,11 +4,13 @@ import CheckBox from '@react-native-community/checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import PreBuyComp from './PreBuyPipe';
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 const ITEM_HEIGHT = Dimensions.get('window').height;
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const CartView = (navigation) => {
   const [data, setData] = useState([]);
@@ -35,6 +37,7 @@ export const CartView = (navigation) => {
   }, [isFocused])
 
   const fetchCart = async () => {
+    setLoading(true)
     var userId = await AsyncStorage.getItem("user_id")
 
     const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
@@ -210,7 +213,7 @@ export const CartView = (navigation) => {
       return (
         <>
           <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 30, flexDirection: 'row' }}>
-            <Text style={{ fontSize: 25, color: '#3a748a' }}>No Item in the Cart !</Text>
+            <Text style={{ fontSize: 25, color: 'black' }}>No Item in the Cart !</Text>
           </View>
           <View style={{
             alignItems: 'center',
@@ -218,7 +221,7 @@ export const CartView = (navigation) => {
             marginTop: 30,
             flexDirection: 'row'
           }}>
-            <Text style={{ fontSize: 20, color: '#3a748a' }}>Why not you try</Text>
+            <Text style={{ fontSize: 20, color: 'grey' }}>Why not you try</Text>
           </View>
           <View style={{
             alignItems: 'center',
@@ -227,7 +230,7 @@ export const CartView = (navigation) => {
             flexDirection: 'row'
           }}>
             <LinearGradient
-              colors={['white', 'aliceblue']}
+              colors={[COLOR1, COLOR1]}
               style={styles.nextRedirectItem}
             >
               <TouchableOpacity onPress={() => navigation.navigation.navigate('Home')} style={{
@@ -236,14 +239,15 @@ export const CartView = (navigation) => {
                 width: '100%',
                 height: '100%'
               }}>
-                <Image source={{ uri: "https://img.icons8.com/ios-filled/100/22C3E6/home-page.png" }} style={{ width: 30, height: 30 }} />
+                <Icon name={'home'} size={40} color={COLOR4} />
+
                 <Text style={{ fontSize: 15, color: 'black' }}>Keep Shopping</Text>
               </TouchableOpacity>
 
             </LinearGradient>
 
             <LinearGradient
-              colors={['white', 'aliceblue']}
+              colors={[COLOR1, COLOR1]}
               style={styles.nextRedirectItem}
             >
               <TouchableOpacity onPress={() => navigation.navigation.navigate('Trending')} style={{
@@ -252,13 +256,13 @@ export const CartView = (navigation) => {
                 width: '100%',
                 height: '100%'
               }}>
-                <Image source={{ uri: "https://img.icons8.com/external-tanah-basah-glyph-tanah-basah/48/22C3E6/external-trending-content-creator-tanah-basah-glyph-tanah-basah.png" }} style={{ width: 30, height: 30 }} />
+                <Icon name={'sort-up'} size={40} color={COLOR4} />
                 <Text style={{ fontSize: 15, color: 'black' }}>Watch Videos</Text>
               </TouchableOpacity>
             </LinearGradient>
 
             <LinearGradient
-              colors={['white', 'aliceblue']}
+              colors={[COLOR1, COLOR1]}
               style={styles.nextRedirectItem}
             >
               <TouchableOpacity onPress={() => navigation.navigation.navigate('Order')} style={{
@@ -267,7 +271,7 @@ export const CartView = (navigation) => {
                 width: '100%',
                 height: '100%'
               }}>
-                <Image source={{ uri: "https://img.icons8.com/external-phatplus-solid-phatplus/64/22C3E6/external-logistics-business-online-phatplus-solid-phatplus.png" }} style={{ width: 30, height: 30 }} />
+                <Icon name={'shopping-bag'} size={40} color={COLOR4} />
                 <Text style={{ fontSize: 15, color: 'black' }}>See Orders</Text>
               </TouchableOpacity>
             </LinearGradient>
@@ -289,13 +293,13 @@ export const CartView = (navigation) => {
       return <>
         <TouchableOpacity style={{
           color: "black",
-          backgroundColor: "aliceblue",
+          backgroundColor: COLOR3,
           padding: 10,
           width: "95%",
           margin: 10,
           borderWidth: 1,
           borderRadius: 8,
-          borderColor: "#3a748a",
+          borderColor: COLOR4,
           alignContent: 'center',
           justifyContent: 'center'
         }} onPress={(props) => {
@@ -306,7 +310,7 @@ export const CartView = (navigation) => {
           fontWeight: "900",
           fontSize: 20,
           textAlign: 'center',
-          color: "#3a748a"
+          color: COLOR4
         }}>Proceed to Buy ({data.length} items)</Text></TouchableOpacity>
 
       </>
@@ -319,35 +323,15 @@ export const CartView = (navigation) => {
     <SafeAreaView style={styles.outer_container}>
       {loading &&
         <View style={{ alignItems: 'center' }}>
-          <Bars size={25} color="green" />
+          <Bars size={25} color={COLOR4} />
         </View>}
 
       {/* Cart Details Card */}
 
       <LinearGradient
-        colors={['white', 'aliceblue']}
+        colors={[COLOR1, COLOR1]}
         style={styles.container}>
-        {/* <View style={{
-          height: 150,
-          width: 150,
-          borderRadius: 80,
-          backgroundColor: '#A4EBF3',
-          left: -75,
-          bottom: -75,
-          position: 'absolute',
-          transform: [{ translateY: 0 }],
-        }}></View>
-        <View style={{
-          height: 150,
-          width: 150,
-          borderRadius: 80,
-          backgroundColor: '#A4EBF3',
-          right: -75,
-          top: -75,
-          position: 'absolute',
-          transform: [{ translateY: 0 }],
-        }}></View> */}
-        <Text style={{ color: "black", fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
+        <Text style={{ color: COLOR4, fontSize: 25 }}>Subtotal <Text style={{ fontWeight: "900" }}>&#8377; {subTotal}</Text></Text>
 
         <ProceedButton />
 
@@ -368,7 +352,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingLeft: 10,
     overflow: 'hidden',
-    shadowColor: '#3a748a',
+    shadowColor: 'black',
     elevation: 10,
     marginVertical: 10,
     marginHorizontal: 10,
@@ -380,7 +364,7 @@ const styles = StyleSheet.create({
     height: 150,
     width: 120,
     borderRadius: 10,
-    shadowColor: '#3a748a',
+    shadowColor: 'black',
     elevation: 10,
     marginLeft: 10,
   },
@@ -425,7 +409,7 @@ const styles = StyleSheet.create({
   title: { color: "black", fontSize: 12, flexShrink: 1, flexWrap: 'wrap' },
 
   outer_container: {
-    backgroundColor: '#fff',
+    backgroundColor: COLOR2,
     height: '100%',
   },
 

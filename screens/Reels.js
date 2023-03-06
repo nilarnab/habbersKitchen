@@ -17,6 +17,7 @@ const ScreenHeight = Dimensions.get('window').height;
 import { TRENDING_STRIDE } from '../env';
 
 function Reels({
+  navigation,
   loading,
   videos,
   backgroundColor = 'white',
@@ -89,6 +90,7 @@ function Reels({
             {...item}
             index={index}
             ViewableItem={ViewableItem}
+            navigation={navigation}
             onFinishPlaying={index => {
               if (index !== videos.length - 1) {
                 // @ts-ignore: Object is possibly 'null'.
@@ -105,7 +107,7 @@ function Reels({
           offset: ScreenHeight * index,
           index,
         })}
-        snapToInterval={TRENDING_STRIDE + 10}
+        snapToInterval={TRENDING_STRIDE}
         pagingEnabled
         decelerationRate={0.9}
         onViewableItemsChanged={onViewRef.current}

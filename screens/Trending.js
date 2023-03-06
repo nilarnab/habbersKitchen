@@ -15,6 +15,8 @@ import UniversalLoader from './UniversalLoader';
 
 import { Dimensions } from 'react-native';
 
+import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
+
 
 
 
@@ -242,6 +244,8 @@ export default Trending = (props) => {
                     data={scategoryData}
                     renderItem={CatagoryItem}
                     initialNumToRender={1}
+                    showsHorizontalScrollIndicator={false}
+                    scroller
                     // TODO: Fix in production
                     keyExtractor={item => Math.random()}
 
@@ -293,8 +297,7 @@ export default Trending = (props) => {
                 height: 'auto',
                 width: '100%',
                 flexDirection: 'row',
-                paddingTop: 5,
-                marginLeft: 0
+                // backgroundColor: 'green'
             }}>
                 <View
                     style={{
@@ -320,10 +323,9 @@ export default Trending = (props) => {
                     style={{
                         height: 'auto',
                         width: '60%',
-                        backgroundColor: '',
                         flexDirection: 'row',
                         marginLeft: '5%',
-                        backgroundColor: ''
+                        // backgroundColor: 'red'
                     }}>
                     <TextInput
                         onChangeText={(text) => { setTextVal(text) }}
@@ -333,9 +335,8 @@ export default Trending = (props) => {
                             fontSize: 15,
                             color: "black",
                             width: '80%',
-                            padding: 10,
+                            padding: 0,
                             borderRadius: 8,
-                            marginBottom: 10,
                             marginLeft: '15%'
 
                         }}
@@ -385,10 +386,10 @@ export default Trending = (props) => {
 
         return (<>
             <View style={{
-                height: 70,
+                height: 'auto',
                 width: '100%',
                 paddingHorizontal: 5,
-                backgroundColor: 'white'
+                backgroundColor: ''
             }}>
 
                 <View style={{
@@ -404,55 +405,6 @@ export default Trending = (props) => {
             <SearchableCategories />
         </>)
     }
-
-    const onRefresh = async () => {
-        setRefreshing(true)
-        var new_page = Math.max(1, page - 1)
-        setLastRequestByRefresh(true)
-        await fetchTrending(new_page, query, true)
-        setPage(new_page)
-        setRefreshing(false)
-    }
-
-    const onEndReached = async () => {
-        if (!lastRequestByRefresh) {
-            setLoading(true)
-            await fetchTrending(page + 1, query, false)
-        }
-        else {
-            setLastRequestByRefresh(false)
-        }
-    }
-
-
-    const onViewCallBack = React.useCallback(async (viewableItems) => {
-
-        var changed = viewableItems.changed
-        // await AsyncStorage.setItem('videoPlayedTill', '0')
-
-        for (var i = 0; i < changed.length; i++) {
-            if (changed[i].isViewable == true) {
-                console.log('viewable', changed[i].index)
-                if (i == 0) {
-
-                    setPlayable(changed[i].index)
-                    console.log('now playable', changed[i].index)
-
-                }
-                else {
-                    break
-                }
-
-            }
-        }
-
-        // Use viewable items in state or as intended
-    }, []) // any dependencies that require the function to be "redeclared"
-
-
-    const viewConfigRef = React.useRef({ viewAreaCoveragePercentThreshold: 100 })
-
-
 
     const FlatListHorizontalItem = ({ index, item }) => {
         const OpenSpecificView = () => {
@@ -472,7 +424,6 @@ export default Trending = (props) => {
                     justifyContent: 'center',
                     // borderRightColor: 'lightgrey',
                     // borderRightWidth: 0.5,
-                    backgroundColor: 'white',
                     marginLeft: 5,
                     borderRadius: 20,
                     shadowColor: "#3a748a",
@@ -803,7 +754,7 @@ export default Trending = (props) => {
                     alignSelf: 'center',
                     marginTop: 20
                 }}>
-                    <UniversalLoader verbose={1} volume={'trending'} color={'#2178bf'} size={'small'} />
+                    <UniversalLoader verbose={1} volume={'trending'} color={COLOR4} size={'small'} />
                 </View>
             </>
         }
@@ -814,11 +765,13 @@ export default Trending = (props) => {
         <SafeAreaView>
             <View style={{
                 flexDirection: 'row',
+                backgroundColor: COLOR2
             }}>
                 <Animated.View style={{
                     width: fadeAnim,
                     height: '100%',
                     backgroundColor: 'rgb(240, 240, 245)',
+                    overflow: 'hidden'
                 }}>
                     <SideBar props={props.navigation} setState={setSideMenu} />
                 </Animated.View>
@@ -826,12 +779,11 @@ export default Trending = (props) => {
                 <View style={{
                     width: mainWidth,
                     height: '100%',
-                    backgroundColor: 'white',
                     elevation: 1
                 }}>
                     <Header setQuery={setQuery} />
                     <Loader />
-                    <Reels videos={trendingData} fetch={fetchTrending} loading={loading} />
+                    <Reels videos={trendingData} fetch={fetchTrending} loading={loading} navigation={props.navigation} />
                 </View>
             </View>
         </SafeAreaView>
@@ -844,13 +796,12 @@ const styles = StyleSheet.create({
     videoContainer: {
         height: 300,
         width: '100%',
-        backgroundColor: 'lightgrey',
+        backgroundColor: '',
         paddingVertical: 5,
     },
     textContainer: {
         height: 'auto',
         width: '100%',
-        marginTop: 5,
         marginBottom: 5,
         paddingHorizontal: 10,
     },
@@ -885,24 +836,22 @@ const styles = StyleSheet.create({
         marginHorizontal: "auto",
         justifyContent: 'center',
         flexWrap: 'wrap',
-        marginLeft: 0,
-        marginVertical: 0,
-        paddingTop: 5,
-        backgroundColor: 'white'
+        backgroundColor: COLOR1,
+        paddingVertical: 5
+        // position: 'relative',
+        // top: -20
     },
     catItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'aliceblue',
         borderRadius: 10,
         height: 'auto',
         width: 'auto',
         paddingHorizontal: 5,
-        paddingVertical: 5,
+        paddingVertical: 10,
         marginHorizontal: 10,
-        marginVertical: 5,
         flexDirection: 'row',
-        backgroundColor: 'aliceblue'
+        backgroundColor: COLOR2
     },
     catItemImage: {
         width: 30,
@@ -925,14 +874,12 @@ const styles = StyleSheet.create({
         padding: 11,
         height: 100,
         width: 100,
-        margin: 4
 
     },
 
     catagoryText: {
         fontWeight: '800',
         fontSize: 25,
-        marginTop: 20,
         marginLeft: 12,
     },
 
@@ -951,7 +898,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
         elevation: 0,
-        margin: 2
 
     },
 

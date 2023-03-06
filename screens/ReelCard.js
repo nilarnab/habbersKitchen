@@ -11,8 +11,12 @@ import helper from '../utils/helper';
 const ScreenWidth = Dimensions.get('window').width;
 const ScreenHeight = Dimensions.get('window').height - 50;
 
+import { navigate } from "../RootNavigator";
+
 // import stride length
 import { TRENDING_STRIDE } from '../env';
+
+import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 
 // is Focused 
 import { useIsFocused } from '@react-navigation/native';
@@ -32,6 +36,7 @@ function ReelCard({
   liked = false,
   disliked = false,
   index,
+  navigation,
 
   // Container Props
   backgroundColor = 'white',
@@ -57,9 +62,9 @@ function ReelCard({
   onFinishPlaying = () => { },
 
   // Slider Props
-  minimumTrackTintColor = 'black',
+  minimumTrackTintColor = COLOR4,
   maximumTrackTintColor = 'grey',
-  thumbTintColor = 'black',
+  thumbTintColor = COLOR4,
 
   // Time Props
   timeElapsedColor = 'black',
@@ -72,13 +77,13 @@ function ReelCard({
   // States
   const [VideoDimensions, SetVideoDimensions] = useState({
     width: ScreenWidth,
-    height: ScreenWidth,
+    height: TRENDING_STRIDE * 0.4,
   });
   const [Progress, SetProgress] = useState(0);
   const [Duration, SetDuration] = useState(0);
   const [Paused, SetPaused] = useState(false);
   const [ShowOptions, SetShowOptions] = useState(true);
-  const [isMuted, setIsMuted] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
   const [showMuted, setShowMuted] = useState(false)
 
 
@@ -90,6 +95,8 @@ function ReelCard({
 
 
   // }, [setShowMuted])
+
+  // console.log('in reel card navigation', navigation)
 
   const muteButtonHandler = () => {
     setShowMuted(true)
@@ -127,7 +134,7 @@ function ReelCard({
             borderRadius: 20,
             position: 'absolute',
             alignSelf: 'center',
-            transform: [{ translateY: -40 }],
+            transform: [{ translateY: 200 }],
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'white',
@@ -148,6 +155,7 @@ function ReelCard({
   /* Our changes */
 
   const FlatListHorizontalItem = ({ index, item }) => {
+    console.log('flat list nav', navigation)
     const OpenSpecificView = () => {
       navigate("ProductSpecific", { item, navigation });
     };
@@ -155,41 +163,52 @@ function ReelCard({
     return (
 
       <TouchableOpacity onPress={OpenSpecificView}>
-        <LinearGradient style={styles.horizontalItem} colors={['white', 'aliceblue']}>
+        <LinearGradient style={styles.horizontalItem} colors={[COLOR2, COLOR2]}>
 
           <View
             style={{
               flexDirection: 'row',
+              height: 'auto',
+              // backgroundColor: 'red',
+              width: '100%'
             }}>
             <View style={{
-              width: 90,
+              width: 80,
               marginLeft: 5,
+              alignSelf: 'center'
             }}>
-              <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20 }} />
+              <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20, backgroundColor: COLOR1 }} />
             </View>
 
-            <View style={{
-              width: '50%',
-              justifyContent: 'center',
-            }}>
+            <View>
 
-              <Text style={styles.titleStyle}>{item.name}</Text>
+              <View style={{
+                width: 100,
+                height: 90,
+                justifyContent: 'center',
+                marginLeft: '10%',
+              }}>
+
+                <Text style={{
+                  color: 'black'
+                }}>{item.name}</Text>
+
+                <View style={{
+                  // position: 'absolute',
+                  // bottom: 0
+
+                }}>
+                  <Text style={{
+                    fontSize: 20,
+                    color: 'black',
+                  }}>{item.price}/-</Text>
+                </View>
+
+              </View>
             </View>
 
           </View>
 
-          <View>
-            <Text style={{
-              fontSize: 15,
-              color: 'grey'
-            }}>
-              Now at only
-            </Text>
-            <Text style={{
-              fontSize: 25,
-              color: 'black'
-            }}>{item.price} /-</Text>
-          </View>
 
         </LinearGradient>
       </TouchableOpacity>
@@ -391,10 +410,31 @@ function ReelCard({
     [ShowOptions, optionsComponent, liked, disliked],
   );
 
+  // horizontal product list view
+
+  const ProductHolder = useMemo(
+    () => (
+      <View style={styles.horizontalListHolder}>
+        <FlatList
+          horizontal
+          data={products}
+          renderItem={FlatListHorizontalItem}
+          keyExtractor={(item, index) => index.toString()}
+          style={{
+            height: 200,
+            width: '100%',
+            marginVertical: 5,
+            marginLeft: 5,
+          }}
+        />
+
+      </View>
+    ), [])
+
   return (
     <>
       <Pressable
-        style={[styles.container, { backgroundColor: backgroundColor }]}
+        style={[styles.container]}
         onPress={() => { }}>
 
         <View style={
@@ -421,7 +461,6 @@ function ReelCard({
 
         <TouchableOpacity
           onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
-
         >
 
           <Video
@@ -443,7 +482,6 @@ function ReelCard({
 
         </TouchableOpacity>
 
-        <MuteButton />
 
         {ShowOptions ? (
           <>
@@ -451,20 +489,8 @@ function ReelCard({
           </>
         ) : null}
 
-        <View style={styles.horizontalListHolder}>
-          <FlatList
-            horizontal
-            data={products}
-            renderItem={FlatListHorizontalItem}
-            keyExtractor={(item, index) => index.toString()}
-            style={{
-              height: 150,
-              width: '100%',
-              marginVertical: 5,
-              marginLeft: 5,
-            }}
-          />
-        </View>
+        <MuteButton />
+        {ProductHolder}
 
       </Pressable>
 
@@ -480,15 +506,19 @@ export default ReelCard;
 // Stylesheet
 const styles = StyleSheet.create({
   container: {
-    width: ScreenWidth,
+    width: ScreenWidth - 20,
     height: TRENDING_STRIDE,
-    justifyContent: 'center',
     alignContent: 'center',
-    paddingTop: 50,
+    marginHorizontal: 10,
+    // paddingTop: 0,
+    backgroundColor: COLOR1,
+    overflow: 'hidden',
+    borderRadius: 10,
+    marginTop: 5,
     // paddingTop: '20%'
   },
   SliderContainer: {
-    width: ScreenWidth,
+    width: '100%',
     height: 55,
     bottom: 0,
     zIndex: 100,
@@ -539,21 +569,18 @@ const styles = StyleSheet.create({
 
   textContainer: {
     marginHorizontal: 10,
-    marginBottom: 5,
+    marginVertical: 10,
   },
   horizontalListHolder: {
-    marginTop: 10,
+    height: 150,
+    width: '100%',
+    // backgroundColor: 'red'
   },
   horizontalItem: {
-    height: 'auto',
+    height: 100,
     width: 200,
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    // borderColor: 'lightgrey',
-    // borderWidth: 0.5,
     marginLeft: 5,
     borderRadius: 20,
     overflow: 'hidden',

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Animated, ActivityIndicator, Image, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR3, COLOR4 } from '../env';
 import Header from './NonSearchHeader'
 
 import StepIndicator from 'react-native-step-indicator';
@@ -214,10 +214,11 @@ const OldOrderStatus = (props) => {
                     <>
                         <TouchableOpacity style={{
                             borderWidth: 1,
-                            borderColor: '#039942',
+                            borderColor: COLOR4,
                             height: 100,
                             width: 300,
                             justifyContent: 'center',
+                            backgroundColor: COLOR3,
                             padding: 20,
                             borderRadius: 10,
                             margin: 10

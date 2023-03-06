@@ -3,14 +3,13 @@ import { Animated, SafeAreaView, Image, StyleSheet, Text, View, AppRegistry, Fla
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import InfiniteList from "./InfiniteList";
 import Header from './UniversalHeader';
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native'
 import SideBar from '../SideBar';
 import LinearGradient from 'react-native-linear-gradient';
 
-const WHITE_COLOR = '#FFFFFF'
 const BACKGROUND_COLOR = 'white'
 
 
@@ -82,7 +81,7 @@ export const HomeScreen = (props) => {
 
         return (
             <>
-                <LinearGradient colors={['white', 'white', 'white']}>
+                <LinearGradient colors={[COLOR2, COLOR2]}>
                     <ImageBackground
                         // source={{ uri: '' }}
                         resizeMode="stretch"
@@ -93,7 +92,13 @@ export const HomeScreen = (props) => {
                             alignItems: 'center',
                         }}
                     >
-                        <Header setState={setSideMenu} State={SideMenu} hideHeader={hideHeader} setHideHeader={setHideHeader} setProducts={setProducts} setIgnoreSearch={setIgnoreSearch} />
+                        <Header
+                            setState={setSideMenu}
+                            State={SideMenu}
+                            hideHeader={hideHeader}
+                            setHideHeader={setHideHeader}
+                            setProducts={setProducts}
+                            setIgnoreSearch={setIgnoreSearch} />
 
                         <InfiniteList
                             list={products}
@@ -131,7 +136,7 @@ export const HomeScreen = (props) => {
             <View style={{
                 width: mainWidth,
                 height: '100%',
-                backgroundColor: BACKGROUND_COLOR,
+                backgroundColor: COLOR2,
                 elevation: 1
             }}>
                 <Home props={props} />

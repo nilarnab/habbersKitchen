@@ -4,7 +4,7 @@ import { navigate } from "../RootNavigator";
 import { ActivityIndicator, Button } from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { BASE_URL } from '../env'
+import { BASE_URL, COLOR1, COLOR4 } from '../env'
 import LinearGradient from "react-native-linear-gradient";
 
 function AddToCartButton({ productID }) {
@@ -69,7 +69,7 @@ function AddToCartButton({ productID }) {
 
     if (count === 0)
         return (
-            <Button icon="cart" mode="contained" style={{ backgroundColor: "black", borderRadius: 50 }} onPress={addProduct}>Add </Button>
+            <Button icon="cart" mode="contained" style={{ backgroundColor: COLOR4, borderRadius: 50 }} onPress={addProduct}>Add </Button>
         )
     else
         return (
@@ -93,54 +93,11 @@ const ProductView = ({ item, navigation }) => {
 
         <TouchableOpacity style={styles.itemWrapperStyle} onPress={openSpecificView}>
 
-
-            {/* <View style={{
-                height: 180,
-                width: 180,
-                borderRadius: 90,
-                backgroundColor: '#CCF2F4',
-                alignSelf: 'center',
-                position: 'absolute',
-                transform: [{ translateY: -40 }],
-            }}></View> */}
-
-            {/* <View style={{
-                height: 100,
-                width: 100,
-                borderRadius: 50,
-                backgroundColor: '#A4EBF3',
-                alignSelf: 'center',
-                position: 'absolute',
-                transform: [{ translateY: 40 }],
-            }}></View> */}
-            <LinearGradient colors={['white', 'aliceblue', '#A4EBF3']} style={{
+            <LinearGradient colors={[COLOR1, COLOR1]} style={{
                 width: '100%',
                 paddingVertical: 10,
                 paddingHorizontal: 10,
             }}>
-                {/* <View style={{
-                    height: 250,
-                    width: 250,
-                    borderRadius: 250,
-                    backgroundColor: '#CCF2F4',
-                    alignSelf: 'center',
-                    position: 'absolute',
-                    bottom: 0,
-                    shadowColor: "black",
-                    elevation: 10,
-                    transform: [{ translateY: 100 }],
-                }}></View>
-
-                <View style={{
-                    height: 150,
-                    width: 150,
-                    borderRadius: 100,
-                    backgroundColor: '#A4EBF3',
-                    alignSelf: 'center',
-                    position: 'absolute',
-                    bottom: 0,
-                    transform: [{ translateY: 40 }],
-                }}></View> */}
 
                 <Image style={styles.itemImageStyle} source={{ uri: item.image }} />
                 <View style={styles.contentWrapperStyle}>
@@ -172,16 +129,17 @@ const ProductView = ({ item, navigation }) => {
 
 const styles = StyleSheet.create({
     itemWrapperStyle: {
-        width: '47%',
+        width: '48%',
         height: 'auto',
         overflow: 'hidden',
-        margin: "1.5%",
+        marginLeft: '1.3%',
+        marginBottom: '1.3%',
         borderColor: 'lightgrey',
         // borderWidth:2,
         borderBottomWidth: 0.5,
         borderRightWidth: 0.5,
         borderRadius: 10,
-        shadowColor: '#3a748a',
+        shadowColor: 'black',
         shadowOffset: { width: 20, height: 10 },
         elevation: 15,
         backgroundColor: 'green'
@@ -232,7 +190,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: "black",
+        backgroundColor: COLOR4,
         width: '10%',
     },
 });

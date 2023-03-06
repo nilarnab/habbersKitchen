@@ -14,6 +14,7 @@ import Trending from './Trending';
 import SideMenu from 'react-native-side-menu-updated'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import { COLOR4 } from '../env';
 
 
 AppRegistry.registerComponent('Appname', () => App);
@@ -44,7 +45,7 @@ function MainPage(props) {
             <Tab.Navigator
                 screenOptions={({ route }) => ({
 
-                    "tabBarActiveTintColor": "#3a748a",
+                    "tabBarActiveTintColor": COLOR4,
                     tabBarInactiveTintColor: 'gray',
                     "tabBarStyle": [
                         {
@@ -75,7 +76,7 @@ function MainPage(props) {
 
                     contentStyle: {
                         backgroundColor: '#FFFFFF',
-                        activeTintColor: '#A4EBF3',
+                        activeTintColor: COLOR4,
                     },
                     headerMode: 'screen',
                     defaultNavigationOptions: ({ navigation }) => {

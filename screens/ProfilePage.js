@@ -15,106 +15,10 @@ import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native'
 import Header from './NonSearchHeader';
 import SideBar from '../SideBar';
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import LinearGradient from 'react-native-linear-gradient';
 import auth from '@react-native-firebase/auth';
 import GetLocation from 'react-native-get-location';
-
-const SECTIONS = [
-    {
-        title: 'Your Wishlist',
-        data: [
-            {
-                key: '1',
-                text: 'Item text 1',
-                uri: 'https://picsum.photos/id/1011/200',
-            },
-            {
-                key: '2',
-                text: 'Item text 2',
-                uri: 'https://picsum.photos/id/1012/200',
-            },
-
-            {
-                key: '3',
-                text: 'Item text 3',
-                uri: 'https://picsum.photos/id/1013/200',
-            },
-            {
-                key: '4',
-                text: 'Item text 4',
-                uri: 'https://picsum.photos/id/1015/200',
-            },
-            {
-                key: '5',
-                text: 'Item text 5',
-                uri: 'https://picsum.photos/id/1016/200',
-            },
-        ],
-    },
-    {
-        title: 'Your Recomendations',
-        data: [
-            {
-                key: '1',
-                text: 'Item text 1',
-                uri: 'https://picsum.photos/id/1020/200',
-            },
-            {
-                key: '2',
-                text: 'Item text 2',
-                uri: 'https://picsum.photos/id/1024/200',
-            },
-
-            {
-                key: '3',
-                text: 'Item text 3',
-                uri: 'https://picsum.photos/id/1027/200',
-            },
-            {
-                key: '4',
-                text: 'Item text 4',
-                uri: 'https://picsum.photos/id/1035/200',
-            },
-            {
-                key: '5',
-                text: 'Item text 5',
-                uri: 'https://picsum.photos/id/1038/200',
-            },
-        ],
-    },
-];
-
-
-
-
-
-const ListItem = ({ item }) => {
-
-    return (
-        <>
-            <TouchableOpacity onPress={() => {
-                console.log(item)
-            }}>
-                <View style={styles.item}>
-                    <Image
-                        source={{
-                            uri: item.uri || item.image,
-                        }}
-                        style={styles.itemPhoto}
-                        resizeMode="cover"
-                    />
-                    <Text style={styles.itemText}>{item.text}</Text>
-                </View>
-            </TouchableOpacity>
-
-
-        </>
-    );
-};
-
-
-
 
 
 const Rendarable = ({ recVisited }) => {
@@ -190,7 +94,7 @@ const Rendarable = ({ recVisited }) => {
                         left: 10,
                         top: 10,
                         position: 'absolute',
-                        borderColor: '#A4EBF3',
+                        borderColor: COLOR4,
                         borderWidth: 2,
                         borderRadius: 5,
                         justifyContent: 'center',
@@ -199,7 +103,7 @@ const Rendarable = ({ recVisited }) => {
                         paddingVertical: 5,
                     }}>
                         <Text style={{
-                            color: 'black',
+                            color: COLOR4,
                             fontSize: 12,
                             fontWeight: 'bold',
                             alignSelf: 'center',
@@ -218,10 +122,10 @@ const Rendarable = ({ recVisited }) => {
                         left: 10,
                         top: 10,
                         position: 'absolute',
-                        borderColor: '#A4EBF3',
+                        borderColor: COLOR3,
                         borderWidth: 2,
                         borderRadius: 5,
-                        backgroundColor: 'green',
+                        backgroundColor: COLOR4,
                         justifyContent: 'center',
                         alignItems: 'center',
                         paddingHorizontal: 10,
@@ -252,7 +156,7 @@ const Rendarable = ({ recVisited }) => {
                         borderRadius: 10,
                         marginVertical: 10,
                         paddingLeft: 10,
-                        borderColor: 'green',
+                        borderColor: COLOR4,
                         borderWidth: 1,
                         shadowColor: "green",
                         elevation: 5,
@@ -268,8 +172,8 @@ const Rendarable = ({ recVisited }) => {
                             height: 40,
                             backgroundColor: 'white',
                         }} placeholder={'Your Name'}
-                        underlineColor={'aliceblue'}
-                        activeUnderlineColor={'#3a748a'}
+                        underlineColor={COLOR3}
+                        activeUnderlineColor={COLOR4}
                         onChangeText={setName}
                         value={name} />
 
@@ -281,8 +185,8 @@ const Rendarable = ({ recVisited }) => {
                             backgroundColor: 'white',
                         }} placeholder={'New Email'}
                         onChangeText={setEmail}
-                        underlineColor={'aliceblue'}
-                        activeUnderlineColor={'#3a748a'}
+                        underlineColor={COLOR3}
+                        activeUnderlineColor={COLOR4}
                         value={email} />
 
                 </View>
@@ -291,19 +195,19 @@ const Rendarable = ({ recVisited }) => {
         else {
             return (<>
                 <LinearGradient
-                    colors={['white', 'aliceblue']}
+                    colors={[COLOR1, COLOR1]}
                     style={{
                         alignSelf: 'center',
                         width: '80%',
                         heidth: 'auto',
                         paddingVertical: 50,
-                        borderColor: '#A4EBF3',
+                        borderColor: COLOR4,
                         borderRadius: 10,
                         borderWidth: 1,
                         marginVertical: 10,
                         paddingLeft: 10,
                         overflow: 'hidden',
-                        shadowColor: '#3a748a',
+                        shadowColor: COLOR4,
                         elevation: 10,
                     }}>
 
@@ -311,7 +215,7 @@ const Rendarable = ({ recVisited }) => {
                         height: 150,
                         width: 150,
                         borderRadius: 80,
-                        backgroundColor: '#A4EBF3',
+                        backgroundColor: COLOR4,
                         left: -75,
                         bottom: -75,
                         position: 'absolute',
@@ -321,7 +225,7 @@ const Rendarable = ({ recVisited }) => {
                         height: 150,
                         width: 150,
                         borderRadius: 80,
-                        backgroundColor: '#A4EBF3',
+                        backgroundColor: COLOR4,
                         right: -75,
                         top: -75,
                         position: 'absolute',
@@ -504,16 +408,14 @@ const Rendarable = ({ recVisited }) => {
         return <>
 
             <View style={{
-                backgroundColor: 'white',
+                backgroundColor: COLOR1,
                 height: 'auto',
                 paddingTop: 20,
                 paddingBottom: 20,
                 paddingHorizontal: 20,
-                borderWidth: 1,
-                borderColor: 'aliceblue',
                 marginHorizontal: 20,
                 borderRadius: 10,
-                shadowColor: '#3a748a',
+                shadowColor: 'black',
                 elevation: 5,
             }}>
 
@@ -540,7 +442,7 @@ const Rendarable = ({ recVisited }) => {
                     onChangeText={setAddr1}
                     value={addr1}
                     style={styles.inputStyleLocation}
-                    activeUnderlineColor='#3a748a'
+                    activeUnderlineColor={COLOR4}
                 ></TextInput>
 
                 <Text
@@ -556,7 +458,7 @@ const Rendarable = ({ recVisited }) => {
                     onChangeText={setAddr2}
                     value={addr2}
                     style={styles.inputStyleLocation}
-                    activeUnderlineColor='#3a748a'
+                    activeUnderlineColor={COLOR4}
                 ></TextInput>
 
                 <View
@@ -584,10 +486,10 @@ const Rendarable = ({ recVisited }) => {
                             color: 'black',
                             backgroundColor: 'white'
                         }}
-                        underlineColorAndroid="aliceblue"
+                        underlineColorAndroid={COLOR3}
                         onChangeText={setPin}
                         placeholderTextColor="lightgray"
-                        activeUnderlineColor='#3a748a'
+                        activeUnderlineColor={COLOR4}
                         value={pin}></TextInput>
 
 
@@ -611,7 +513,7 @@ const Rendarable = ({ recVisited }) => {
                         underlineColorAndroid="aliceblue"
                         onChangeText={setCity}
                         placeholderTextColor="lightgray"
-                        activeUnderlineColor='#3a748a'
+                        activeUnderlineColor={COLOR4}
                         value={city}></TextInput>
                 </View>
 
@@ -711,7 +613,7 @@ export const ProfilePage = (props) => {
             <View style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: '#ffff',
+                backgroundColor: COLOR2,
                 elevation: 2,
                 flexDirection: 'row'
             }}>
@@ -728,7 +630,7 @@ export const ProfilePage = (props) => {
                 <View style={{
                     width: mainWidth,
                     height: '100%',
-                    backgroundColor: 'white',
+                    backgroundColor: COLOR2,
                     elevation: 1
                 }}>
                     <Header setState={setSideMenu} State={SideMenu} />
@@ -749,10 +651,10 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         height: 'auto',
-        backgroundColor: 'aliceblue'
+        backgroundColor: COLOR3
     },
     buttonTextLocation: {
-        color: 'green'
+        color: COLOR4
     },
     inputStyle: {
         fontSize: 15,
@@ -765,7 +667,7 @@ const styles = StyleSheet.create({
         // height: 40
     },
     buttonStyleLocation: {
-        backgroundColor: '#A4EBF3',
+        backgroundColor: COLOR3,
         width: 'auto',
         height: 'auto',
         borderRadius: 5,
@@ -778,6 +680,6 @@ const styles = StyleSheet.create({
     buttonTextStyleLocation: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: 'black',
+        color: COLOR4,
     }
 });

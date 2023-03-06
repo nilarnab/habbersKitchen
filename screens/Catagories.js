@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, Image, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
-import { BASE_URL } from '../env'
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env'
 import LinearGradient from 'react-native-linear-gradient';
 
 const bigCatagoryActionCenter = async ({ item }) => {
@@ -68,7 +68,7 @@ const CatagoryItem = ({ item }) => {
 
         return (
             <>
-                <LinearGradient colors={['white', 'aliceblue']} style={styles.catItem}>
+                <LinearGradient colors={[COLOR2, COLOR2]} style={styles.catItem}>
                     <TouchableOpacity onPress={() => bigCatagoryActionCenter({ item })}>
 
                         {/* <Text style={styles.catagoryText}>{item.title}</Text> */}
@@ -89,8 +89,7 @@ const CatagoryItem = ({ item }) => {
                         <Image source={{ uri: item.image }} resizeMode="cover" style={{
                             width: 180,
                             height: 180,
-                            margin: 0,
-                            borderRadius: 20
+                            borderRadius: 10
                         }} Image>
                         </Image>
                         {/* <Text style={styles.catItemTitle}>{item.title}</Text> */}
@@ -155,13 +154,17 @@ const styles = StyleSheet.create({
         marginHorizontal: "auto",
         justifyContent: 'center',
         flexWrap: 'wrap',
-        marginLeft: 15,
+        marginLeft: 5,
+        backgroundColor: COLOR1,
+        borderRadius: 10,
+        paddingLeft: 10,
+        paddingVertical: 10,
     },
     catItem: {
         alignItems: 'center',
         // justifyContent: 'center',
         borderRadius: 10,
-        backgroundColor: '#F4F9F9',
+        backgroundColor: COLOR2,
         height: 180,
         width: 180,
         shadowColor: "#000",
@@ -169,10 +172,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 3,
         },
-        elevation: 0,
-        margin: 2,
         borderColor: 'lightgrey',
-        padding: 2,
+        marginLeft: 10,
         borderRightWidth: 0.5,
         overflow: 'hidden'
 
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     catItemQuad: {
-        backgroundColor: '#F4F9F9',
+        backgroundColor: COLOR2,
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,

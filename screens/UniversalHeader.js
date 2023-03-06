@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
 import { FaHeart } from "react-icons/fa";
 import Icon from "react-native-vector-icons/Ionicons";
-import { BASE_URL } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
+
+const ScreenWidth = Dimensions.get('window').width;
 
 const SearchBar = (props) => {
 
     const [searchText, setSearchText] = useState("");
     const [hideHeader, setHideHeader] = useState(props.hideHeader)
+
 
     // console.log("search bar props")
     // console.log(props)
@@ -70,7 +73,7 @@ const SearchBar = (props) => {
                 value={searchText}
                 onChangeText={setSearchText}
                 placeholder="Start Typing to search ..."
-                placeholderTextColor="#000"
+                placeholderTextColor={'black'}
             />
 
             <TouchableOpacity title='Search' onPress={async () => {
@@ -156,20 +159,19 @@ const styles = StyleSheet.create({
     containter: {
         width: '100%',
         height: 60,
-        // backgroundColor: '#ffff',
         // elevation: 2,
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
 
     left_icons: {
-        width: 80,
+        width: 60,
         height: '100%',
         padding: 20
     },
 
     right_icons:
     {
-        width: '80%',
+        width: ScreenWidth - 60,
         height: '100%',
         // backgroundColor: 'white',
         position: 'absolute',
@@ -188,12 +190,12 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        marginBottom: 1,
         fontSize: 15,
         color: "black",
-        width: '80%',
+        backgroundColor: COLOR1,
+        width: '100%',
         padding: 10,
-        borderRadius: 8,
+        borderRadius: 10,
         marginBottom: 10
     },
 

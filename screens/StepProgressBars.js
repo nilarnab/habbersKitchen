@@ -1,24 +1,26 @@
+import { COLOR1, COLOR2, COLOR3, COLOR4 } from "../env";
+
 export const PreBuyPipeLabels = ["Location Confirmation", 'User Info', "Order Summary", "Payment Method", "Completion"];
 export const PreBuyPipeStyles = {
     stepIndicatorSize: 25,
     currentStepIndicatorSize: 30,
     separatorStrokeWidth: 2,
     currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: '#039942',
+    stepStrokeCurrentColor: COLOR4,
     stepStrokeWidth: 3,
-    stepStrokeFinishedColor: '#039942',
+    stepStrokeFinishedColor: COLOR4,
     stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#039942',
+    separatorFinishedColor: COLOR4,
     separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: '#039942',
+    stepIndicatorFinishedColor: COLOR4,
     stepIndicatorUnFinishedColor: '#ffffff',
     stepIndicatorCurrentColor: '#ffffff',
     stepIndicatorLabelFontSize: 13,
     currentStepIndicatorLabelFontSize: 13,
-    stepIndicatorLabelCurrentColor: '#039942',
+    stepIndicatorLabelCurrentColor: COLOR4,
     stepIndicatorLabelFinishedColor: 'white',
     stepIndicatorLabelUnFinishedColor: '#aaaaaa',
     labelColor: '#999999',
     labelSize: 13,
-    currentStepLabelColor: '#039942'
+    currentStepLabelColor: COLOR4
 }

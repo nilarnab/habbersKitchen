@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Animated, Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground,ToastAndroid, FlatList } from 'react-native';
+import { Animated, Image, BackHandler, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground, ToastAndroid, FlatList } from 'react-native';
 // import Ionicons from '@expo/vector-icons/Ionicons';
 import Video, { DRMType } from 'react-native-video';
 import { ActivityIndicator, Button, configureFonts } from 'react-native-paper';
@@ -12,6 +12,8 @@ import { Slider } from '@miblanchard/react-native-slider';
 import { useIsFocused } from '@react-navigation/native';
 
 import { BASE_URL } from '../env';
+
+
 
 // testing
 
@@ -38,29 +40,30 @@ const ProductImage = (url, index) => {
     </>
 
 }
-function AddToWishButton({productID}){
+
+function AddToWishButton({ productID }) {
     console.log(productID)
-   
+
     const [loading, setLoading] = useState(true);
-    
+
     // const [fetchbutton,setfetchbutton]=useState(true);
-    const [fetchaddbutton,setfetchaddbutton]=useState(true)
-    
-    
+    const [fetchaddbutton, setfetchaddbutton] = useState(true)
+
+
     const [userid, setUserid] = useState(null)
-    
-    const checkstatus=async()=>{
+
+    const checkstatus = async () => {
         setLoading(true);
         var user_id_temp = await AsyncStorage.getItem('user_id');
         // setUserid(user_id_temp);
         const response = await fetch(BASE_URL + `wishlist/get_ind/${user_id_temp}/${productID}`, { method: 'GET' })
         const data = await response.json();
         console.log(data)
-        if(data.valid==null){
+        if (data.valid == null) {
             console.log("data fetched");
             setLoading(false)
         }
-        else{
+        else {
             setLoading(false)
             setfetchaddbutton(false)
             // setwishbutton("Add to Wishlist")
@@ -79,44 +82,44 @@ function AddToWishButton({productID}){
 
         const resp = await fetch(BASE_URL + `wishlist/remove/${user_id_temp}/${productID}`, { method: 'POST' })
         const data = await resp.json();
-        if(data){
+        if (data) {
             console.log("data removed");
             setLoading(false)
-            
+
             setfetchaddbutton(true)
             ToastAndroid.show('Remove successfully!', ToastAndroid.SHORT);
             // checkstatus();
             // setLoading(false)
         }
-        else{
+        else {
             console.log("some error has occured")
         }
-        
+
     };
     const addTOwish = async () => {
 
         setLoading(true);
-      
+
         var user_id_temp = await AsyncStorage.getItem('user_id');
         setUserid(user_id_temp)
 
         const resp = await fetch(BASE_URL + `wishlist/insert-item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
         // const data = await resp.json();
-        if(resp){
+        if (resp) {
             console.log("data inserted");
             setLoading(false)
             setfetchaddbutton(false)
-          
-          
+
+
             ToastAndroid.show('added successfully!', ToastAndroid.SHORT);
             // checkstatus();
             // setLoading(false)
         }
-        else{
+        else {
             console.log("some error has occured")
         }
-        
-        
+
+
     };
 
     if (loading) {
@@ -125,45 +128,45 @@ function AddToWishButton({productID}){
         );
     }
 
-    if(fetchaddbutton){
+    if (fetchaddbutton) {
         return (
             <View>
-            <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
+                <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
                     Add to Wishlist
                 </Button>
-            {/* <FontAwesomeIcon icon="fa-regular fa-heart" onPress={addTOwish}  /> */}
-            {/* <FontAwesomeIcon icon={ faMugSaucer }  onPress={addTOwish}/> */}
-            {/* <WishIcon onPress={addTOwish} /> */}
+                {/* <FontAwesomeIcon icon="fa-regular fa-heart" onPress={addTOwish}  /> */}
+                {/* <FontAwesomeIcon icon={ faMugSaucer }  onPress={addTOwish}/> */}
+                {/* <WishIcon onPress={addTOwish} /> */}
             </View>
-          );
-           
-            //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={addTOwish}>
-            //     {wishbutton}
-            // </Button>
-            
-           
-       
-        
-        }
-        else {
-            return(
-                <View>
-           <Button icon="heart" mode="contained" style={{ backgroundColor: "green" }} onPress={removewish}>
+        );
+
+        //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={addTOwish}>
+        //     {wishbutton}
+        // </Button>
+
+
+
+
+    }
+    else {
+        return (
+            <View>
+                <Button icon="heart" mode="contained" style={{ backgroundColor: "green" }} onPress={removewish}>
                     Remove from Wishlist
                 </Button>
-          {/* <FontAwesomeIcon icon="fa-solid fa-heart" onPress={removewish}  /> */}
-          {/* <FontAwesomeIcon icon={ faMugSaucer } onPress={removewish} /> */}
-          {/* <WishIcon onPress={removewish}/> */}
-        </View>
+                {/* <FontAwesomeIcon icon="fa-solid fa-heart" onPress={removewish}  /> */}
+                {/* <FontAwesomeIcon icon={ faMugSaucer } onPress={removewish} /> */}
+                {/* <WishIcon onPress={removewish}/> */}
+            </View>
             //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={removewish}>
             //     {wishbutton}
             // </Button>
-    
-            )
-        }
-   
-    
-    
+
+        )
+    }
+
+
+
 
 
 }
@@ -269,6 +272,21 @@ export default function ProductSpecific({ route, navigation }) {
     const fadeAnim = useRef(new Animated.Value(0)).current
     const fadeAnimControls = useRef(new Animated.Value(0)).current
 
+    useEffect(() => {
+        const backAction = async () => {
+            navigation.goBack()
+
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+
+        return () => backHandler.remove();
+
+    }, []);
 
     useEffect(() => {
 
