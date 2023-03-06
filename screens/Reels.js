@@ -20,6 +20,9 @@ function Reels({
   navigation,
   loading,
   videos,
+  fetch,
+  page,
+  query,
   backgroundColor = 'white',
   headerTitle,
   headerIconName,
@@ -84,7 +87,7 @@ function Reels({
         ref={FlatlistRef}
         data={videos}
         keyExtractor={item => item.title.toString()}
-        onEndReached={() => { console.log('end reached') }}
+        onEndReached={() => { console.log('end reached');fetch(page+1,query)  }}
         renderItem={({ item, index }) => (
           <ReelCard
             {...item}

@@ -448,15 +448,15 @@ function ReelCard({
 
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 13,
               color: 'black',
             }}>{description1}</Text>
 
-          <Text
+          {/* <Text
             style={{
-              fontSize: 15,
+              fontSize: 12,
               color: 'black',
-            }}>{description2}</Text>
+            }}>{description2}</Text> */}
         </View>
 
         <TouchableOpacity
