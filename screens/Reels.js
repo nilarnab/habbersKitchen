@@ -20,6 +20,9 @@ function Reels({
   navigation,
   loading,
   videos,
+  fetch,
+  page,
+  query,
   backgroundColor = 'white',
   headerTitle,
   headerIconName,
@@ -66,17 +69,26 @@ function Reels({
     timeElapsedColor: timeElapsedColor,
     totalTimeColor: totalTimeColor,
   };
-
+  // const viewabilityConfigCallbackPairs = useRef([
+  //   { onViewChange },
+  // ]);
   const Loader = () => {
     if (loading) { }
   }
 
   // Viewable configuration
   const onViewRef = useRef(viewableItems => {
-    // console.log("viewable items", viewableItems.viewableItems);
+    console.log("viewable items", viewableItems);
     if (viewableItems?.viewableItems?.length > 0)
       SetViewableItem(viewableItems.viewableItems[0].key || 0);
   });
+
+  // const onViewChange = ({
+  //   viewableItems,
+  // }) => {
+  //   console.log(viewa)
+  // };
+
   // console.log("data-here", videos)
   return (
     <>
@@ -84,8 +96,9 @@ function Reels({
         nestedScrollEnabled
         ref={FlatlistRef}
         data={videos}
+        // key={Rand}
         keyExtractor={item => item.title.toString()}
-        onEndReached={() => { console.log('end reached') }}
+        onEndReached={() => { console.log('end reached'); fetch(page + 1, query) }}
         renderItem={({ item, index }) => (
           <ReelCard
             {...item}
@@ -103,6 +116,7 @@ function Reels({
             {...applyProps}
           />
         )}
+        onMomentumScrollEnd={(event) => console.log(event)}
         getItemLayout={(_data, index) => ({
           length: ScreenHeight,
           offset: ScreenHeight * index,
@@ -110,8 +124,9 @@ function Reels({
         })}
         snapToInterval={TRENDING_STRIDE}
         pagingEnabled
-        decelerationRate={0.9}
         onViewableItemsChanged={onViewRef.current}
+        // viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+        decelerationRate={0.9}
         // viewabilityConfig={viewConfigRef.current}
         contentContainerStyle={{ paddingBottom: TRENDING_STRIDE - 100 }}
         viewabilityConfig={{

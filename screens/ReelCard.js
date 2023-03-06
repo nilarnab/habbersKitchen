@@ -339,7 +339,6 @@ function ReelCard({
           height: width_val * (naturalHeight / naturalWidth),
         });
       }
-      console.log('redy')
       setVisualOp(1)
       SetDuration(event.duration * 1000);
     } catch (error) { }
@@ -377,6 +376,39 @@ function ReelCard({
 
   // useMemo for Slider
   const GetSlider = useMemo(
+    () => (
+      <View style={styles.SliderContainer}>
+        <Text style={[styles.TimeOne, { color: timeElapsedColor }]}>
+          {helper.GetDurationFormat(Math.floor((Progress * Duration) / 100))}
+        </Text>
+        <Slider
+          style={{ height: 40, width: '100%' }}
+          minimumValue={0}
+          maximumValue={100}
+          minimumTrackTintColor={minimumTrackTintColor}
+          maximumTrackTintColor={maximumTrackTintColor}
+          thumbTintColor={thumbTintColor}
+          value={Progress}
+          onSlidingComplete={data => SeekUpdate(data)}
+        />
+        <Text style={[styles.TimeTwo, { color: totalTimeColor }]}>
+          {helper.GetDurationFormat(Duration || 0)}
+        </Text>
+      </View>
+    ),
+    [
+      Duration,
+      Progress,
+      ShowOptions,
+      thumbTintColor,
+      totalTimeColor,
+      timeElapsedColor,
+      minimumTrackTintColor,
+      maximumTrackTintColor,
+    ],
+  );
+
+  const GetSliderVert = useMemo(
     () => (
       <View style={styles.SliderContainer}>
         <Text style={[styles.TimeOne, { color: timeElapsedColor }]}>
@@ -500,7 +532,7 @@ function ReelCard({
         width: '100%',
         height: 210,
         position: 'absolute',
-        top: (VideoDimensions.height - 210 + 20),
+        bottom: 20,
 
       }}>
         <View style={{
@@ -530,6 +562,17 @@ function ReelCard({
     ), [])
 
 
+  const NowPlaying = () => {
+    if (!Paused) {
+      return <>
+        <Text style={{ fontSize: 10, fontWeight: 'normal' }}>
+          (Now playing)
+        </Text>
+      </>
+    }
+  }
+
+
   if (!isVertical.current) {
     return (
       <View style={{
@@ -546,7 +589,7 @@ function ReelCard({
                 fontSize: 20,
                 color: 'black',
                 fontWeight: 'bold'
-              }}>{title}</Text>
+              }}>{title} <NowPlaying /></Text>
 
             <Text
               style={{
@@ -706,6 +749,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 55,
     bottom: 0,
+    zIndex: 100,
+  },
+  SliderContainerVert: {
+    width: '100%',
+    height: 55,
+    position: 'absolute',
+    bottom: 20,
     zIndex: 100,
   },
   TimeOne: {

@@ -50,31 +50,28 @@ export default Trending = (props) => {
     const fadeAnim = useRef(new Animated.Value(0)).current
 
     useEffect(() => {
-        console.log('this use effect is running')
         const checkSession = async () => {
 
             const userId = await AsyncStorage.getItem("user_id")
 
             if (userId == null) {
-                console.log("no cache data in trending")
                 props.navigation.navigate("Phone")
             }
             else {
-                console.log("cache data in trending", userId)
             }
         }
 
         checkSession()
     }, [isFocused])
 
-    const fetchTrending = async (page, query, refresh) => {
+    const fetchTrending = async (page, query) => {
 
-        console.log('fetching trending', page, query, refresh)
+        setPage(page);
 
         // storing last search query
         await AsyncStorage.setItem('last_search_trending', query)
 
-        setLoading(true)
+        // setLoading(true)
 
         var user_id = await AsyncStorage.getItem('user_id')
 
@@ -84,30 +81,29 @@ export default Trending = (props) => {
             props.navigation.navigate('Phone')
         }
         else {
-            if (!caughtUp) {
-                var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
-                var feedDataJson = await feedData.json()
-                var scrollToTop = feedDataJson.scroll_to_top
+            // if (!caughtUp) {
+            var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
+            var feedDataJson = await feedData.json()
+            var scrollToTop = feedDataJson.scroll_to_top
+            // if (!refresh) {
+            //     if (scrollToTop) {
+            //         console.log('scrolling to top')
+            //         flatListRef.current.scrollToIndex({ animated: false, index: 0 })
+            //     }
+            // }
+            // else {
+            //     flatListRef.current.scrollToEnd({ animated: false })
+            // }
 
-                if (!refresh) {
-                    if (scrollToTop) {
-                        console.log('scrolling to top')
-                        flatListRef.current.scrollToIndex({ animated: false, index: 0 })
-                    }
-                }
-                else {
-                    flatListRef.current.scrollToEnd({ animated: false })
-                }
-
-                setTrendingData(feedDataJson.response)
-                setCaughtUp(feedDataJson.caughtup)
+            setTrendingData(feedDataJson.response)
+            setCaughtUp(feedDataJson.caughtup)
 
 
-                console.log('list length', feedDataJson.response.length)
-                setPage(page)
-            }
+            console.log('list length', feedDataJson.response.length)
+            setPage(page)
+            // }
         }
-        setLoading(false)
+        // setLoading(false)
     }
 
     useEffect(() => {
@@ -769,7 +765,7 @@ export default Trending = (props) => {
             }}>
                 <Animated.View style={{
                     width: fadeAnim,
-                    height: '100%',
+                    height: 60,
                     backgroundColor: 'rgb(240, 240, 245)',
                     overflow: 'hidden'
                 }}>
@@ -783,7 +779,7 @@ export default Trending = (props) => {
                 }}>
                     <Header setQuery={setQuery} />
                     <Loader />
-                    <Reels videos={trendingData} fetch={fetchTrending} loading={loading} navigation={props.navigation} />
+                    <Reels videos={trendingData} fetch={fetchTrending} loading={loading} navigation={props.navigation} page={page} query={query} />
                 </View>
             </View>
         </SafeAreaView>
@@ -845,11 +841,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        height: 'auto',
+        height: 50,
         width: 'auto',
         paddingHorizontal: 5,
         paddingVertical: 10,
         marginHorizontal: 10,
+        marginBottom: 10,
         flexDirection: 'row',
         backgroundColor: COLOR2
     },
