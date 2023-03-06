@@ -79,12 +79,15 @@ function ReelCard({
     width: ScreenWidth,
     height: TRENDING_STRIDE * 0.4,
   });
+  const [visualOp, setVisualOp] = useState(0.2)
   const [Progress, SetProgress] = useState(0);
   const [Duration, SetDuration] = useState(0);
   const [Paused, SetPaused] = useState(false);
   const [ShowOptions, SetShowOptions] = useState(true);
   const [isMuted, setIsMuted] = useState(true)
   const [showMuted, setShowMuted] = useState(false)
+
+  const isVertical = useRef(false)
 
 
   const isFocused = useIsFocused()
@@ -153,9 +156,7 @@ function ReelCard({
   }
 
   /* Our changes */
-
   const FlatListHorizontalItem = ({ index, item }) => {
-    console.log('flat list nav', navigation)
     const OpenSpecificView = () => {
       navigate("ProductSpecific", { item, navigation });
     };
@@ -206,6 +207,60 @@ function ReelCard({
 
               </View>
             </View>
+
+          </View>
+
+
+        </LinearGradient>
+      </TouchableOpacity>
+    )
+  }
+
+  const FlatListHorizontalItemVert = ({ index, item }) => {
+    const OpenSpecificView = () => {
+      navigate("ProductSpecific", { item, navigation });
+    };
+
+    return (
+
+      <TouchableOpacity onPress={OpenSpecificView}>
+        <LinearGradient style={styles.horizontalItemVert} colors={[COLOR2, COLOR2]}>
+          <Text style={{
+            color: 'black',
+            marginTop: 5
+          }}>{item.name}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              height: 'auto',
+              // backgroundColor: 'red',
+              width: '100%',
+              alignContent: 'center',
+              marginTop: 5
+            }}>
+            <View style={{
+              width: '100%',
+              alignSelf: 'center',
+              alignContent: 'center'
+            }}>
+              <Image source={{ uri: item.image }} style={{ height: 80, width: 80, borderRadius: 20, backgroundColor: COLOR1, alignSelf: 'center' }} />
+            </View>
+
+
+
+          </View>
+          <View style={{
+            width: '100%',
+            height: 'auto',
+            alignContent: 'center',
+            marginTop: 5
+          }}>
+
+            <Text style={{
+              fontSize: 20,
+              color: 'black',
+              alignSelf: 'center'
+            }}>{item.price}/-</Text>
 
           </View>
 
@@ -270,16 +325,22 @@ function ReelCard({
       const naturalWidth = naturalSize.width;
       const naturalHeight = naturalSize.height;
       if (naturalWidth > naturalHeight) {
+        isVertical.current = false
         SetVideoDimensions({
           width: ScreenWidth,
           height: ScreenWidth * (naturalHeight / naturalWidth),
         });
       } else {
+        isVertical.current = true
+
+        width_val = Math.min(TRENDING_STRIDE * (naturalWidth / naturalHeight), (ScreenWidth - 20) * 0.6)
         SetVideoDimensions({
-          width: ScreenHeight * (naturalWidth / naturalHeight),
-          height: ScreenHeight,
+          width: width_val,
+          height: width_val * (naturalHeight / naturalWidth),
         });
       }
+      console.log('redy')
+      setVisualOp(1)
       SetDuration(event.duration * 1000);
     } catch (error) { }
   };
@@ -415,6 +476,8 @@ function ReelCard({
   const ProductHolder = useMemo(
     () => (
       <View style={styles.horizontalListHolder}>
+
+
         <FlatList
           horizontal
           data={products}
@@ -431,73 +494,195 @@ function ReelCard({
       </View>
     ), [])
 
-  return (
-    <>
-      <Pressable
-        style={[styles.container]}
-        onPress={() => { }}>
+  const ProductHolderVert = useMemo(
+    () => (
+      <View style={{
+        width: '100%',
+        height: 210,
+        position: 'absolute',
+        top: (VideoDimensions.height - 210 + 20),
 
-        <View style={
-          styles.textContainer}>
-          <Text
-            style={{
-              fontSize: 20,
-              color: 'black',
-              fontWeight: 'bold'
-            }}>{title}</Text>
-
-          <Text
-            style={{
-              fontSize: 15,
-              color: 'black',
-            }}>{description1}</Text>
-
-          <Text
-            style={{
-              fontSize: 15,
-              color: 'black',
-            }}>{description2}</Text>
+      }}>
+        <View style={{
+          marginLeft: 10
+        }}>
+          <Text style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: 'black'
+          }}>Products</Text>
         </View>
+        <FlatList
+          horizontal
+          data={products}
+          renderItem={FlatListHorizontalItemVert}
+          keyExtractor={(item, index) => index.toString()}
+          style={{
+            height: '100%',
+            width: '100%',
+            marginVertical: 5,
+            marginLeft: 5,
+            transform: [{ translateX: - 4 }]
+          }}
+        />
 
-        <TouchableOpacity
-          onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
-        >
-
-          <Video
-            ref={VideoPlayer}
-            source={{ uri: videoUrl }}
-            style={VideoDimensions}
-            resizeMode="contain"
-            onError={videoError}
-            controls={false}
-            playInBackground={false}
-            progressUpdateInterval={1000}
-            paused={Paused}
-            muted={isMuted}
-            repeat={false}
-            onLoad={onLoadComplete}
-            onProgress={PlayBackStatusUpdate}
-            onEnd={() => { onFinishPlaying(index) }}
-          />
-
-        </TouchableOpacity>
+      </View>
+    ), [])
 
 
-        {ShowOptions ? (
-          <>
-            {GetSlider}
-          </>
-        ) : null}
+  if (!isVertical.current) {
+    return (
+      <View style={{
+        opacity: visualOp
+      }}>
+        <Pressable
+          style={[styles.container]}
+          onPress={() => { }}>
 
-        <MuteButton />
-        {ProductHolder}
+          <View style={
+            styles.textContainer}>
+            <Text
+              style={{
+                fontSize: 20,
+                color: 'black',
+                fontWeight: 'bold'
+              }}>{title}</Text>
 
-      </Pressable>
+            <Text
+              style={{
+                fontSize: 15,
+                color: 'black',
+              }}>{description1}</Text>
+
+            <Text
+              style={{
+                fontSize: 15,
+                color: 'black',
+              }}>{description2}</Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
+          >
+
+            <Video
+              ref={VideoPlayer}
+              source={{ uri: videoUrl }}
+              style={VideoDimensions}
+              resizeMode="contain"
+              onError={videoError}
+              controls={false}
+              playInBackground={false}
+              progressUpdateInterval={1000}
+              paused={Paused}
+              muted={isMuted}
+              repeat={false}
+              onLoad={onLoadComplete}
+              onProgress={PlayBackStatusUpdate}
+              onEnd={() => { onFinishPlaying(index) }}
+            />
+
+          </TouchableOpacity>
+
+
+          {ShowOptions ? (
+            <>
+              {GetSlider}
+            </>
+          ) : null}
+
+          <MuteButton />
+          {ProductHolder}
+
+        </Pressable>
 
 
 
-    </>
-  );
+      </View>
+    );
+  }
+  else {
+    return (
+      <View style={{
+        opacity: visualOp
+      }}>
+        <Pressable
+          style={[styles.container]}
+          onPress={() => { }}>
+
+          <View style={{ flexDirection: 'row' }}>
+
+            <TouchableOpacity
+              onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
+              style={{
+                width: VideoDimensions.width,
+                height: 'auto',
+              }}
+            >
+
+
+              <Video
+                ref={VideoPlayer}
+                source={{ uri: videoUrl }}
+                style={[VideoDimensions, { borderRadius: 20, marginTop: 10 }]}
+                resizeMode="contain"
+                onError={videoError}
+                controls={false}
+                playInBackground={false}
+                progressUpdateInterval={1000}
+                paused={Paused}
+                muted={isMuted}
+                repeat={false}
+                onLoad={onLoadComplete}
+                onProgress={PlayBackStatusUpdate}
+                onEnd={() => { onFinishPlaying(index) }}
+              />
+
+              <MuteButton />
+              {ShowOptions ? (
+                <>
+                  {GetSlider}
+                </>
+              ) : null}
+
+            </TouchableOpacity>
+
+            <View style={{
+              width: (ScreenWidth - 20) - VideoDimensions.width
+            }}>
+              <View style={
+                styles.textContainer}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: 'black',
+                    fontWeight: 'bold'
+                  }}>{title}</Text>
+
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: 'black',
+                  }}>{description1}</Text>
+
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: 'black',
+                  }}>{description2}</Text>
+              </View>
+
+              {ProductHolderVert}
+
+            </View>
+          </View>
+
+        </Pressable>
+      </View>
+    );
+  }
+
+
 }
 
 // Exports
@@ -583,6 +768,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 5,
     borderRadius: 20,
+    overflow: 'hidden',
+  },
+  horizontalItemVert: {
+    height: '100%',
+    width: 120,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    marginLeft: 10,
+    borderRadius: 20,
+    paddingVertical: 10,
     overflow: 'hidden',
   }
 });

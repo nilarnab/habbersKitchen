@@ -7,7 +7,7 @@ export const COMPNAY_NAME = 'BuyBold'
 export const APP_NAME = 'BuyBold'
 
 // trending page 
-export const TRENDING_STRIDE = 560
+export const TRENDING_STRIDE = 520
 
 // export const TRENDING_STRIDE = 550
 

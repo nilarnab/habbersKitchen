@@ -81,6 +81,7 @@ function Reels({
   return (
     <>
       <FlatList
+        nestedScrollEnabled
         ref={FlatlistRef}
         data={videos}
         keyExtractor={item => item.title.toString()}
