@@ -1,6 +1,6 @@
 // packages Imports
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Text, Pressable } from 'react-native';
+import { Animated, View, StyleSheet, FlatList, Image, TouchableOpacity, Dimensions, Text, Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Video from 'react-native-video';
 
@@ -89,6 +89,37 @@ function ReelCard({
 
   const isVertical = useRef(false)
 
+  const CardWidth = (ScreenWidth - 20)
+  const ExpectedVideoWidth = CardWidth * 0.6
+  const videoHolderWidth = useRef(new Animated.Value(ExpectedVideoWidth)).current
+  const contentHolderWidth = useRef(new Animated.Value(CardWidth - ExpectedVideoWidth)).current
+  const [videoMode, setVideoMode] = useState(true)
+
+  useEffect(() => {
+    if (videoMode) {
+      Animated.timing(videoHolderWidth, {
+        toValue: ExpectedVideoWidth,
+        useNativeDriver: false
+      }).start()
+
+      Animated.timing(contentHolderWidth, {
+        toValue: CardWidth - ExpectedVideoWidth,
+        useNativeDriver: false
+      }).start()
+
+    }
+    else {
+      Animated.timing(videoHolderWidth, {
+        toValue: 0,
+        useNativeDriver: false
+      }).start()
+
+      Animated.timing(contentHolderWidth, {
+        toValue: CardWidth,
+        useNativeDriver: false
+      }).start()
+    }
+  }, [videoMode])
 
   const isFocused = useIsFocused()
 
@@ -224,7 +255,7 @@ function ReelCard({
     return (
 
       <TouchableOpacity onPress={OpenSpecificView}>
-        <LinearGradient style={styles.horizontalItemVert} colors={[COLOR2, COLOR2]}>
+        <LinearGradient style={styles.horizontalItemVert} colors={[COLOR1, COLOR1]}>
           <Text style={{
             color: 'black',
             marginTop: 5
@@ -275,26 +306,18 @@ function ReelCard({
 
   // Play/Pause video according to viisibility
   useEffect(() => {
-    if (ViewableItem === title) SetPaused(false);
+    // console.log('in reelcard', ViewableItem, 'index', index, ViewableItem == index)
+    if (ViewableItem == index) SetPaused(false);
     else SetPaused(true);
   }, [ViewableItem]);
 
-  useEffect(() => {
-    if (isFocused) {
-      SetPaused(false)
-    }
-    else {
-      SetPaused(true)
-    }
-  }, [isFocused])
-
   // Pause when use toggle options to True
-  useEffect(() => {
-    if (pauseOnOptionsShow) {
-      if (ShowOptions) SetPaused(true);
-      else SetPaused(false);
-    }
-  }, [ShowOptions, pauseOnOptionsShow]);
+  // useEffect(() => {
+  //   if (pauseOnOptionsShow) {
+  //     if (ShowOptions) SetPaused(true);
+  //     else SetPaused(false);
+  //   }
+  // }, [ShowOptions, pauseOnOptionsShow]);
 
   // Callbhack for Seek Update
   const SeekUpdate = useCallback(
@@ -333,7 +356,7 @@ function ReelCard({
       } else {
         isVertical.current = true
 
-        width_val = Math.min(TRENDING_STRIDE * (naturalWidth / naturalHeight), (ScreenWidth - 20) * 0.6)
+        width_val = (ScreenWidth - 20) * 0.6
         SetVideoDimensions({
           width: width_val,
           height: width_val * (naturalHeight / naturalWidth),
@@ -529,10 +552,14 @@ function ReelCard({
   const ProductHolderVert = useMemo(
     () => (
       <View style={{
-        width: '100%',
+        width: '90%',
         height: 210,
         position: 'absolute',
         bottom: 20,
+        backgroundColor: COLOR2,
+        paddingVertical: 5,
+        borderRadius: 10,
+        marginLeft: 10,
 
       }}>
         <View style={{
@@ -655,69 +682,95 @@ function ReelCard({
 
           <View style={{ flexDirection: 'row' }}>
 
-            <TouchableOpacity
-              onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
-              style={{
-                width: VideoDimensions.width,
-                height: 'auto',
-              }}
-            >
-
-
-              <Video
-                ref={VideoPlayer}
-                source={{ uri: videoUrl }}
-                style={[VideoDimensions, { borderRadius: 20, marginTop: 10 }]}
-                resizeMode="contain"
-                onError={videoError}
-                controls={false}
-                playInBackground={false}
-                progressUpdateInterval={1000}
-                paused={Paused}
-                muted={isMuted}
-                repeat={false}
-                onLoad={onLoadComplete}
-                onProgress={PlayBackStatusUpdate}
-                onEnd={() => { onFinishPlaying(index) }}
-              />
-
-              <MuteButton />
-              {ShowOptions ? (
-                <>
-                  {GetSlider}
-                </>
-              ) : null}
-
-            </TouchableOpacity>
-
-            <View style={{
-              width: (ScreenWidth - 20) - VideoDimensions.width
+            <Animated.View style={{
+              width: videoHolderWidth,
+              overflow: 'hidden'
             }}>
-              <View style={
-                styles.textContainer}>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    color: 'black',
-                    fontWeight: 'bold'
-                  }}>{title}</Text>
 
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: 'black',
-                  }}>{description1}</Text>
+              <TouchableOpacity
+                onPress={() => { setIsMuted(!isMuted); muteButtonHandler() }}
+                style={{
+                  width: VideoDimensions.width,
+                  height: 'auto',
+                }}
+              >
 
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: 'black',
-                  }}>{description2}</Text>
-              </View>
 
-              {ProductHolderVert}
+                <Video
+                  ref={VideoPlayer}
+                  source={{ uri: videoUrl }}
+                  style={[VideoDimensions, { borderRadius: 20, marginTop: 10 }]}
+                  resizeMode="contain"
+                  onError={videoError}
+                  controls={false}
+                  playInBackground={false}
+                  progressUpdateInterval={1000}
+                  paused={Paused}
+                  muted={isMuted}
+                  repeat={false}
+                  onLoad={onLoadComplete}
+                  onProgress={PlayBackStatusUpdate}
+                  onEnd={() => { onFinishPlaying(index) }}
+                />
 
-            </View>
+                <MuteButton />
+                {ShowOptions ? (
+                  <>
+                    {GetSlider}
+                  </>
+                ) : null}
+
+              </TouchableOpacity>
+            </Animated.View>
+
+            <Animated.View
+              style={{
+                width: contentHolderWidth,
+                height: 'auto'
+              }}>
+              <TouchableOpacity onPress={() => {
+                if (videoMode) {
+                  SetPaused(true)
+                }
+                else {
+                  SetPaused(false)
+                }
+
+                setVideoMode(!videoMode)
+              }}>
+
+                <View style={{
+                  width: '100%',
+                  height: TRENDING_STRIDE,
+                }}>
+                  <View style={
+                    styles.textContainer}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: 'black',
+                        fontWeight: 'bold'
+                      }}>{title} <NowPlaying /></Text>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'black',
+                      }}>{description1}</Text>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: 'black',
+                      }}>{description2}</Text>
+                  </View>
+
+                  {ProductHolderVert}
+
+                </View>
+
+              </TouchableOpacity>
+            </Animated.View>
           </View>
 
         </Pressable>
