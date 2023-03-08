@@ -110,7 +110,7 @@ function ReelCard({
     }
     else {
       Animated.timing(videoHolderWidth, {
-        toValue: 0,
+        toValue: 50,
         useNativeDriver: false
       }).start()
 
@@ -646,7 +646,7 @@ function ReelCard({
               progressUpdateInterval={1000}
               paused={Paused}
               muted={isMuted}
-              repeat={false}
+              repeat={true}
               onLoad={onLoadComplete}
               onProgress={PlayBackStatusUpdate}
               onEnd={() => { onFinishPlaying(index) }}
@@ -707,7 +707,7 @@ function ReelCard({
                   progressUpdateInterval={1000}
                   paused={Paused}
                   muted={isMuted}
-                  repeat={false}
+                  repeat={true}
                   onLoad={onLoadComplete}
                   onProgress={PlayBackStatusUpdate}
                   onEnd={() => { onFinishPlaying(index) }}

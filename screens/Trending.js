@@ -49,6 +49,8 @@ export default Trending = (props) => {
     const [mainWidth, setMainWidth] = useState('100%')
     const fadeAnim = useRef(new Animated.Value(0)).current
 
+    const nowShowing = useRef([])
+
     useEffect(() => {
         const checkSession = async () => {
 
@@ -64,6 +66,11 @@ export default Trending = (props) => {
         checkSession()
     }, [isFocused])
 
+    const populateNowShowing = (feeds) => {
+        nowShowing.current = feeds
+
+    }
+
     const fetchTrending = async (page, query) => {
 
         setPage(page);
@@ -71,7 +78,9 @@ export default Trending = (props) => {
         // storing last search query
         await AsyncStorage.setItem('last_search_trending', query)
 
-        // setLoading(true)
+        if (page == 1) {
+            setLoading(true)
+        }
 
         var user_id = await AsyncStorage.getItem('user_id')
 
@@ -82,18 +91,25 @@ export default Trending = (props) => {
         }
         else {
             // if (!caughtUp) {
-            var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}`, { method: 'GET' })
+            console.log('trying request')
+            var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}&nowShowing=${nowShowing.current}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'nowShowing': nowShowing.current
+                    })
+                })
+            console.log('requeat got ', feedData)
+
             var feedDataJson = await feedData.json()
+            // console.log('json data', feedDataJson)
             var scrollToTop = feedDataJson.scroll_to_top
-            // if (!refresh) {
-            //     if (scrollToTop) {
-            //         console.log('scrolling to top')
-            //         flatListRef.current.scrollToIndex({ animated: false, index: 0 })
-            //     }
-            // }
-            // else {
-            //     flatListRef.current.scrollToEnd({ animated: false })
-            // }
+
+            populateNowShowing(feedDataJson.response)
 
             setTrendingData(feedDataJson.response)
             setCaughtUp(feedDataJson.caughtup)
@@ -103,7 +119,8 @@ export default Trending = (props) => {
             setPage(page)
             // }
         }
-        // setLoading(false)
+
+        setLoading(false)
     }
 
     useEffect(() => {
