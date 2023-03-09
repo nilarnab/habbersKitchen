@@ -4,7 +4,7 @@ import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-
 import { FaHeart } from "react-icons/fa";
 import Icon from "react-native-vector-icons/Ionicons";
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
-
+import fetch_home from '../methods/fetch';
 const ScreenWidth = Dimensions.get('window').width;
 
 const SearchBar = (props) => {
@@ -32,7 +32,7 @@ const SearchBar = (props) => {
                     <TouchableOpacity title='Search' onPress={async () => {
                         // console.log(searchText);
                         // console.log("in searching", searchText)
-                        const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
+                        const result = await fetch_home(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                         const response = (await result.json()).data;
                         setProducts(response);
                         // console.log(response);
@@ -79,7 +79,7 @@ const SearchBar = (props) => {
             <TouchableOpacity title='Search' onPress={async () => {
                 // console.log(searchText);
                 // console.log("in searching")
-                const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
+                const result = await fetch_home(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                 const response = (await result.json()).data;
                 setProducts(response);
                 setHideHeader(true)

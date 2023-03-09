@@ -19,7 +19,7 @@ import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import LinearGradient from 'react-native-linear-gradient';
 import auth from '@react-native-firebase/auth';
 import GetLocation from 'react-native-get-location';
-
+import fetch_home from '../methods/fetch';
 
 const Rendarable = ({ recVisited }) => {
 
@@ -66,7 +66,7 @@ const Rendarable = ({ recVisited }) => {
                 var uuid = await AsyncStorage.getItem('uuid')
                 var user_id = await AsyncStorage.getItem('user_id')
 
-                const resp = await fetch(BASE_URL + `userInfo/update_name?uuid=${uuid}&user_id=${user_id}&name=${name}`, { method: 'POST' })
+                const resp = await fetch_home(BASE_URL + `userInfo/update_name?uuid=${uuid}&user_id=${user_id}&name=${name}`, { method: 'POST' })
                 var resp_json = await resp.json();
 
                 console.log(resp_json)
@@ -557,14 +557,14 @@ export const ProfilePage = (props) => {
 
                 var userId = await AsyncStorage.getItem('user_id')
 
-                var response = await fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROFILE&userid=${userId}`, { method: 'GET' })
+                var response = await fetch_home(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROFILE&userid=${userId}`, { method: 'GET' })
 
                 var response_json = await response.json()
                 console.log(response_json)
 
                 var user_id = await AsyncStorage.getItem('user_id')
                 // console.log("sending")
-                fetch(BASE_URL + `userInfo/fetchVisited?uid=${user_id}`)
+                fetch_home(BASE_URL + `userInfo/fetchVisited?uid=${user_id}`, { method: 'GET' })
                     .then(res => res.json())
                     .then(result => { setRecVisited({ title: recVisited.title, data: result }) })
             }

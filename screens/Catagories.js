@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, ActivityIndicator, Image, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env'
 import LinearGradient from 'react-native-linear-gradient';
-
+import fetch_home from '../methods/fetch';
 const bigCatagoryActionCenter = async ({ item }) => {
 
     if (item["action"] == 'SEARCH') {
@@ -118,7 +118,7 @@ const Catagories = () => {
     const [categoryData, setcategoryData] = useState([]);
 
     useEffect(() => {
-        fetch(BASE_URL + 'categoryDefine/getCategories?type=0')
+        fetch_home(BASE_URL + 'categoryDefine/getCategories?type=0', { method: 'GET' })
             .then(res => res.json())
             .then(result => { setcategoryData(result); })
     }, []);

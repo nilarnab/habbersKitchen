@@ -95,7 +95,7 @@ const ShowForm = ({ setCancelMode, cancelMode, cancelableOrder, navigation }) =>
                     onPress={async () => {
 
                         if (cancelableOrder != null) {
-                            var response = await fetch(BASE_URL + `orderManage/cancel_order?order_id=${cancelableOrder.order_id}&reason_prime=${reasonPrime}&reason_secondary=${reasonSec}`,
+                            var response = await fetch_home(BASE_URL + `orderManage/cancel_order?order_id=${cancelableOrder.order_id}&reason_prime=${reasonPrime}&reason_secondary=${reasonSec}`,
                                 { method: 'POST' })
 
                             response = await response.json()
@@ -279,7 +279,7 @@ const OrderStatus = (props) => {
 
             if (isFocused) {
                 var userId = await AsyncStorage.getItem('user_id')
-                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=ORDER&userid=${userId}`, { method: 'GET' })
+                fetch_home(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=ORDER&userid=${userId}`, { method: 'GET' })
             }
 
         }
@@ -341,7 +341,7 @@ const OrderStatus = (props) => {
             setLoading(true)
 
             var userIdLocal = await AsyncStorage.getItem('user_id')
-            var orderListLocal = await fetch(BASE_URL + 'orderManage/get_orders?user_id=' + userIdLocal, { method: 'POST' })
+            var orderListLocal = await fetch_home(BASE_URL + 'orderManage/get_orders?user_id=' + userIdLocal, { method: 'POST' })
             var orderListLocalJson = await orderListLocal.json()
 
             setOrderList(orderListLocalJson['response'])

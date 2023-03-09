@@ -6,7 +6,7 @@ import Catagories from "./Catagories"
 import SearchableCatagories from "./SearchableCatagories";
 import { BASE_URL } from '../env'
 import { transform } from "@babel/core";
-
+import fetch_home from '../methods/fetch';
 import LinearGradient from 'react-native-linear-gradient';
 
 
@@ -88,7 +88,7 @@ const InfiniteList = (props) => {
      */
         const getProducts = () => {
             // console.log("trying to get products")
-            fetch(BASE_URL + `products/getAllProducts`, { method: 'GET' })
+            fetch_home(BASE_URL + `products/getAllProducts`, { method: 'GET' })
                 .then(res => res.json())
                 .then(({ allProducts }) => {
                     if (allProducts.length === 0)
