@@ -46,7 +46,8 @@ function Reels({
 }) {
   const FlatlistRef = useRef(null);
   const [ViewableItem, SetViewableItem] = useState(0);
-  const [scrollOffset, setScrollOffset] = useState(-1)
+  const [scrollOffset, setScrollOffset] = useState(-1);
+  const [isMuted, setIsMuted] = useState(true)
   const viewConfigRef = useRef({ viewAreaCoveragePercentThreshold: 70 });
   const applyProps = {
     backgroundColor: backgroundColor,
@@ -77,38 +78,18 @@ function Reels({
     if (loading) { }
   }
 
-  // Viewable configuration
-  const onViewRef = useRef(viewableItems => {
-    // console.log("viewable items", viewableItems);
-    // if (viewableItems?.viewableItems?.length > 0)
-    //   SetViewableItem(viewableItems.viewableItems[0].key || 0);
-
-    // console.log('Viewable item', ViewableItem)
-  });
-
-  // const onViewChange = ({
-  //   viewableItems,
-  // }) => {
-  //   console.log(viewa)
-  // };
-
-  // console.log("data-here", videos)
 
   const onScrollEvent = (event) => {
     var scrollVal = event.nativeEvent.contentOffset.y
-    var scrollDir = null
+    var total_posts = videos.length
+
     if (Math.abs(scrollOffset - scrollVal) > TRENDING_STRIDE * 0.9) {
+      var post_index = Math.round(scrollVal / TRENDING_STRIDE)
+      SetViewableItem(post_index)
 
-      if (scrollVal > scrollOffset) {
-        scrollDir = 'DOWN'
-        // SetViewableItem(ViewableItem + 1)
+      if (total_posts - post_index <= 2) {
+        fetch(page + 1, query)
       }
-      else {
-        scrollDir = 'UP'
-        // SetViewableItem(Math.max(0, ViewableItem - 1))
-      }
-
-      SetViewableItem(Math.round(scrollVal / TRENDING_STRIDE))
 
       setScrollOffset(scrollVal)
     }
@@ -127,13 +108,15 @@ function Reels({
           data={videos}
           // key={Rand}
           keyExtractor={item => item.title.toString()}
-          onEndReached={() => { console.log('end reached'); fetch(page + 1, query) }}
+          // onEndReached={() => { console.log('end reached'); fetch(page + 1, query) }}
           renderItem={({ item, index }) => (
             <ReelCard
               {...item}
               index={index}
               ViewableItem={ViewableItem}
               navigation={navigation}
+              isMuted={isMuted}
+              setIsMuted={setIsMuted}
               onFinishPlaying={index => {
                 if (index !== videos.length - 1) {
                   // @ts-ignore: Object is possibly 'null'.
@@ -152,14 +135,11 @@ function Reels({
           })}
           snapToInterval={TRENDING_STRIDE}
           pagingEnabled
-          onViewableItemsChanged={onViewRef.current}
           // viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
           decelerationRate={0.9}
           // viewabilityConfig={viewConfigRef.current}
           contentContainerStyle={{ paddingBottom: TRENDING_STRIDE - 100 }}
-          viewabilityConfig={{
-            itemVisiblePercentThreshold: 60
-          }}
+
           onMomentumScrollEnd={onScrollEvent}
         />
 

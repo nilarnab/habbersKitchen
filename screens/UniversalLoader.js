@@ -32,7 +32,8 @@ const dictionary = {
     'trending': [
         'fetching latest reels',
         'waiting ..',
-        'pariently waiting ..',
+        'patiently waiting ..',
+        'taking longer than expected ...'
     ]
 }
 

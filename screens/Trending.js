@@ -7,6 +7,7 @@ import Video, { DRMType } from 'react-native-video';
 import { navigate } from "../RootNavigator";
 import LinearGradient from 'react-native-linear-gradient';
 import SideBar from '../SideBar';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Reels from './Reels';
 // import { ActivityIndicator } from 'react-native';
 // import { FlatList } from "react-native-bidirectional-infinite-scroll";
@@ -82,42 +83,47 @@ export default Trending = (props) => {
             setLoading(true)
         }
 
-        var user_id = await AsyncStorage.getItem('user_id')
+        try {
+            var user_id = await AsyncStorage.getItem('user_id')
 
-        if (user_id == null) {
+            if (user_id == null) {
 
-            // this part is not tested
-            props.navigation.navigate('Phone')
-        }
-        else {
-            // if (!caughtUp) {
-            console.log('trying request')
-            var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}&nowShowing=${nowShowing.current}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        'nowShowing': nowShowing.current
+                // this part is not tested
+                props.navigation.navigate('Phone')
+            }
+            else {
+                // if (!caughtUp) {
+                console.log('trying request')
+                var feedData = await fetch_home(BASE_URL + `trending/get_feed?user_id=${user_id}&page=${page}&fquery=${query}&nowShowing=${nowShowing.current}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            'nowShowing': nowShowing.current
+                        })
                     })
-                })
-            console.log('requeat got ', feedData)
 
-            var feedDataJson = await feedData.json()
-            // console.log('json data', feedDataJson)
-            var scrollToTop = feedDataJson.scroll_to_top
+                var feedDataJson = await feedData.json()
+                // console.log('json data', feedDataJson)
+                var scrollToTop = feedDataJson.scroll_to_top
 
-            populateNowShowing(feedDataJson.response)
+                populateNowShowing(feedDataJson.response)
 
-            setTrendingData(feedDataJson.response)
-            setCaughtUp(feedDataJson.caughtup)
+                setTrendingData(feedDataJson.response)
+                setCaughtUp(feedDataJson.caughtup)
 
 
-            console.log('list length', feedDataJson.response.length)
-            setPage(page)
-            // }
+                console.log('list length', feedDataJson.response.length)
+                setPage(page)
+                // }
+            }
+
+        }
+        catch (error) {
+            console.log('error in fetching', error)
         }
 
         setLoading(false)
@@ -276,13 +282,13 @@ export default Trending = (props) => {
 
                 return (
                     <>
-                        <Image source={{ uri: "https://img.icons8.com/material/24/null/menu--v1.png" }} style={{ height: 20, width: 20 }}></Image>
+                        <Icon name='bars' size={20} color={COLOR4} />
                     </>
                 )
             }
             else {
                 return (
-                    <Image source={{ uri: "https://img.icons8.com/material/24/null/arrow-pointing-left--v2.png" }} style={{ height: 20, width: 20 }}></Image>
+                    <Icon name='close' size={20} color={COLOR4} />
                 )
             }
         }
@@ -291,14 +297,17 @@ export default Trending = (props) => {
             if (textVal.length == 0) {
                 return (
                     <>
-                        <Image source={{ uri: "https://img.icons8.com/ios/50/null/search--v1.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} />
+
+                        <Icon name='search' size={20} color={COLOR4} />
+
                     </>
                 )
             }
             else {
                 return (
                     <>
-                        <Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} />
+                        <Icon name='search' size={20} color={COLOR4} />
+
                     </>
                 )
             }
@@ -369,13 +378,10 @@ export default Trending = (props) => {
                     <TouchableOpacity style={{
                         height: 40,
                         width: 40,
-                        paddingTop: 15,
                         justifyContent: 'center',
                         alignItems: 'center',
                         marginRight: 40,
                         marginTop: 5,
-                        borderRadius: 50,
-                        borderWidth: 0.5,
                         borderColor: 'lightgrey',
                     }}
                         onPress={() => {
@@ -765,7 +771,14 @@ export default Trending = (props) => {
             return <>
                 <View style={{
                     alignSelf: 'center',
-                    marginTop: 20
+                    marginTop: 120,
+                    position: 'absolute',
+                    zIndex: 100,
+                    backgroundColor: 'white',
+                    borderRadius: 20,
+                    padding: 10,
+                    borderWidth: 1,
+                    borderColor: COLOR4
                 }}>
                     <UniversalLoader verbose={1} volume={'trending'} color={COLOR4} size={'small'} />
                 </View>
@@ -782,8 +795,7 @@ export default Trending = (props) => {
             }}>
                 <Animated.View style={{
                     width: fadeAnim,
-                    height: 60,
-                    backgroundColor: 'rgb(240, 240, 245)',
+                    height: '100%',
                     overflow: 'hidden'
                 }}>
                     <SideBar props={props.navigation} setState={setSideMenu} />

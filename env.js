@@ -3,11 +3,13 @@
 export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 
 // names and conventions
-export const COMPNAY_NAME = 'BuyBold'
+export const COMPNAY_NAME = 'buyBold'
 export const APP_NAME = 'BuyBold'
 
 // trending page 
 export const TRENDING_STRIDE = 520
+export const HORI_HW_RAT = 0.5625
+export const VERT_HW_RAT = 192 / 108
 
 // export const TRENDING_STRIDE = 550
 
@@ -16,3 +18,6 @@ export const COLOR1 = '#FFFFFF'
 export const COLOR2 = '#F9F6F7'
 export const COLOR3 = '#FFE8D6'
 export const COLOR4 = '#FF971D'
+export const COLOR5 = '#BA2025'
+
+

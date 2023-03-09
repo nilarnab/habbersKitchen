@@ -11,6 +11,10 @@ import helper from '../utils/helper';
 const ScreenWidth = Dimensions.get('window').width;
 const ScreenHeight = Dimensions.get('window').height - 50;
 
+// expected ratio
+import { HORI_HW_RAT } from '../env';
+import { VERT_HW_RAT } from '../env';
+
 import { navigate } from "../RootNavigator";
 
 // import stride length
@@ -28,6 +32,8 @@ function ReelCard({
   _id,
   videoUrl,
   fetch,
+  isMuted,
+  setIsMuted,
   title,
   description1,
   description2,
@@ -84,7 +90,7 @@ function ReelCard({
   const [Duration, SetDuration] = useState(0);
   const [Paused, SetPaused] = useState(false);
   const [ShowOptions, SetShowOptions] = useState(true);
-  const [isMuted, setIsMuted] = useState(true)
+  // const [isMuted, setIsMuted] = useState(true)
   const [showMuted, setShowMuted] = useState(false)
 
   const isVertical = useRef(false)
@@ -349,18 +355,9 @@ function ReelCard({
       const naturalHeight = naturalSize.height;
       if (naturalWidth > naturalHeight) {
         isVertical.current = false
-        SetVideoDimensions({
-          width: ScreenWidth,
-          height: ScreenWidth * (naturalHeight / naturalWidth),
-        });
+
       } else {
         isVertical.current = true
-
-        width_val = (ScreenWidth - 20) * 0.6
-        SetVideoDimensions({
-          width: width_val,
-          height: width_val * (naturalHeight / naturalWidth),
-        });
       }
       setVisualOp(1)
       SetDuration(event.duration * 1000);
@@ -638,7 +635,10 @@ function ReelCard({
             <Video
               ref={VideoPlayer}
               source={{ uri: videoUrl }}
-              style={VideoDimensions}
+              style={{
+                width: ScreenWidth,
+                height: ScreenWidth * HORI_HW_RAT
+              }}
               resizeMode="contain"
               onError={videoError}
               controls={false}
@@ -684,7 +684,7 @@ function ReelCard({
 
             <Animated.View style={{
               width: videoHolderWidth,
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}>
 
               <TouchableOpacity
@@ -699,7 +699,13 @@ function ReelCard({
                 <Video
                   ref={VideoPlayer}
                   source={{ uri: videoUrl }}
-                  style={[VideoDimensions, { borderRadius: 20, marginTop: 10 }]}
+                  style={{
+                    width: (ScreenWidth - 20) * 0.6,
+                    height: ((ScreenWidth - 20) * 0.6) * VERT_HW_RAT,
+                    borderTopLeftRadius: 20,
+                    borderBottomLeftRadius: 20,
+                    marginTop: 10
+                  }}
                   resizeMode="contain"
                   onError={videoError}
                   controls={false}
@@ -713,7 +719,13 @@ function ReelCard({
                   onEnd={() => { onFinishPlaying(index) }}
                 />
 
-                <MuteButton />
+                <View style={{
+                  width: (ScreenWidth - 20) * 0.6,
+                  height: ((ScreenWidth - 20) * 0.6) * VERT_HW_RAT,
+                  position: 'absolute',
+                }}>
+                  <MuteButton />
+                </View>
                 {ShowOptions ? (
                   <>
                     {GetSlider}
@@ -726,7 +738,11 @@ function ReelCard({
             <Animated.View
               style={{
                 width: contentHolderWidth,
-                height: 'auto'
+                height: 'auto',
+                backgroundColor: 'white',
+                elevation: 10,
+                borderTopLeftRadius: 20,
+                borderBottomLeftRadius: 20,
               }}>
               <TouchableOpacity onPress={() => {
                 if (videoMode) {

@@ -340,7 +340,6 @@ export default function ProductSpecific({ route, navigation }) {
                 fetch(BASE_URL + `stream/getResources?pid=${item._id}&uid=${userId}`)
                     .then(res => res.json())
                     .then(result => { setresourceData(result) })
-                console.log("sent :-)")
             }
 
         }
@@ -349,18 +348,7 @@ export default function ProductSpecific({ route, navigation }) {
 
     }, [isFocused, item])
 
-
-    // useEffect(() => {
-    //     // fecth will be here (guess so)
-    //     fetch(BASE_URL + `stream/getResources?pid=${item._id}`)
-    //         .then(res => res.json())
-    //         .then(result => { setresourceData(result) })
-    // }, [item]);
-
     const placeOrder = async (prodId) => {
-
-        console.log("place order called")
-        console.log(prodId)
 
         // navigate to pre buy pipe page with a prop
         navigation.navigate('PreBuyPipe', { prodId: prodId })

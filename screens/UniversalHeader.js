@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
 import { FaHeart } from "react-icons/fa";
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 
 const ScreenWidth = Dimensions.get('window').width;
@@ -41,7 +41,13 @@ const SearchBar = (props) => {
                         props.setHideHeader(false)
                         props.setIgnoreSearch(false)
 
-                    }} style={styles.searchButton} ><Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/restart--v2.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} /></TouchableOpacity>
+                    }}
+                        style={{
+                            transform: [{ translateX: -30 }, { translateY: -10 }],
+                            height: 30,
+                            width: 30,
+                            // backgroundColor: 'green'
+                        }} ><Icon name='close' size={25} color={COLOR4} /></TouchableOpacity>
 
                 </>
             )
@@ -49,19 +55,29 @@ const SearchBar = (props) => {
     }
 
     const SearchButtonIcon = () => {
-        if (searchText.length == 0) {
-            return (
-                <>
-                    <Image source={{ uri: "https://img.icons8.com/ios/50/null/search--v1.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} />
-                </>
-            )
-        }
-        else {
-            return (
-                <>
-                    <Image source={{ uri: "https://img.icons8.com/3d-fluency/94/null/search.png" }} style={{ height: 20, width: 20, marginBottom: 15 }} />
-                </>
-            )
+
+        if (!hideHeader) {
+            if (searchText.length == 0) {
+                return (
+                    <>
+                        <View style={{
+                            height: 30,
+                            width: 30,
+                            // backgroundColor: 'red',
+                            marginLeft: 20
+                        }}>
+                            <Icon name='search' size={20} color={COLOR4} />
+                        </View>
+                    </>
+                )
+            }
+            else {
+                return (
+                    <>
+                        <Icon name='search' size={20} color={COLOR4} />
+                    </>
+                )
+            }
         }
     }
 
@@ -111,13 +127,13 @@ const Header = ({ setState, State, setProducts, setHideHeader, hideHeader, setIg
 
             return (
                 <>
-                    <Image source={{ uri: "https://img.icons8.com/material/24/null/menu--v1.png" }} style={{ height: 20, width: 20 }}></Image>
+                    <Icon name='bars' size={20} color={COLOR4} />
                 </>
             )
         }
         else {
             return (
-                <Image source={{ uri: "https://img.icons8.com/material/24/null/arrow-pointing-left--v2.png" }} style={{ height: 20, width: 20 }}></Image>
+                <Icon name='close' size={20} color={COLOR4} />
             )
         }
     }
