@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import PreBuyComp from './PreBuyPipe';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import LinearGradient from 'react-native-linear-gradient';
-
+import fetch_home from '../methods/fetch';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 const ITEM_HEIGHT = Dimensions.get('window').height;
 
@@ -27,7 +27,7 @@ export const CartView = (navigation) => {
 
       if (isFocused) {
         var userId = await AsyncStorage.getItem('user_id')
-        fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=CART&userid=${userId}`, { method: 'GET' })
+        fetch_home(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=CART&userid=${userId}`, { method: 'GET' })
       }
 
     }
@@ -40,7 +40,7 @@ export const CartView = (navigation) => {
     setLoading(true)
     var userId = await AsyncStorage.getItem("user_id")
 
-    const resp = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
+    const resp = await fetch_home(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
     var data_raw = await resp.json();
 
     if (data_raw.response != null) {
@@ -131,7 +131,7 @@ export const CartView = (navigation) => {
                 setLoading(true)
                 // console.log("reducing from cart")
                 var userId = await AsyncStorage.getItem("user_id")
-                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
+                const resp = await fetch_home(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=${props.prod_qnt - 1}`, { method: 'POST' })
 
                 fetchCart();
 
@@ -142,7 +142,7 @@ export const CartView = (navigation) => {
                 // // console.log("adding to cart")
                 console.log(props)
                 var userId = await AsyncStorage.getItem("user_id")
-                const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
+                const resp = await fetch_home(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=${props.prod_qnt + 1}`, { method: 'POST' })
                 fetchCart();
               }} props={props}><Text style={{ fontSize: 18, color: "black" }}>+</Text>
               </TouchableOpacity>
@@ -163,7 +163,7 @@ export const CartView = (navigation) => {
               setLoading(true)
               // console.log("removing from cart")
               var userId = await AsyncStorage.getItem("user_id")
-              const resp = await fetch(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=0`, { method: 'POST' })
+              const resp = await fetch_home(BASE_URL + `handleCartOps/alter?cart_id=${props.cart_id}&prod_id=${props.prod_id}&qnt_new=0`, { method: 'POST' })
 
               fetchCart();
 

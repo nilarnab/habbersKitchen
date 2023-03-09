@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 
 import { BASE_URL } from '../env';
-
+import fetch_home from '../methods/fetch';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 const ITEM_HEIGHT = Dimensions.get('window').height;
 const EventCard = ({daTa}) => {
@@ -21,7 +21,7 @@ const EventCard = ({daTa}) => {
   const getImage=async ()=>{
     
     // , body: JSON.stringify({}),
-    await fetch(BASE_URL + `products/get_individual/${daTa.prod_id}`, { method: 'POST',body: JSON.stringify({}), })
+    await fetch_home(BASE_URL + `products/get_individual/${daTa.prod_id}`, { method: 'POST',body: JSON.stringify({}), })
     .then((response) => response.json())
     .then((data) => {
       console.log("Quantity found");
@@ -92,7 +92,7 @@ const EventCard = ({daTa}) => {
               var user_id_temp = await AsyncStorage.getItem('user_id');
         setUserId(user_id_temp)
 
-        const resp = await fetch(BASE_URL + `wishlist/remove/${userID}/${daTa.prod_id}`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `wishlist/remove/${userID}/${daTa.prod_id}`, { method: 'POST' })
         const data = await resp.json();
         if(data){
             console.log("data removed");
@@ -130,7 +130,7 @@ const Wishlistview = () => {
 
   const fetchCart = async () => {
     var userId = await AsyncStorage.getItem("user_id")
-    await fetch(BASE_URL + `wishlist/getwish/${userId}`, { method: 'POST', body: JSON.stringify({}), })
+    await fetch_home(BASE_URL + `wishlist/getwish/${userId}`, { method: 'POST', body: JSON.stringify({}), })
     .then((response) => response.json())
     .then((data) => {
      

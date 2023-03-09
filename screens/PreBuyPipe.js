@@ -12,7 +12,7 @@ import { parse } from '@babel/core';
 import { BASE_URL, COLOR1, COLOR3, COLOR4 } from '../env';
 
 import { Dimensions } from 'react-native';
-
+import fetch_home from '../methods/fetch';
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';
@@ -488,7 +488,7 @@ const OrderSummary = ({ setStage, prodId, stage }) => {
 
                 if (prodId == null) {
                     console.log('trying to get cart items')
-                    var response = await fetch(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
+                    var response = await fetch_home(BASE_URL + `handleCartOps/show_items?user_id=${userId}`, { method: 'POST' })
                     var responseJson = await response.json()
                     console.log(responseJson)
 
@@ -508,7 +508,7 @@ const OrderSummary = ({ setStage, prodId, stage }) => {
                 }
                 else {
                     console.log('trying to get prods')
-                    var response = await fetch(BASE_URL + `products/get_one_product?prodId=${prodId}`, { method: 'GET' })
+                    var response = await fetch_home(BASE_URL + `products/get_one_product?prodId=${prodId}`, { method: 'GET' })
                     var responseJson = await response.json()
 
                     setCartItems(responseJson.response)
@@ -771,12 +771,12 @@ const PreBuyComp = (props) => {
 
         if (prodId == null) {
             console.log("placing by cart")
-            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&name=${name}&email=${email}&phone=${phoneNumber}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+            var resp_raw = await fetch_home(BASE_URL + `orderManage/place_by_cart?user_id=${userId}&name=${name}&email=${email}&phone=${phoneNumber}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
             var resp = await resp_raw.json()
         }
         else {
             console.log("placing by item")
-            var resp_raw = await fetch(BASE_URL + `orderManage/place_by_item?user_id=${userId}&name=${name}&email=${email}&phone=${phoneNumber}&prod_id=${prodId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
+            var resp_raw = await fetch_home(BASE_URL + `orderManage/place_by_item?user_id=${userId}&name=${name}&email=${email}&phone=${phoneNumber}&prod_id=${prodId}&lat=${loc_lat}&long=${loc_long}&loc1=${loc_addr1}&loc2=${loc_addr2}&pin=${loc_pin}&city=${loc_city}`, { method: 'POST' })
             var resp = await resp_raw.json()
             console.log("response")
             console.log(resp)

@@ -9,7 +9,7 @@ import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 import LinearGradient from 'react-native-linear-gradient';
 import { BASE_URL, COLOR1, COLOR4 } from '../env'
 import { APP_NAME } from '../env';
-
+import fetch_home from '../methods/fetch';
 import UniversalLoader from './UniversalLoader';
 
 
@@ -55,7 +55,7 @@ export default function PhoneNumber(props) {
         // console.log("starting session")
 
         // call the server 
-        const resp = await fetch(BASE_URL + `sessionManage/create?uuid=${uid}&phone_num=${phone}`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `sessionManage/create?uuid=${uid}&phone_num=${phone}`, { method: 'POST' })
         var resp_json = await resp.json();
 
         // console.log(resp_json)

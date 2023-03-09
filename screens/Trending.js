@@ -207,7 +207,7 @@ export default Trending = (props) => {
 
         const focusAction = async () => {
             if (isFocused) {
-                var resp = await fetch_home(BASE_URL + 'trending/get_searchable_categories')
+                var resp = await fetch_home(BASE_URL + 'trending/get_searchable_categories', { method: 'GET' })
                 resp = await resp.json()
                 setscategoryData(resp.response)
             }

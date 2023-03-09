@@ -9,7 +9,7 @@ import auth from '@react-native-firebase/auth';
 import { useIsFocused } from '@react-navigation/native'
 import SideBar from '../SideBar';
 import LinearGradient from 'react-native-linear-gradient';
-
+import fetch_home from '../methods/fetch';
 const BACKGROUND_COLOR = 'white'
 
 
@@ -61,7 +61,7 @@ export const HomeScreen = (props) => {
 
             if (isFocused) {
                 var userId = await AsyncStorage.getItem('user_id')
-                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=HOME&userid=${userId}`, { method: 'GET' })
+                fetch_home(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=HOME&userid=${userId}`, { method: 'GET' })
             }
 
         }

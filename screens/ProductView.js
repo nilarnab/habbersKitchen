@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { BASE_URL, COLOR1, COLOR4 } from '../env'
 import LinearGradient from "react-native-linear-gradient";
-
+import fetch_home from '../methods/fetch';
 function AddToCartButton({ productID }) {
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ function AddToCartButton({ productID }) {
         var user_id_temp = await AsyncStorage.getItem('user_id')
         setUserId(user_id_temp)
 
-        const resp = await fetch(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
         const response = await resp.json();
 
         if (response.cart_item == null) {
@@ -49,14 +49,14 @@ function AddToCartButton({ productID }) {
     const addProduct = async () => {
         setLoading(true);
 
-        const resp = await fetch(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
         const data = await resp.json();
         fetchCart()
     };
 
     const modifyCount = async (newCount) => {
         setLoading(true);
-        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&prod_id=${productID}&qnt_new=${newCount}`, { method: 'POST' })
+        await fetch_home(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&prod_id=${productID}&qnt_new=${newCount}`, { method: 'POST' })
 
         fetchCart()
     }

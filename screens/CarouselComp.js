@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput,
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from './CarouselCardItem'
 import { BASE_URL } from '../env';
+import fetch_home from '../methods/fetch';
 
 const data = [
     {
@@ -27,7 +28,7 @@ const CarouselComp = () => {
     const [carouselData, setcarouselData] = useState([]);
     useEffect(() => {
         // fecth will be here (guess so)
-        fetch(BASE_URL + 'carousel/getCarousel')
+        fetch_home(BASE_URL + 'carousel/getCarousel',{method:'GET'})
             .then(res => res.json())
             .then(result => {
                 setcarouselData(result.data);

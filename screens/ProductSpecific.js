@@ -10,7 +10,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Slider } from '@miblanchard/react-native-slider';
 
 import { useIsFocused } from '@react-navigation/native';
-
+import fetch_home from '../methods/fetch';
 import { BASE_URL } from '../env';
 
 
@@ -56,7 +56,7 @@ function AddToWishButton({ productID }) {
         setLoading(true);
         var user_id_temp = await AsyncStorage.getItem('user_id');
         // setUserid(user_id_temp);
-        const response = await fetch(BASE_URL + `wishlist/get_ind/${user_id_temp}/${productID}`, { method: 'GET' })
+        const response = await fetch_home(BASE_URL + `wishlist/get_ind/${user_id_temp}/${productID}`, { method: 'GET' })
         const data = await response.json();
         console.log(data)
         if (data.valid == null) {
@@ -80,7 +80,7 @@ function AddToWishButton({ productID }) {
         var user_id_temp = await AsyncStorage.getItem('user_id');
         setUserid(user_id_temp)
 
-        const resp = await fetch(BASE_URL + `wishlist/remove/${user_id_temp}/${productID}`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `wishlist/remove/${user_id_temp}/${productID}`, { method: 'POST' })
         const data = await resp.json();
         if (data) {
             console.log("data removed");
@@ -103,7 +103,7 @@ function AddToWishButton({ productID }) {
         var user_id_temp = await AsyncStorage.getItem('user_id');
         setUserid(user_id_temp)
 
-        const resp = await fetch(BASE_URL + `wishlist/insert-item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `wishlist/insert-item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
         // const data = await resp.json();
         if (resp) {
             console.log("data inserted");
@@ -186,7 +186,7 @@ function AddToCartButton({ productID }) {
         var user_id_temp = await AsyncStorage.getItem('user_id')
         setUserId(user_id_temp)
 
-        const resp = await fetch(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `handleCartOps/show_item?user_id=${user_id_temp}&prod_id=${productID}`, { method: 'POST' })
         const response = await resp.json();
 
         if (response.cart_item == null) {
@@ -212,14 +212,14 @@ function AddToCartButton({ productID }) {
     const addProduct = async () => {
         setLoading(true);
 
-        const resp = await fetch(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
+        const resp = await fetch_home(BASE_URL + `handleCartOps/insert?user_id=${userId}&prod_id=${productID}&qnt=1`, { method: 'POST' })
         const data = await resp.json();
         fetchCart()
     };
 
     const modifyCount = async (newCount) => {
         setLoading(true);
-        await fetch(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&prod_id=${productID}&qnt_new=${newCount}`, { method: 'POST' })
+        await fetch_home(BASE_URL + `handleCartOps/alter?cart_id=${cartID}&prod_id=${productID}&qnt_new=${newCount}`, { method: 'POST' })
 
         fetchCart()
     }
@@ -336,8 +336,8 @@ export default function ProductSpecific({ route, navigation }) {
 
             if (isFocused) {
                 userId = await AsyncStorage.getItem('user_id')
-                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROD_SPEC&userid=${userId}&pagesubname=${item.name}`, { method: 'GET' })
-                fetch(BASE_URL + `stream/getResources?pid=${item._id}&uid=${userId}`)
+                fetch_home(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=PROD_SPEC&userid=${userId}&pagesubname=${item.name}`, { method: 'GET' })
+                fetch_home(BASE_URL + `stream/getResources?pid=${item._id}&uid=${userId}`, { method: 'GET' })
                     .then(res => res.json())
                     .then(result => { setresourceData(result) })
             }
@@ -347,6 +347,14 @@ export default function ProductSpecific({ route, navigation }) {
         sendPagePopularityMetric();
 
     }, [isFocused, item])
+
+
+    // useEffect(() => {
+    //     // fecth will be here (guess so)
+    //     fetch_home(BASE_URL + `stream/getResources?pid=${item._id}`)
+    //         .then(res => res.json())
+    //         .then(result => { setresourceData(result) })
+    // }, [item]);
 
     const placeOrder = async (prodId) => {
 

@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, COLOR3, COLOR4 } from '../env';
 import Header from './NonSearchHeader'
-
+import fetch_home from '../methods/fetch';
 import StepIndicator from 'react-native-step-indicator';
 
 
@@ -71,7 +71,7 @@ const OldOrderStatus = (props) => {
 
             if (isFocused) {
                 var userId = await AsyncStorage.getItem('user_id')
-                fetch(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=OLD_ORDER&userid=${userId}`, { method: 'GET' })
+                fetch_home(BASE_URL + `monitor/send_metric?metric=PAGE_ENGAGEMENT&pagename=OLD_ORDER&userid=${userId}`, { method: 'GET' })
             }
 
         }
@@ -163,7 +163,7 @@ const OldOrderStatus = (props) => {
             setLoading(true)
             // console.log("fetching order list")
             var userIdLocal = await AsyncStorage.getItem('user_id')
-            var orderListLocal = await fetch(BASE_URL + 'orderManage/get_old_orders?user_id=' + userIdLocal, { method: 'POST' })
+            var orderListLocal = await fetch_home(BASE_URL + 'orderManage/get_old_orders?user_id=' + userIdLocal, { method: 'POST' })
             var orderListLocalJson = await orderListLocal.json()
             // console.log(orderListLocalJson['response'])
 

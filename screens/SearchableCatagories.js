@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, Image, StyleSheet, ActivityIndicator, RefreshControl, Text, ScrollView, Touchable, TouchableOpacity, ImageBackground } from "react-native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env'
-
+import fetch_home from '../methods/fetch';
 
 
 const SearchableCatagories = (props) => {
@@ -9,7 +9,7 @@ const SearchableCatagories = (props) => {
 
     useEffect(() => {
         // fecth will be here (guess so)
-        fetch(BASE_URL + 'categoryDefine/getCategories?type=1')
+        fetch_home(BASE_URL + 'categoryDefine/getCategories?type=1', { method: 'GET' })
             .then(res => res.json())
             .then(result => { setscategoryData(result); })
     }, []);
@@ -19,7 +19,7 @@ const SearchableCatagories = (props) => {
 
     const searchItem = async (searchText) => {
         // console.log("seraching for", searchText)
-        const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
+        const result = await fetch_home(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
         const response = (await result.json()).data;
         props.setCatagorySearchProducts(response);
         // console.log(response);

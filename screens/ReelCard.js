@@ -27,6 +27,10 @@ import { useIsFocused } from '@react-navigation/native';
 
 import LinearGradient from 'react-native-linear-gradient';
 
+
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 function ReelCard({
   uri,
   _id,
