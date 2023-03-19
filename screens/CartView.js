@@ -75,7 +75,7 @@ export const CartView = (navigation) => {
   const renderItem = ({ item }) => {
     // console.log("during redner")
     // console.log(item)
-
+    console.log("change")
     var product_id = item['product']._id.toString()
     var product_name = item['product'].name
     var product_description = item['product'].description
