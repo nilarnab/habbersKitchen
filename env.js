@@ -1,6 +1,6 @@
-export const BASE_URL = 'http://172.22.66.82:3000/' // -> local
+// export const BASE_URL = 'http://172.22.66.82:3000/' // -> local
 
-// export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
+export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 
 // names and conventions
 export const COMPNAY_NAME = 'buyBold'
