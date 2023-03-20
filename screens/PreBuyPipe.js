@@ -9,13 +9,15 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import MapView, { Marker } from "react-native-maps";
 import RazorpayCheckout from 'react-native-razorpay';
 import { parse } from '@babel/core';
-import { BASE_URL, COLOR1, COLOR3, COLOR4 } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4, COLOR5, COLOR_GREEN } from '../env';
 
 import { Dimensions } from 'react-native';
 import fetch_home from '../methods/fetch';
 
 import { PreBuyPipeLabels, PreBuyPipeStyles } from './StepProgressBars';
 import StepIndicator from 'react-native-step-indicator';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const StepProgressBar = ({ step }) => {
     return (
@@ -719,24 +721,27 @@ const PreBuyComp = (props) => {
 
     const Success = () => {
 
-        return <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        return <View style={{ alignItems: 'center', justifyContent: 'center', height: '50%' }}>
 
-            <Image source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0ea0QZqeq5H33F4EDbIY5VtcbcO1y1fiyFQ&usqp=CAU' }} style={{ width: 200, height: 200 }} />
+            <Icon name={'smile-o'} size={200} color={COLOR4} />
             <Text style={{
                 fontSize: 30,
                 color: 'black'
             }}>Success</Text>
             <TouchableOpacity onPress={() => {
-
                 props.navigation.reset({
                     index: 3,
                     routes: [{ name: 'Order' }],
                 })
                 props.navigation.navigate('Order')
             }} style={{
-                alignItems: 'center'
+                alignItems: 'center',
+                backgroundColor: COLOR4,
+                padding: 20,
+                borderRadius: 10,
+                marginTop: 10,
             }}>
-                <Text style={{ color: "black" }}>Move to Orders</Text>
+                <Text style={{ color: COLOR1 }}>Move to Orders</Text>
             </TouchableOpacity>
 
         </View>
@@ -816,37 +821,48 @@ const PreBuyComp = (props) => {
     }
     const PaymentGateway = () => {
         return <>
-            <SafeAreaView style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <SafeAreaView style={{ padding: 20, }}>
+
+                <Text style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    color: 'black'
+                }}>Let's settle the payment</Text>
+
+                <Text style={{
+                    fontSize: 15,
+                    color: 'black',
+                    marginVertical: 10,
+                }}>Currently we don't have many payment methods available but soon we will rev it up</Text>
 
                 <TouchableOpacity onPress={async () => {
                     await PlaceOrder()
                 }} style={{
-                    alignItems: 'center',
                     padding: 20,
-                    borderWidth: 1,
-                    borderColor: 'green',
+                    backgroundColor: COLOR2,
                     borderRadius: 10,
-                    width: 100,
-
+                    width: '100%',
+                    flexDirection: 'row',
+                    marginTop: 10,
                 }}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/cash-in-hand.png' }} style={{ height: 50, width: 50 }} />
-                    <Text style={{ fontWeight: 'bold', color: 'green' }}>Cash on Delivery</Text>
+                    <Icon name={'money'} size={40} color={COLOR4} />
+                    <Text style={{ color: 'black', paddingTop: 10, marginLeft: 10 }}>Pay upfront! cash on delivery</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={async () => {
+                <View onPress={async () => {
                     // await PlaceOrder()
-                    OnlinePayment();
+                    // OnlinePayment();
                 }} style={{
-                    alignItems: 'center',
                     padding: 20,
-                    borderWidth: 1,
-                    borderColor: 'green',
+                    backgroundColor: COLOR2,
                     borderRadius: 10,
-                    width: 100,
-
+                    width: '100%',
+                    flexDirection: 'row',
+                    marginTop: 10,
+                    opacity: 0.2
                 }}>
-                    <Image source={{ uri: 'https://img.icons8.com/3d-fluency/94/null/card-wallet.png' }} style={{ height: 50, width: 50 }} />
-                    <Text style={{ fontWeight: 'bold', color: 'green' }}>Pay Online</Text>
-                </TouchableOpacity>
+                    <Icon name={'qrcode'} size={40} color={COLOR4} />
+                    <Text style={{ color: 'black', paddingTop: 10, marginLeft: 10 }}>Online payments will be there later</Text>
+                </View>
             </SafeAreaView>
         </>
     }

@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Header from './NonSearchHeader'
 import SideBar from '../SideBar';
+import fetch_home from '../methods/fetch';
 
 // import moment from 'moment';
 import { moment } from 'moment';

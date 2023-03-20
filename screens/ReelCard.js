@@ -97,7 +97,7 @@ function ReelCard({
   // const [isMuted, setIsMuted] = useState(true)
   const [showMuted, setShowMuted] = useState(false)
 
-  const isVertical = useRef(false)
+  const isVertical = useRef(true)
 
   const CardWidth = (ScreenWidth - 20)
   const ExpectedVideoWidth = CardWidth * 0.6
@@ -182,7 +182,6 @@ function ReelCard({
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: 'white',
-            opacity: 0.8
           }}
         >
           <MuteButtonImage />
@@ -604,7 +603,6 @@ function ReelCard({
   if (!isVertical.current) {
     return (
       <View style={{
-        opacity: visualOp
       }}>
         <Pressable
           style={[styles.container]}
@@ -678,7 +676,6 @@ function ReelCard({
   else {
     return (
       <View style={{
-        opacity: visualOp
       }}>
         <Pressable
           style={[styles.container]}
@@ -745,8 +742,6 @@ function ReelCard({
                 height: 'auto',
                 backgroundColor: 'white',
                 elevation: 10,
-                borderTopLeftRadius: 20,
-                borderBottomLeftRadius: 20,
               }}>
               <TouchableOpacity onPress={() => {
                 if (videoMode) {

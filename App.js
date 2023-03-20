@@ -42,7 +42,7 @@ import PhoneNumber from './screens/PhoneNumber';
 import { navigationRef } from './RootNavigator';
 import Payment from './screens/payment';
 import SideMenu from 'react-native-side-menu-updated'
-
+import { BugReport } from './screens/reportBug';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,13 +58,8 @@ const App: () => Node = () => {
     SplashScreen.hide(); //hides the splash screen on app load.
   }, []);
 
-
-
-
   return (
     <>
-
-
       <NavigationContainer ref={navigationRef}>
 
         <Stack.Navigator>
@@ -84,6 +79,7 @@ const App: () => Node = () => {
           <Stack.Screen name="OrderStatus" component={OrderStatus} />
           <Stack.Screen name="OldOrderStatus" component={OldOrderStatus} />
           <Stack.Screen name="Wishlist" component={Wishlistview} />
+          <Stack.Screen name="ReportBug" component={BugReport} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

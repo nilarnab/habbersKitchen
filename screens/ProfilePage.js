@@ -313,23 +313,6 @@ const Rendarable = ({ recVisited }) => {
                 var loc_pin = await AsyncStorage.getItem("loc_pin")
                 var loc_city = await AsyncStorage.getItem("city")
 
-
-                if (loc_lat == null || loc_long == null) {
-                    await findCoordinates()
-                }
-
-
-                if (loc_lat != null && !isNaN(loc_lat)) {
-
-                    setLat(parseFloat(loc_lat))
-                    setLatMarker(parseFloat(loc_lat))
-                }
-
-                if (loc_long != null && !isNaN(loc_long)) {
-                    console.log("setting up lat")
-                    setLong(parseFloat(loc_long))
-                    setLongMarker(parseFloat(loc_long))
-                }
                 if (loc_addr1 != null) {
                     console.log("addr 1 is set as", loc_addr1)
                     setAddr1(loc_addr1)

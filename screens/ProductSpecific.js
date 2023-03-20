@@ -122,48 +122,48 @@ function AddToWishButton({ productID }) {
 
     };
 
-    if (loading) {
-        return (
-            <ActivityIndicator size={38} color="black" />
-        );
-    }
+    // if (loading) {
+    //     return (
+    //         <ActivityIndicator size={38} color="black" />
+    //     );
+    // }
 
-    if (fetchaddbutton) {
-        return (
-            <View>
-                <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
-                    Add to Wishlist
-                </Button>
-                {/* <FontAwesomeIcon icon="fa-regular fa-heart" onPress={addTOwish}  /> */}
-                {/* <FontAwesomeIcon icon={ faMugSaucer }  onPress={addTOwish}/> */}
-                {/* <WishIcon onPress={addTOwish} /> */}
-            </View>
-        );
+    // if (fetchaddbutton) {
+    //     return (
+    //         <View>
+    //             <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
+    //                 Add to Wishlist
+    //             </Button>
+    //             {/* <FontAwesomeIcon icon="fa-regular fa-heart" onPress={addTOwish}  /> */}
+    //             {/* <FontAwesomeIcon icon={ faMugSaucer }  onPress={addTOwish}/> */}
+    //             {/* <WishIcon onPress={addTOwish} /> */}
+    //         </View>
+    //     );
 
-        //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={addTOwish}>
-        //     {wishbutton}
-        // </Button>
-
-
+    //     //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={addTOwish}>
+    //     //     {wishbutton}
+    //     // </Button>
 
 
-    }
-    else {
-        return (
-            <View>
-                <Button icon="heart" mode="contained" style={{ backgroundColor: "green" }} onPress={removewish}>
-                    Remove from Wishlist
-                </Button>
-                {/* <FontAwesomeIcon icon="fa-solid fa-heart" onPress={removewish}  /> */}
-                {/* <FontAwesomeIcon icon={ faMugSaucer } onPress={removewish} /> */}
-                {/* <WishIcon onPress={removewish}/> */}
-            </View>
-            //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={removewish}>
-            //     {wishbutton}
-            // </Button>
 
-        )
-    }
+
+    // }
+    // else {
+    //     return (
+    //         <View>
+    //             <Button icon="heart" mode="contained" style={{ backgroundColor: "green" }} onPress={removewish}>
+    //                 Remove from Wishlist
+    //             </Button>
+    //             {/* <FontAwesomeIcon icon="fa-solid fa-heart" onPress={removewish}  /> */}
+    //             {/* <FontAwesomeIcon icon={ faMugSaucer } onPress={removewish} /> */}
+    //             {/* <WishIcon onPress={removewish}/> */}
+    //         </View>
+    //         //     <Button icon="cart" mode="outlined" style={{ backgroundColor: "green" }} onPress={removewish}>
+    //         //     {wishbutton}
+    //         // </Button>
+
+    //     )
+    // }
 
 
 

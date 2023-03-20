@@ -100,6 +100,15 @@ const SideBar = ({ props, setState }) => {
                         </TouchableOpacity>
                     </View>
 
+                    <View style={styles.tabContainer}>
+                        <TouchableOpacity onPress={async () => {
+                            setState(0)
+                            props.navigate('ReportBug')
+                        }} style={styles.tabTab}>
+                            <Text style={styles.tabTextStyle}>Report a Bug</Text>
+                        </TouchableOpacity>
+                    </View>
+
                     <View style={[styles.tabContainer, {
                         backgroundColor: COLOR4
                     }]}>
