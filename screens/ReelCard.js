@@ -726,12 +726,19 @@ function ReelCard({
                   position: 'absolute',
                 }}>
                   <MuteButton />
+
+
                 </View>
-                {ShowOptions ? (
-                  <>
-                    {GetSlider}
-                  </>
-                ) : null}
+
+                <View style={{
+                  width: (ScreenWidth - 20) * 0.6,
+                }}>
+                  {ShowOptions ? (
+                    <>
+                      {GetSlider}
+                    </>
+                  ) : null}
+                </View>
 
               </TouchableOpacity>
             </Animated.View>
@@ -816,7 +823,7 @@ const styles = StyleSheet.create({
   SliderContainer: {
     width: '100%',
     height: 55,
-    bottom: 0,
+    bottom: 10,
     zIndex: 100,
   },
   SliderContainerVert: {
