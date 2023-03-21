@@ -808,7 +808,7 @@ export default Trending = (props) => {
                 }}>
                     <Header setQuery={setQuery} />
                     <Loader />
-                    <Reels videos={trendingData} fetch={fetchTrending} loading={loading} navigation={props.navigation} page={page} query={query} />
+                    {/* <Reels videos={trendingData} fetch={fetchTrending} loading={loading} navigation={props.navigation} page={page} query={query} /> */}
                 </View>
             </View>
         </SafeAreaView>
