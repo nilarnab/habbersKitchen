@@ -920,13 +920,14 @@ const PreBuyComp = (props) => {
                 marginTop: 20
             }}>For making a successful delivery, we need to know a little bit more about you .. </Text>
 
-            <TextInput placeholder="Name" style={{ borderWidth: 1, borderColor: 'black', width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
+            <TextInput placeholder="Name" style={{ borderWidth: 1, borderColor: 'black',color:'black', width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
                 onChangeText={setName}
                 value={name}
             />
-            <TextInput placeholder="Email" style={{ borderWidth: 1, borderColor: 'black', width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
+            <TextInput placeholder="Email" style={{ borderWidth: 1, borderColor: 'black',color:'black' ,width: 300, padding: 10, borderRadius: 10, marginTop: 20 }}
                 onChangeText={setEmail}
                 value={email}
+                placeholderTextColor="black"
                 autoCompleteType="email"
                 TextContentType="emailAddress"
             />

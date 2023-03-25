@@ -8,10 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { white } from 'react-native-paper/lib/typescript/styles/colors';
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import { Slider } from '@miblanchard/react-native-slider';
-
+import SelectDropdown from 'react-native-select-dropdown'
 import { useIsFocused } from '@react-navigation/native';
 import fetch_home from '../methods/fetch';
 import { BASE_URL } from '../env';
+
 
 
 
@@ -42,23 +43,23 @@ const ProductImage = (url, index) => {
 }
 
 function AddToWishButton({ productID }) {
-    console.log(productID)
-
+    // console.log(productID)
+    
     const [loading, setLoading] = useState(true);
-
+    
     // const [fetchbutton,setfetchbutton]=useState(true);
     const [fetchaddbutton, setfetchaddbutton] = useState(true)
-
-
+    
+    
     const [userid, setUserid] = useState(null)
-
+    
     const checkstatus = async () => {
         setLoading(true);
         var user_id_temp = await AsyncStorage.getItem('user_id');
         // setUserid(user_id_temp);
         const response = await fetch_home(BASE_URL + `wishlist/get_ind/${user_id_temp}/${productID}`, { method: 'GET' })
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         if (data.valid == null) {
             console.log("data fetched");
             setLoading(false)
@@ -72,7 +73,7 @@ function AddToWishButton({ productID }) {
     }
     useEffect(() => {
         checkstatus();
-
+        
     }, [])
     const removewish = async () => {
         setLoading(true);
@@ -85,7 +86,7 @@ function AddToWishButton({ productID }) {
         if (data) {
             console.log("data removed");
             setLoading(false)
-
+            
             setfetchaddbutton(true)
             ToastAndroid.show('Remove successfully!', ToastAndroid.SHORT);
             // checkstatus();
@@ -94,12 +95,12 @@ function AddToWishButton({ productID }) {
         else {
             console.log("some error has occured")
         }
-
+        
     };
     const addTOwish = async () => {
-
+        
         setLoading(true);
-
+        
         var user_id_temp = await AsyncStorage.getItem('user_id');
         setUserid(user_id_temp)
 
@@ -109,8 +110,8 @@ function AddToWishButton({ productID }) {
             console.log("data inserted");
             setLoading(false)
             setfetchaddbutton(false)
-
-
+            
+            
             ToastAndroid.show('added successfully!', ToastAndroid.SHORT);
             // checkstatus();
             // setLoading(false)
@@ -118,22 +119,22 @@ function AddToWishButton({ productID }) {
         else {
             console.log("some error has occured")
         }
-
-
+        
+        
     };
-
+    
     // if (loading) {
-    //     return (
-    //         <ActivityIndicator size={38} color="black" />
-    //     );
-    // }
-
-    // if (fetchaddbutton) {
-    //     return (
-    //         <View>
-    //             <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
-    //                 Add to Wishlist
-    //             </Button>
+        //     return (
+            //         <ActivityIndicator size={38} color="black" />
+            //     );
+            // }
+            
+            // if (fetchaddbutton) {
+                //     return (
+                    //         <View>
+                    //             <Button icon="heart" mode="contained" style={{ backgroundColor: "black" }} onPress={addTOwish}>
+                    //                 Add to Wishlist
+                    //             </Button>
     //             {/* <FontAwesomeIcon icon="fa-regular fa-heart" onPress={addTOwish}  /> */}
     //             {/* <FontAwesomeIcon icon={ faMugSaucer }  onPress={addTOwish}/> */}
     //             {/* <WishIcon onPress={addTOwish} /> */}
@@ -389,7 +390,7 @@ export default function ProductSpecific({ route, navigation }) {
     function DashVideo(url, vidIndex) {
 
         if (index == vidIndex) {
-            console.log(url)
+            // console.log(url)
             return (
                 <>
                     <View style={styles.container} key={index} >
@@ -727,7 +728,37 @@ export default function ProductSpecific({ route, navigation }) {
                             <Text style={styles.text}>₹{item.price}</Text>
                         </View>
                         <View style={{ height: 2, backgroundColor: "lightgrey", marginVertical: 10 }} />
-                        <Text style={styles.description}>{item.description}</Text>
+                        <Text style={{...styles.description,borderBottomColor:'black',borderBottomWidth:2}}>{item.description}</Text>
+                        {item.sizes?
+                        <View><Text style={{color:"blue",fontSize:20}}>Available Size
+                        </Text>
+                        <SelectDropdown
+                            data={item.sizes}
+                            onSelect={(selectedItem, index) => {
+                                if (selectedItem.inStock){
+                                    // item={...item,"selectedSize":selectedItem.value}
+                                    // console.log(item);
+                                }
+                                else
+                                    alert("out of stock item selected");
+                            }}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                                // text represented after item is selected
+                                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                                return selectedItem.value
+
+                            }}
+                            rowTextForSelection={(item, index) => {
+                                // text represented for each item in dropdown
+                                // if data array is an array of objects then return item.property to represent item in dropdown
+                                if(item.inStock)
+                                return ""+item.value
+                                else
+                                 return  ""+item.value + " - out of Stock"
+                            }}
+                            />
+                            </View>
+                            :""}
                         <TouchableOpacity mode="contained" style={{
                             backgroundColor: 'white',
                             marginVertical: 10,
