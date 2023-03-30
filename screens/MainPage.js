@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, useWindowDimensions } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from './HomeScreen'
@@ -14,93 +14,89 @@ import Trending from './Trending';
 import SideMenu from 'react-native-side-menu-updated'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
-import { COLOR4 } from '../env';
+import InfiniteList from './InfiniteList';
+import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
+import Header from './UniversalHeader';
+
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 
 AppRegistry.registerComponent('Appname', () => App);
 
 const userId = "630dc78ee20ed11eea7fb99f"
 const Tab = createBottomTabNavigator()
-function MainPage(props) {
-
-    useEffect(() => {
-
-        const checkSession = async () => {
-
-            const userId = await AsyncStorage.getItem("user_id")
-
-            if (userId == null) {
-                console.log("lost cache data")
-                props.navigation.navigate("Phone")
-            }
-        }
-
-        checkSession()
-
-    })
-
-    return (
-
-        <>
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-
-                    "tabBarActiveTintColor": COLOR4,
-                    tabBarInactiveTintColor: 'gray',
-                    "tabBarStyle": [
-                        {
-                            "display": "flex"
-                        },
-                        null
-                    ],
-
-                    tabBarIcon: ({ color, size, focused }) => {
-                        let iconName;
-                        if (route.name === 'Home')
-                            iconName = 'home';
-                        else if (route.name === 'Cart')
-                            iconName = 'shopping-cart';
-                        else if (route.name === 'Profile')
-                            iconName = 'user';
-                        else if (route.name === 'Order')
-                            iconName = 'shopping-bag';
-                        else if (route.name === 'Location')
-                            iconName = 'map-marker';
-                        else if (route.name === 'Trending')
-                            iconName = 'sort-up';
-
-                        return <Icon name={iconName} size={size} color={color} />;
-                    },
 
 
+const Home = () => (
+    <View style={{ flex: 1, backgroundColor: COLOR1 }}>
+        <InfiniteList />
+    </View>
+);
 
-                    contentStyle: {
-                        backgroundColor: '#FFFFFF',
-                        activeTintColor: COLOR4,
-                    },
-                    headerMode: 'screen',
-                    defaultNavigationOptions: ({ navigation }) => {
-                        {
-                            console.log("navigation", navigation)
-                        }
-                    },
+const SecondRoute = () => (
+    <View style={{ flex: 1, backgroundColor: COLOR1 }} />
+);
 
+const ThirdRoute = () => (
+    <View style={{ flex: 1, backgroundColor: COLOR1 }} />
+);
 
+const renderScene = SceneMap({
+    home: Home,
+    second: SecondRoute,
+    third: ThirdRoute
+});
 
-                })}
-                sceneContainerStyle={{ elevation: 10 }}
-            // tabBarOptions={{
-            //     activeTintColor: '#ffffff',
-            // }}
-            >
-                <Tab.Screen name='Trending' options={{ headerShown: false }} children={() => <Trending navigation={props.navigation} />} />
-                <Tab.Screen name="Home" options={{ headerShown: false }} children={() => <HomeScreen navigation={props.navigation} />} />
-                <Tab.Screen name="Cart" options={{}} children={() => <CartView navigation={props.navigation} />} />
-                <Tab.Screen name='Profile' options={{ headerShown: false }} children={() => <ProfilePage navigation={props.navigation} />} />
-                <Tab.Screen name='Order' options={{ headerShown: false }} children={() => <OrderStatus navigation={props.navigation} />} />
-            </Tab.Navigator >
-        </>
-    );
+export function MainPage(props) {
+
+    const layout = useWindowDimensions();
+
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'home', title: 'Home' },
+        { key: 'second', title: 'Some Recipie' },
+        { key: 'third', title: 'Some Recipie' },
+    ]);
+
+    function renderTabBar(props) {
+        return (<TabBar
+            scrollEnabled={true}
+            style={{
+                backgroundColor: COLOR2,
+                elevation: 0,
+                borderColor: '#000000',
+                borderBottomWidth: 1,
+                height: 45,
+                width: 'auto'
+            }}
+            labelStyle={{
+                color: COLOR1,
+                fontSize: 14,
+                fontWeight: 'bold'
+            }}
+            {...props}
+            indicatorStyle={{ backgroundColor: COLOR1, height: 2.5 }}
+        />
+        );
+    }
+
+    return <>
+        <Header />
+        <TabView
+            style={{
+                backgroundColor: 'white'
+            }}
+            renderTabBar={renderTabBar}
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={setIndex}
+            initialLayout={{ width: layout.width }}
+            overScrollMode={'always'}
+            sceneContainerStyle={{
+                backgroundColor: 'red'
+            }}
+        />
+    </>
 }
 
 export default MainPage;

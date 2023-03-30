@@ -47,7 +47,7 @@ const SearchBar = (props) => {
                             height: 30,
                             width: 30,
                             // backgroundColor: 'green'
-                        }} ><Icon name='close' size={25} color={COLOR4} /></TouchableOpacity>
+                        }} ><Icon name='close' size={25} color={COLOR2} /></TouchableOpacity>
 
                 </>
             )
@@ -66,7 +66,7 @@ const SearchBar = (props) => {
                             // backgroundColor: 'red',
                             marginLeft: 20
                         }}>
-                            <Icon name='search' size={20} color={COLOR4} />
+                            <Icon name='search' size={20} color={COLOR1} />
                         </View>
                     </>
                 )
@@ -74,7 +74,7 @@ const SearchBar = (props) => {
             else {
                 return (
                     <>
-                        <Icon name='search' size={20} color={COLOR4} />
+                        <Icon name='search' size={20} color={COLOR1} />
                     </>
                 )
             }
@@ -83,14 +83,25 @@ const SearchBar = (props) => {
 
     return (
         <>
-            <TextInput style={styles.input}
+            {/* <TextInput style={styles.input}
                 editable
                 maxLength={40}
                 value={searchText}
                 onChangeText={setSearchText}
                 placeholder="Start Typing to search ..."
                 placeholderTextColor={'black'}
-            />
+            /> */}
+            <Text
+                style={{
+                    justifyContent: 'center',
+                    width: '100%',
+                    color: COLOR1,
+                    marginRight: 80,
+                    fontSize: 20,
+                    textAlign: 'center'
+                }}>
+                Hebbers Kitchen
+            </Text>
 
             <TouchableOpacity title='Search' onPress={async () => {
                 // console.log(searchText);
@@ -102,7 +113,11 @@ const SearchBar = (props) => {
                 props.setHideHeader(true)
                 props.setIgnoreSearch(false)
 
-            }} style={styles.searchButton} >
+            }} style={{
+                position: 'absolute',
+                right: 0,
+                top: 5
+            }} >
                 <SearchButtonIcon />
             </TouchableOpacity>
             <ResetButton setHideHeader={props.setHideHeader} hideHeader={props.hideHeader} setIgnoreSearch={props.setIgnoreSearch} />
@@ -112,7 +127,13 @@ const SearchBar = (props) => {
 }
 
 
-const Header = ({ setState, State, setProducts, setHideHeader, hideHeader, setIgnoreSearch }) => {
+const Header = ({
+    setState,
+    State,
+    setProducts,
+    setHideHeader,
+    hideHeader,
+    setIgnoreSearch }) => {
 
     const [sideState, setSideState] = useState(0)
 
@@ -122,18 +143,26 @@ const Header = ({ setState, State, setProducts, setHideHeader, hideHeader, setIg
 
 
     const BurgerIcon = () => {
+        return (
+            <>
+                <Icon name='bars' size={20} color={COLOR1} style={{
+                    position: 'absolute',
+                    transform: [{ translateY: -5 }]
+                }} />
+            </>
+        )
 
         if (State == 0) {
 
             return (
                 <>
-                    <Icon name='bars' size={20} color={COLOR4} />
+                    <Icon name='bars' size={20} color={COLOR1} />
                 </>
             )
         }
         else {
             return (
-                <Icon name='close' size={20} color={COLOR4} />
+                <Icon name='close' size={20} color={COLOR1} />
             )
         }
     }
@@ -174,9 +203,10 @@ const styles = StyleSheet.create({
 
     containter: {
         width: '100%',
-        height: 60,
+        height: 50,
         // elevation: 2,
         flexDirection: 'row',
+        backgroundColor: COLOR2
     },
 
     left_icons: {

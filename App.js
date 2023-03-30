@@ -61,6 +61,11 @@ const App: () => Node = () => {
   return (
     <>
       <NavigationContainer ref={navigationRef}>
+        <MainPage />
+      </NavigationContainer>
+
+
+      {/* <NavigationContainer ref={navigationRef}>
 
         <Stack.Navigator>
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
@@ -81,7 +86,7 @@ const App: () => Node = () => {
           <Stack.Screen name="Wishlist" component={Wishlistview} />
           <Stack.Screen name="ReportBug" component={BugReport} />
         </Stack.Navigator>
-      </NavigationContainer>
+      </NavigationContainer> */}
     </>
   );
 };

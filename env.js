@@ -1,5 +1,5 @@
 // export const BASE_URL = 'http://172.22.66.82:3000/' // -> local
-export const BASE_URL = 'http://192.168.0.152:3000/' // -> local 2
+export const BASE_URL = 'https://hebbarskitchen.com/wp-json/wp/v2/' // -> local 2
 
 // export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 
@@ -16,8 +16,8 @@ export const VERT_HW_RAT = 192 / 108
 
 // color theme
 export const COLOR1 = '#FFFFFF'
-export const COLOR2 = '#F9F6F7'
-export const COLOR3 = '#FFE8D6'
+export const COLOR2 = 'black'
+export const COLOR3 = 'grey'
 export const COLOR4 = '#FF971D'
 export const COLOR5 = '#BA2025'
 export const COLOR_GREEN = '#3a6e6e'
