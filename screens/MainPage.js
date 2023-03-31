@@ -1,19 +1,8 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, useWindowDimensions } from 'react-native';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen } from './HomeScreen'
-import { CartView } from './CartView'
-import { ProfilePage } from './ProfilePage'
-import { Location } from './locationSetter'
-import { PreBuyComp } from './PreBuyPipe'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import OrderStatus from './OrderStatus';
-import Trending from './Trending';
-import SideMenu from 'react-native-side-menu-updated'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from '@react-native-firebase/auth';
+
 import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Header from './UniversalHeader';

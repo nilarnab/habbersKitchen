@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Animated, View, Dimensions, FlatList, StyleSheet, Image, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
-import ProductView from "./ProductView";
-import CarouselComp from "./CarouselComp"
-import Catagories from "./Catagories"
-import SearchableCatagories from "./SearchableCatagories";
+
 import { BASE_URL, COLOR1, COLOR2, COLOR3 } from '../env'
-import { transform } from "@babel/core";
-import fetch_home from '../methods/fetch';
-import LinearGradient from 'react-native-linear-gradient';
+
 
 
 const InfiniteList = () => {

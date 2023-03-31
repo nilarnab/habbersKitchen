@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
-import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
-import { FaHeart } from "react-icons/fa";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import fetch_home from '../methods/fetch';
+import { SideBar } from './SideBar';
 const ScreenWidth = Dimensions.get('window').width;
+
+
 
 const SearchBar = (props) => {
 
@@ -143,26 +144,28 @@ const Header = ({
 
 
     const BurgerIcon = () => {
-        return (
-            <>
-                <Icon name='bars' size={20} color={COLOR1} style={{
-                    position: 'absolute',
-                    transform: [{ translateY: -5 }]
-                }} />
-            </>
-        )
-
-        if (State == 0) {
+        if (sideState == 0) {
 
             return (
-                <>
-                    <Icon name='bars' size={20} color={COLOR1} />
-                </>
+                
+                    <Icon name='bars' size={20} style={{
+                        position: 'absolute',
+                        transform: [{ translateY: -5 }]
+                    }} color={COLOR1} onPress={() => {
+                        setSideState(1)
+                    }} />
+                
             )
         }
         else {
             return (
-                <Icon name='close' size={20} color={COLOR1} />
+                <Icon name='close' size={20} style={{
+                    position: 'absolute',
+                    transform: [{ translateY: -5 }]
+                }} color={COLOR1} onPress={() => {
+                    console.log("closed");
+                    setSideState(0)
+                }} />
             )
         }
     }
@@ -175,14 +178,15 @@ const Header = ({
 
                 <View style={styles.left_icons}>
                     <TouchableOpacity
-                        onPress={() => {
-                            if (State == 0) {
-                                setState(1)
-                            }
-                            else {
-                                setState(0)
-                            }
-                        }}>
+                    // onPress={() => {
+                    //     if (sideState == 0) {
+                    //         setSideState(1)
+                    //     }
+                    //     else {
+                    //         setSideState(0)
+                    //     }
+                    // }}
+                    >
                         <BurgerIcon />
                     </TouchableOpacity>
 
@@ -193,8 +197,8 @@ const Header = ({
                         <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} />
                     </View>
                 </View>
-
             </View>
+            {sideState?<SideBar/>:""}
         </>
     )
 }

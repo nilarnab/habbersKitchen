@@ -7,16 +7,11 @@
  */
 
 import React, { useEffect } from 'react';
-import type { Node } from 'react';
+import { Node } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainPage from './screens/MainPage';
-import ProductSpecific from './screens/ProductSpecific';
-import PreBuyComp from './screens/PreBuyPipe';
-import OrderStatus from './screens/OrderStatus';
-import OldOrderStatus from './screens/OldOrder';
 import SplashScreen from 'react-native-splash-screen';
-import Wishlistview from './screens/Wishlistview';
 
 
 import {
@@ -38,11 +33,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 // internal imports
-import PhoneNumber from './screens/PhoneNumber';
 import { navigationRef } from './RootNavigator';
-import Payment from './screens/payment';
-import SideMenu from 'react-native-side-menu-updated'
-import { BugReport } from './screens/reportBug';
+
 
 const Stack = createNativeStackNavigator();
 
