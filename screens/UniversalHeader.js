@@ -105,8 +105,6 @@ const SearchBar = (props) => {
             </Text>
 
             <TouchableOpacity title='Search' onPress={async () => {
-                // console.log(searchText);
-                // console.log("in searching")
                 const result = await fetch_home(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                 const response = (await result.json()).data;
                 setProducts(response);
@@ -129,8 +127,8 @@ const SearchBar = (props) => {
 
 
 const Header = ({
-    setState,
-    State,
+    setSideMenu,
+    SideMenu,
     setProducts,
     setHideHeader,
     hideHeader,
@@ -144,17 +142,15 @@ const Header = ({
 
 
     const BurgerIcon = () => {
-        if (sideState == 0) {
+        if (SideMenu == 0) {
 
             return (
-                
-                    <Icon name='bars' size={20} style={{
-                        position: 'absolute',
-                        transform: [{ translateY: -5 }]
-                    }} color={COLOR1} onPress={() => {
-                        setSideState(1)
-                    }} />
-                
+
+                <Icon name='bars' size={20} style={{
+                    position: 'absolute',
+                    transform: [{ translateY: -5 }]
+                }} color={COLOR1} />
+
             )
         }
         else {
@@ -162,10 +158,7 @@ const Header = ({
                 <Icon name='close' size={20} style={{
                     position: 'absolute',
                     transform: [{ translateY: -5 }]
-                }} color={COLOR1} onPress={() => {
-                    console.log("closed");
-                    setSideState(0)
-                }} />
+                }} color={COLOR1} />
             )
         }
     }
@@ -176,21 +169,24 @@ const Header = ({
         <>
             <View style={styles.containter}>
 
-                <View style={styles.left_icons}>
-                    <TouchableOpacity
-                    // onPress={() => {
-                    //     if (sideState == 0) {
-                    //         setSideState(1)
-                    //     }
-                    //     else {
-                    //         setSideState(0)
-                    //     }
-                    // }}
-                    >
-                        <BurgerIcon />
-                    </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        if (SideMenu == 0) {
+                            setSideMenu(1)
+                        }
+                        else {
+                            setSideMenu(0)
+                        }
+                    }}
 
-                </View>
+                >
+                    <View style={{
+                        ...styles.left_icons,
+                    }}>
+                        <BurgerIcon />
+                    </View>
+                </TouchableOpacity>
+
 
                 <View style={styles.right_icons}>
                     <View style={styles.screen}>
@@ -198,7 +194,6 @@ const Header = ({
                     </View>
                 </View>
             </View>
-            {sideState?<SideBar/>:""}
         </>
     )
 }
@@ -216,7 +211,10 @@ const styles = StyleSheet.create({
     left_icons: {
         width: 60,
         height: '100%',
-        padding: 20
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 5
     },
 
     right_icons:

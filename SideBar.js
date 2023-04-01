@@ -18,11 +18,9 @@ const SideBar = ({ props, setState }) => {
             <View style={{
                 width: '100%',
                 alignItems: 'center',
-                backgroundColor: COLOR4,
                 height: '100%'
             }}>
                 <View style={{
-                    backgroundColor: COLOR4,
                     width: '100%',
                     height: 'auto',
                     justifyContent: 'center',
@@ -110,7 +108,7 @@ const SideBar = ({ props, setState }) => {
                     </View>
 
                     <View style={[styles.tabContainer, {
-                        backgroundColor: COLOR4
+
                     }]}>
                         <TouchableOpacity onPress={async () => {
                             setState(0)
