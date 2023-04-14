@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Animated, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, useWindowDimensions } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Header from './UniversalHeader';
@@ -40,6 +39,7 @@ export function MainPage(props) {
     const fadeAnim = useRef(new Animated.Value(0)).current
     const opAnim = useRef(new Animated.Value(1)).current
     const layout = useWindowDimensions();
+    console.log(props)
 
     useEffect(() => {
         console.log('sidemenue', SideMenu)

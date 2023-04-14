@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Animated, View, Dimensions, FlatList, StyleSheet, Image, ActivityIndicator, RefreshControl, Text, ScrollView } from "react-native";
-
+import { Animated, View, Dimensions, FlatList, StyleSheet, Image, ActivityIndicator, RefreshControl, Text, ScrollView, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import { BASE_URL, COLOR1, COLOR2, COLOR3 } from '../env'
+
+
 
 
 
 const InfiniteList = () => {
     const [feedData, setFeedData] = useState([])
+    const navigation = useNavigation()
+    console.log('navigation', navigation)
 
     useEffect(() => {
         const getPosts = async () => {
@@ -18,16 +22,18 @@ const InfiniteList = () => {
         getPosts()
     }, [])
 
+
     const ItemRender = ({ item }) => {
-        console.log(item.yoast_head_json.og_image[0].url)
 
         return <>
-            <View style={{
+            <TouchableOpacity style={{
                 height: 200,
                 width: '100%',
                 flexDirection: 'row',
                 borderBottomColor: COLOR3,
                 borderBottomWidth: 1
+            }} onPress={() => {
+                navigation.navigate('Post')
             }}>
                 <View style={{
                     width: '50%'
@@ -54,9 +60,10 @@ const InfiniteList = () => {
                         fontWeight: 'bold'
                     }}>{item.yoast_head_json.title}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         </>
     }
+
 
     return (
         <>

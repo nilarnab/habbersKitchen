@@ -11,6 +11,7 @@ import { Node } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainPage from './screens/MainPage';
+import PostSpecific from './screens/PostSpecific';
 import SplashScreen from 'react-native-splash-screen';
 
 
@@ -53,7 +54,10 @@ const App: () => Node = () => {
   return (
     <>
       <NavigationContainer ref={navigationRef}>
-        <MainPage />
+        <Stack.Navigator>
+          <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
+          <Stack.Screen name="Post" component={PostSpecific} options={{ headerShown: false }} />
+        </Stack.Navigator>
       </NavigationContainer>
 
 
