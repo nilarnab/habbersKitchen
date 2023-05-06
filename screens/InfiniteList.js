@@ -10,7 +10,6 @@ import { BASE_URL, COLOR1, COLOR2, COLOR3 } from '../env'
 const InfiniteList = () => {
     const [feedData, setFeedData] = useState([])
     const navigation = useNavigation()
-    console.log('navigation', navigation)
 
     useEffect(() => {
         const getPosts = async () => {
@@ -24,7 +23,7 @@ const InfiniteList = () => {
 
 
     const ItemRender = ({ item }) => {
-
+        console.log('item', item.id)
         return <>
             <TouchableOpacity style={{
                 height: 200,
@@ -33,7 +32,7 @@ const InfiniteList = () => {
                 borderBottomColor: COLOR3,
                 borderBottomWidth: 1
             }} onPress={() => {
-                navigation.navigate('Post')
+                navigation.navigate('Post', { pid: item.id })
             }}>
                 <View style={{
                     width: '50%'
