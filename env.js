@@ -1,5 +1,6 @@
 // export const BASE_URL = 'http://172.22.66.82:3000/' // -> local
 export const BASE_URL = 'https://hebbarskitchen.com/wp-json/wp/v2/' // -> local 2
+export const GET_POST_URL = 'https://hebbarskitchen.com/ml-api/v2/post?post_id='
 
 // export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 
