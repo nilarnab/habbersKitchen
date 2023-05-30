@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Animated, SafeAreaView, Image, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, TouchableOpacity, } from 'react-native';
 import { COMPNAY_NAME, BASE_URL } from './env.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import { COLOR1, COLOR2, COLOR3, COLOR4, COLOR5 } from './env';
 
 
@@ -118,9 +118,9 @@ const SideBar = ({ props, setState }) => {
                             await AsyncStorage.removeItem('email')
                             await AsyncStorage.removeItem('user_id')
 
-                            if (auth().currentUser) {
-                                await auth().signOut()
-                            }
+                            // if (auth().currentUser) {
+                            //     await auth().signOut()
+                            // }
 
                             props.navigate('Phone')
 

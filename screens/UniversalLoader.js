@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, Button, TextInput, Linking, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bubbles, DoubleBounce, Bars, Pulse } from 'react-native-loader';
 

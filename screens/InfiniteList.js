@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Animated, View, Dimensions, FlatList, StyleSheet, Image, ActivityIndicator, RefreshControl, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { BASE_URL, COLOR1, COLOR2, COLOR3 } from '../env'
+import { BASE_URL, COLOR1, COLOR2, COLOR3 } from '../env';
+import { FlashList } from "@shopify/flash-list";
 
 
 
@@ -66,8 +67,9 @@ const InfiniteList = () => {
 
     return (
         <>
-            <View>
-                <FlatList
+            <View style={{ minHeight: 500, height: "100%" }}>
+                <FlashList
+                    estimatedItemSize={200}
                     data={feedData}
                     renderItem={ItemRender}
                 />
