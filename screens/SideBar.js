@@ -2,10 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
+import { COLOR1, COLOR2, COLOR3, COLOR4, BASE_URL } from '../env';
 
 
 export const SideBar = (props) => {
+    const [categories, setCategories] = useState([])
+    useEffect(() => {
+        fetchCategories();
+    }, [])
+
+    const fetchCategories = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}categories`);
+            const jsonData = await response.json();
+            if (jsonData.length > 0) {
+                setCategories(jsonData)
+            }
+        } catch (error) {
+            console.log("Error fetching categoriess:", error);
+        }
+    }
 
     return (<>
         <View style={{
@@ -16,11 +32,10 @@ export const SideBar = (props) => {
             paddingHorizontal: 20,
             paddingTop: 20
         }}>
-
-            <Text style={styles.sidebarItems}>Chicken biriyani</Text>
-            <Text style={styles.sidebarItems}>Tandoori Chicken</Text>
-            <Text style={styles.sidebarItems}>Fish Fry</Text>
-            <Text style={styles.sidebarItems}>Aluu Bhaja</Text>
+            {/* {categories.map((el) => {
+                console.log(el.name)
+                return <Text style={styles.sidebarItems}>{el.name}</Text>
+            })} */}
         </View>
     </>
     )
@@ -30,8 +45,9 @@ const styles = StyleSheet.create({
 
     sidebarItems: {
         width: '100%',
-        height: 30,
+        // height: 30,
         flexDirection: 'row',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'gray'
     },
 })

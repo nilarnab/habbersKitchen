@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview'
 import { GET_POST_URL } from '../env';
 import { Header } from './PostSpecHeader';
