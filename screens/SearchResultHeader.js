@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export const Header = () => {
     const navigation = useNavigation();
+    console.log('navigation', navigation)
     return <>
         <View
             style={{
@@ -39,14 +40,14 @@ export const Header = () => {
                     width: '50%',
                     marginTop: 20,
                 }} >
-                    <Icon name='share-alt' size={20} color={COLOR1} />
+                    {/* <Icon name='share-alt' size={20} color={COLOR1} /> */}
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{
                     width: 20,
                     marginTop: 20,
                 }}>
-                    <Icon name='bookmark' size={20} color={COLOR1} />
+                    <Icon name='shopping-cart' size={20} color={COLOR1} />
                 </TouchableOpacity>
 
             </View>
