@@ -134,13 +134,6 @@ const Header = ({
     hideHeader,
     setIgnoreSearch }) => {
 
-    const [sideState, setSideState] = useState(0)
-
-    const handleSideBar = () => {
-
-    }
-
-
     const BurgerIcon = () => {
         if (SideMenu == 0) {
 

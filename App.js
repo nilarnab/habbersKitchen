@@ -13,6 +13,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainPage from './screens/MainPage';
 import PostSpecific from './screens/PostSpecific';
 import SplashScreen from 'react-native-splash-screen';
+import { CategorySpecific } from './screens/CategorySpecific';
 
 
 import {
@@ -57,32 +58,9 @@ const App: () => Node = () => {
         <Stack.Navigator>
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="Post" component={PostSpecific} options={{ headerShown: false }} />
+          <Stack.Screen name="Category" component={CategorySpecific} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-
-
-      {/* <NavigationContainer ref={navigationRef}>
-
-        <Stack.Navigator>
-          <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
-          <Stack.Screen name="Phone" component={PhoneNumber}
-            options={{ headerShown: false }}
-            screenOptions={{
-              headerMode: 'screen',
-              defaultNavigationOptions: {
-                cardStyle: { backgroundColor: '#FFFFFF' },
-              },
-            }}
-          />
-          <Stack.Screen name="ProductSpecific" component={ProductSpecific} />
-          <Stack.Screen name="Pay" component={Payment} />
-          <Stack.Screen name="PreBuyPipe" component={PreBuyComp} options={{ headerShown: false }} />
-          <Stack.Screen name="OrderStatus" component={OrderStatus} />
-          <Stack.Screen name="OldOrderStatus" component={OldOrderStatus} />
-          <Stack.Screen name="Wishlist" component={Wishlistview} />
-          <Stack.Screen name="ReportBug" component={BugReport} />
-        </Stack.Navigator>
-      </NavigationContainer> */}
     </>
   );
 };

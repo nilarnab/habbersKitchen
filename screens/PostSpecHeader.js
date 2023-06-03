@@ -2,11 +2,8 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { Animated, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, useWindowDimensions, TouchableOpacity, Touchable } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
-import { SideBar } from './SideBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { useNavigation } from '@react-navigation/native';
 
 export const Header = () => {

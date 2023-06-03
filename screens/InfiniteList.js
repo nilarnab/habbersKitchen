@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Image,
     ActivityIndicator,
+    RefreshControl,
     Text,
     TouchableOpacity,
 } from "react-native";
@@ -13,20 +14,33 @@ import { useNavigation } from "@react-navigation/native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3 } from "../env";
 import { FlashList } from "@shopify/flash-list";
 
-const InfiniteList = ({ categoryID }) => {
+const InfiniteList = ({ categoryID, route }) => {
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
+    const [refreshing, setRefreshing] = useState(false);
+
+    // Function to handle the refresh action
+    const handleRefresh = () => {
+        // Set the refreshing state to true
+        setRefreshing(true);
+        // Perform your refresh logic here
+        fetchPosts();
+        // Once the refresh is complete, set the refreshing state back to false
+        setRefreshing(false);
+    };
 
     const fetchPosts = useCallback(async () => {
         setLoading(true);
         try {
             const response = await fetch(
-                `${BASE_URL}posts/?page=${page}${categoryID ? "&categories=" + categoryID : ""}`
+                `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
             );
+            if (!response) return
             const jsonData = await response.json();
-            if (jsonData.length > 0) {
+
+            if (jsonData && jsonData.length > 0) {
                 setFeedData((prevData) => [...prevData, ...jsonData]);
                 setPage((prevPage) => prevPage + 1);
             }
@@ -48,7 +62,14 @@ const InfiniteList = ({ categoryID }) => {
     }, [fetchPosts, loading]);
 
     const ItemRender = ({ item }) => {
-        console.log("item", item.id);
+        let thumbimage;
+        try {
+            thumbimage = item.yoast_head_json.og_image[0].url;
+        }
+        catch (err) {
+            thumbimage = 'NOTFOUND';
+            console.log("image not found for " + item.id)
+        }
         return (
             <TouchableOpacity
                 style={styles.itemContainer}
@@ -59,7 +80,7 @@ const InfiniteList = ({ categoryID }) => {
                 <View style={styles.imageContainer}>
                     <Image
                         source={{
-                            uri: item.yoast_head_json.og_image[0].url,
+                            uri: thumbimage,
                         }}
                         style={styles.image}
                     />
@@ -83,6 +104,10 @@ const InfiniteList = ({ categoryID }) => {
                 ListFooterComponent={
                     loading ? <ActivityIndicator style={styles.loadingIndicator} /> : null
                 }
+                refreshControl={<RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={handleRefresh}
+                />}
             />
         </View>
     );

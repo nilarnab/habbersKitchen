@@ -1,42 +1,27 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
-import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLOR1, COLOR2, COLOR3, COLOR4, BASE_URL } from '../env';
 
 
 export const SideBar = (props) => {
-    const [categories, setCategories] = useState([])
-    useEffect(() => {
-        fetchCategories();
-    }, [])
-
-    const fetchCategories = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}categories`);
-            const jsonData = await response.json();
-            if (jsonData.length > 0) {
-                setCategories(jsonData)
-            }
-        } catch (error) {
-            console.log("Error fetching categoriess:", error);
-        }
-    }
-
+    const navigation = useNavigation();
     return (<>
-        <View style={{
+        <ScrollView style={{
             width: 200,
             backgroundColor: COLOR1,
             height: '100%',
             position: "absolute",
             paddingHorizontal: 20,
-            paddingTop: 20
+            paddingBottom: 20
         }}>
-            {/* {categories.map((el) => {
-                console.log(el.name)
-                return <Text style={styles.sidebarItems}>{el.name}</Text>
-            })} */}
-        </View>
+            {props.sideList ? props.sideList.map((el) => {
+                return (<TouchableOpacity style={styles.sideItemWrapper} onPress={() => {
+                    navigation.navigate("Category", { cid: el.id, label: el.label });
+                }}
+                ><Text key={el.id} style={styles.sidebarItems}>{el.label}</Text></TouchableOpacity>)
+            }) : <></>}
+        </ScrollView>
     </>
     )
 }
@@ -46,8 +31,15 @@ const styles = StyleSheet.create({
     sidebarItems: {
         width: '100%',
         // height: 30,
+        fontSize: 14,
         flexDirection: 'row',
         fontWeight: 'bold',
-        color: 'gray'
+        verticalAlign: 'middle',
+        flex: 1,
+        color: 'gray',
     },
+    sideItemWrapper: {
+        height: 50,
+        flex: 1,
+    }
 })

@@ -16,23 +16,18 @@ const Home = () => (
 
 const renderScene = (categories) =>
     ({ route }) => {
-        if (route.key === 'home') {
-            return <Home />;
-        } else {
-            const category = categories.find((c) => c.slug === route.key);
-            if (category) {
-                return (
-                    <View style={{ flex: 1, backgroundColor: COLOR1 }}>
-                        <InfiniteList categoryID={category.id} />
-                    </View>
-                );
-            }
+        const category = categories.find((c) => c.label === route.key);
+        if (category) {
+            return (
+                <View style={{ flex: 1, backgroundColor: COLOR1 }}>
+                    <InfiniteList categoryID={category.id} route={route.key} />
+                </View>
+            );
         }
         return null;
     };
 
 export function MainPage(props) {
-    console.log('rerendering -----------------------------------------------------');
     const [sideMenu, setSideMenu] = useState(false);
     const [mainWidth, setMainWidth] = useState('100%');
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -70,18 +65,18 @@ export function MainPage(props) {
     const [categories, setCategories] = useState([]);
     const [index, setIndex] = useState(0);
     const [routes, setRoutes] = useState([]);
+    const [sideList, setSideList] = useState([])
 
     useEffect(() => {
-        fetch('https://hebbarskitchen.com/wp-json/wp/v2/categories')
+        fetch('https://hebbarskitchen.com/ml-api/v1/config/')
             .then((response) => response.json())
             .then((data) => {
-                setCategories(data);
-
-                const fetched = data.map((category) => ({
-                    key: category.slug,
-                    title: category.name,
+                setCategories(data.horizontal_navigation);
+                setSideList(data.hamburger_navigation);
+                const generatedRoutes = data.horizontal_navigation.map((category) => ({
+                    key: category.label,
+                    title: category.label,
                 }));
-                const generatedRoutes = [{ key: 'home', title: 'Home' }, ...fetched];
                 setRoutes(generatedRoutes);
             })
             .catch((error) => {
@@ -128,7 +123,7 @@ export function MainPage(props) {
         <>
             <View style={{ flexDirection: 'row', height: '100%' }}>
                 <Animated.View style={{ width: fadeAnim, height: '100%', backgroundColor: 'rgb(240, 240, 245)' }}>
-                    <SideBar props={props.navigation} setState={setSideMenu} />
+                    <SideBar props={props.navigation} sideList={sideList} setState={setSideMenu} />
                 </Animated.View>
 
                 <View style={{ width: mainWidth, height: '100%', backgroundColor: COLOR2, elevation: 1 }}>
