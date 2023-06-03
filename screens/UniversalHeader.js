@@ -3,24 +3,49 @@ import { SafeAreaView, Dimensions, StyleSheet, Text, View, AppRegistry, FlatList
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import fetch_home from '../methods/fetch';
-import { SideBar } from './SideBar';
+import { useNavigation } from '@react-navigation/native';
 const ScreenWidth = Dimensions.get('window').width;
 
 
+const MidHeader = ({ searchMode, searchText, setSearchText }) => {
+    const navigation = useNavigation();
+
+    if (searchMode) {
+        return <>
+            <View style={styles.midHeader}>
+                <TextInput
+                    style={styles.input}
+                    value={searchText}
+                    onChangeText={(text) => { setSearchText(text) }}
+                    placeholder='Search ..'
+                    placeholderTextColor={'grey'}
+                    selectionColor={COLOR1}
+                    onSubmitEditing={() => {
+                        navigation.navigate('SearchResult', { query: searchText })
+                    }}
+                />
+            </View>
+        </>
+    }
+    else {
+        return <>
+            <Text
+                style={{ ...styles.midHeader, paddingTop: 10 }}>
+                Hebbers Kitchen
+            </Text>
+        </>
+    }
+}
 
 const SearchBar = (props) => {
-
     const [searchText, setSearchText] = useState("");
     const [hideHeader, setHideHeader] = useState(props.hideHeader)
-
-
-    // console.log("search bar props")
-    // console.log(props)
-
-    // var searchText = props.searchText
-    // var setSearchText = props.setSearchText
+    const [searchMode, setSearchMode] = useState(false)
     var setProducts = props.setProducts
 
+    const fetchSearchResult = () => {
+
+    }
 
     const ResetButton = (props) => {
         // console.log("reset button props")
@@ -57,65 +82,44 @@ const SearchBar = (props) => {
 
     const SearchButtonIcon = () => {
 
-        if (!hideHeader) {
-            if (searchText.length == 0) {
-                return (
-                    <>
-                        <View style={{
-                            height: 30,
-                            width: 30,
-                            // backgroundColor: 'red',
-                            marginLeft: 20
-                        }}>
-                            <Icon name='search' size={20} color={COLOR1} />
-                        </View>
-                    </>
-                )
-            }
-            else {
-                return (
-                    <>
-                        <Icon name='search' size={20} color={COLOR1} />
-                    </>
-                )
-            }
+        if (searchMode) {
+            return <>
+                <View style={{
+                    height: 30,
+                    width: 30,
+                    // backgroundColor: 'red',
+                    marginLeft: 20
+                }}>
+                    <Icon name='close' size={20} color={COLOR1} />
+                </View>
+            </>
+        }
+        else {
+            return <>
+                <View style={{
+                    height: 30,
+                    width: 30,
+                    // backgroundColor: 'red',
+                    marginLeft: 20
+                }}>
+                    <Icon name='search' size={20} color={COLOR1} />
+                </View>
+            </>
         }
     }
 
     return (
         <>
-            {/* <TextInput style={styles.input}
-                editable
-                maxLength={40}
-                value={searchText}
-                onChangeText={setSearchText}
-                placeholder="Start Typing to search ..."
-                placeholderTextColor={'black'}
-            /> */}
-            <Text
-                style={{
-                    justifyContent: 'center',
-                    width: '100%',
-                    color: COLOR1,
-                    marginRight: 80,
-                    fontSize: 20,
-                    textAlign: 'center'
-                }}>
-                Hebbers Kitchen
-            </Text>
 
-            <TouchableOpacity title='Search' onPress={async () => {
-                const result = await fetch_home(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
-                const response = (await result.json()).data;
-                setProducts(response);
-                setHideHeader(true)
-                props.setHideHeader(true)
-                props.setIgnoreSearch(false)
+            <MidHeader searchMode={searchMode} searchText={searchText} setSearchText={setSearchText} />
 
+            <TouchableOpacity title='Search' onPress={() => {
+                setSearchMode(!searchMode)
             }} style={{
-                position: 'absolute',
-                right: 0,
-                top: 5
+                ...styles.left_icons,
+                width: 60,
+                paddingLeft: 10,
+                // backgroundColor: 'pink'
             }} >
                 <SearchButtonIcon />
             </TouchableOpacity>
@@ -182,9 +186,7 @@ const Header = ({
 
 
                 <View style={styles.right_icons}>
-                    <View style={styles.screen}>
-                        <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} />
-                    </View>
+                    <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} />
                 </View>
             </View>
         </>
@@ -198,7 +200,17 @@ const styles = StyleSheet.create({
         height: 50,
         // elevation: 2,
         flexDirection: 'row',
-        backgroundColor: COLOR2
+        backgroundColor: COLOR2,
+
+    },
+
+    midHeader: {
+        justifyContent: 'center',
+        width: ScreenWidth - 60 * 2,
+        color: COLOR1,
+        fontSize: 20,
+        // backgroundColor: 'green',
+        textAlign: 'center'
     },
 
     left_icons: {
@@ -207,7 +219,8 @@ const styles = StyleSheet.create({
         padding: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 5
+        marginTop: 5,
+        // backgroundColor: 'blue'
     },
 
     right_icons:
@@ -217,6 +230,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'white',
         position: 'absolute',
         right: 0,
+        flexDirection: 'row'
     },
 
     //----------------
@@ -232,12 +246,12 @@ const styles = StyleSheet.create({
 
     input: {
         fontSize: 15,
-        color: "black",
-        backgroundColor: COLOR1,
-        width: '100%',
-        padding: 10,
-        borderRadius: 10,
-        marginBottom: 10
+        color: COLOR1,
+        paddingLeft: 10,
+        width: '80%',
+        alignSelf: 'center',
+        borderBottomWidth: 2,
+        borderBottomColor: COLOR1,
     },
 
     screen: {

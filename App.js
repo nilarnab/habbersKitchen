@@ -14,7 +14,7 @@ import MainPage from './screens/MainPage';
 import PostSpecific from './screens/PostSpecific';
 import SplashScreen from 'react-native-splash-screen';
 import { CategorySpecific } from './screens/CategorySpecific';
-
+import { SearchResult } from './screens/SearchResult';
 
 import {
   SafeAreaView,
@@ -59,6 +59,7 @@ const App: () => Node = () => {
           <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} />
           <Stack.Screen name="Post" component={PostSpecific} options={{ headerShown: false }} />
           <Stack.Screen name="Category" component={CategorySpecific} options={{ headerShown: false }} />
+          <Stack.Screen name="SearchResult" component={SearchResult} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
