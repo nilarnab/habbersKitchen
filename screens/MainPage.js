@@ -86,16 +86,14 @@ export function MainPage(props) {
     }, []);
 
     const renderTabBar = useCallback(
-        (props) => (
-            <TabBar
+        (props) => {
+            return <TabBar
                 scrollEnabled={true}
                 style={{
                     backgroundColor: COLOR2,
                     elevation: 0,
-                    borderColor: '#000000',
-                    borderBottomWidth: 1,
-                    // height: 45,
-                    width: 'auto',
+                    // borderColor: '#000000',
+                    // height: 40,
                 }}
                 labelStyle={{
                     color: COLOR1,
@@ -103,9 +101,12 @@ export function MainPage(props) {
                     fontWeight: 'bold',
                 }}
                 {...props}
-                indicatorStyle={{ backgroundColor: COLOR1, height: 2.5 }}
+                indicatorStyle={{
+                    backgroundColor: COLOR1,
+                    //  height: 2.5
+                }}
             />
-        ),
+        },
         []
     );
 
