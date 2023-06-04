@@ -168,12 +168,7 @@ const Header = ({
 
                 <TouchableOpacity
                     onPress={() => {
-                        if (SideMenu == 0) {
-                            setSideMenu(1)
-                        }
-                        else {
-                            setSideMenu(0)
-                        }
+                        setSideMenu(!SideMenu)
                     }}
 
                 >

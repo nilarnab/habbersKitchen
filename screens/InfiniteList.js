@@ -13,6 +13,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3 } from "../env";
 import { FlashList } from "@shopify/flash-list";
+import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 
 const InfiniteList = ({ categoryID, route }) => {
     const [feedData, setFeedData] = useState([]);
@@ -94,21 +95,25 @@ const InfiniteList = ({ categoryID, route }) => {
 
     return (
         <View style={styles.container}>
-            <FlashList
+
+            {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : <FlashList
                 data={feedData}
                 renderItem={ItemRender}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item, index) => {
+                    return item.id;
+                }}
                 onEndReached={handleEndReached}
                 onEndReachedThreshold={0.5}
                 estimatedItemSize={300}
                 ListFooterComponent={
-                    loading ? <ActivityIndicator style={styles.loadingIndicator} /> : null
+                    loading ? <ShimmeringSkeletonLoader count={2} /> : null
                 }
                 refreshControl={<RefreshControl
                     refreshing={refreshing}
                     onRefresh={handleRefresh}
                 />}
             />
+            }
         </View>
     );
 };
