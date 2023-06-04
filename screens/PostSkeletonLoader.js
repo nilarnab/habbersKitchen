@@ -48,12 +48,9 @@ export const ShimmeringSkeletonLoader = ({ count }) => {
     var countArr = Array.from(Array(count).keys())
 
     return <>
-        {/* <FlatList
-            data={countArr}
-            renderItem={ItemRender}
-            nestedScrollEnabled={false}
-        /> */}
-        {countArr.map((el) => { return <ItemRender key={el} item={el} ></ItemRender> })}
+        {
+            countArr.map((item, index) => <ItemRender key={index} item={item} />)
+        }
     </>
 
 }
