@@ -56,6 +56,7 @@ const InfiniteList = ({ categoryID, route }) => {
     }, [fetchPosts]);
 
     const handleEndReached = useCallback(() => {
+        console.log("end reached ---------------------------------")
         if (!loading) {
             fetchPosts();
         }
@@ -100,7 +101,7 @@ const InfiniteList = ({ categoryID, route }) => {
                 keyExtractor={(item) => item.id.toString()}
                 onEndReached={handleEndReached}
                 onEndReachedThreshold={0.5}
-                estimatedItemSize={300}
+                estimatedItemSize={150}
                 ListFooterComponent={
                     loading ? <ActivityIndicator style={styles.loadingIndicator} /> : null
                 }

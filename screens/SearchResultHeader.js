@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 
 export const Header = () => {
     const navigation = useNavigation();
-    console.log('navigation', navigation)
     return <>
         <View
             style={{

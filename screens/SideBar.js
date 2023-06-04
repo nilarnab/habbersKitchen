@@ -16,7 +16,7 @@ export const SideBar = (props) => {
             paddingBottom: 20
         }}>
             {props.sideList ? props.sideList.map((el) => {
-                return (<TouchableOpacity style={styles.sideItemWrapper} onPress={() => {
+                return (<TouchableOpacity key={el.id} style={styles.sideItemWrapper} onPress={() => {
                     navigation.navigate("Category", { cid: el.id, label: el.label });
                 }}
                 ><Text key={el.id} style={styles.sidebarItems}>{el.label}</Text></TouchableOpacity>)
