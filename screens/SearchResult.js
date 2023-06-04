@@ -8,6 +8,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Header } from './SearchResultHeader';
 import { ActivityIndicator } from 'react-native-paper';
 import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
+import axios from 'axios';
 
 export const SearchResult = (props) => {
     const [feedData, setFeedData] = useState([])
@@ -18,14 +19,18 @@ export const SearchResult = (props) => {
     const navigation = useNavigation();
 
     const fetchResults = async (page) => {
-        console.log('asking or page', page, "per page", feedData.length + POST_PER_PAGE)
+        var startTime = Date.now();
+        console.log('asking or page', `https://hebbarskitchen.com/wp-json/wp/v2/posts?search=${query}&order=desc&orderby=date&offset=${feedData.length}&per_page=${POST_PER_PAGE}`)
         setLoading(true)
         var feedDataTemp = feedData.map((item, index) => { return item })
-        const response = await fetch(`https://hebbarskitchen.com/wp-json/wp/v2/posts?search=${query}&order=desc&orderby=date&offset=${feedData.length}&per_page=${POST_PER_PAGE}`)
-        const responseJson = await response.json();
+        const response = await axios.get(`https://hebbarskitchen.com/wp-json/wp/v2/posts?search=${query}&order=desc&orderby=date&offset=${feedData.length}&per_page=${POST_PER_PAGE}`)
+        console.log('got response', Date.now() - startTime)
+        const responseJson = response.data;
+        console.log('converted to json', Date.now() - startTime)
         responseJson.forEach((item, index) => {
             feedDataTemp.push(item)
         })
+        console.log('data ready', Date.now() - startTime)
         setFeedData(feedDataTemp)
         setLoading(false)
     }

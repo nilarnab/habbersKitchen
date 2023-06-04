@@ -14,8 +14,11 @@ import { useNavigation } from "@react-navigation/native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3 } from "../env";
 import { FlashList } from "@shopify/flash-list";
 import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
+import { useIsFocused } from '@react-navigation/native';
+import axios from "axios";
 
 const InfiniteList = ({ categoryID, route }) => {
+    const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -35,11 +38,13 @@ const InfiniteList = ({ categoryID, route }) => {
     const fetchPosts = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await fetch(
+            var startTime = Date.now()
+            const jsonData = (await axios.get(
                 `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
-            );
-            if (!response) return
-            const jsonData = await response.json();
+            )).data;
+            console.log("RESPONSE TIME", Date.now() - startTime)
+            if (!jsonData) return
+            // const jsonData = await response.json();
 
             if (jsonData && jsonData.length > 0) {
                 setFeedData((prevData) => [...prevData, ...jsonData]);
@@ -53,8 +58,10 @@ const InfiniteList = ({ categoryID, route }) => {
     }, [categoryID, page]);
 
     useEffect(() => {
-        fetchPosts();
-    }, [fetchPosts]);
+        if (isFocused) {
+            fetchPosts();
+        }
+    }, []);
 
     const handleEndReached = useCallback(() => {
         if (!loading) {

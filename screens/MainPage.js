@@ -5,6 +5,7 @@ import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2 } from '../env';
 import Header from './UniversalHeader';
 import { SideBar } from './SideBar';
+import axios from 'axios';
 
 AppRegistry.registerComponent('Appname', () => App);
 
@@ -68,8 +69,8 @@ export function MainPage(props) {
     const [sideList, setSideList] = useState([])
 
     useEffect(() => {
-        fetch('https://hebbarskitchen.com/ml-api/v1/config/')
-            .then((response) => response.json())
+        axios.get('https://hebbarskitchen.com/ml-api/v1/config/')
+            .then((response) => response.data)
             .then((data) => {
                 setCategories(data.horizontal_navigation);
                 setSideList(data.hamburger_navigation);
