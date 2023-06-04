@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react';
 import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import InfiniteList from './InfiniteList';
@@ -6,6 +6,7 @@ import { COLOR1, COLOR2 } from '../env';
 import Header from './UniversalHeader';
 import { SideBar } from './SideBar';
 import axios from 'axios';
+import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
 
 AppRegistry.registerComponent('Appname', () => App);
 
@@ -15,18 +16,18 @@ const Home = () => (
     </View>
 );
 
-const renderScene = (categories) =>
-    ({ route }) => {
-        const category = categories.find((c) => c.label === route.key);
-        if (category) {
-            return (
-                <View style={{ flex: 1, backgroundColor: COLOR1 }}>
-                    <InfiniteList categoryID={category.id} route={route.key} />
-                </View>
-            );
-        }
-        return null;
-    };
+
+
+const RenderScene = ({ categories, index, route }) => {
+    const category = categories.find((c) => c.label === route.key);
+    const indexCat = categories.findIndex(c => c.label === route.key)
+    return (
+        <View style={{ flex: 1, backgroundColor: COLOR1 }}>
+            <InfiniteList categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} />
+        </View>
+    );
+
+};
 
 export function MainPage(props) {
     const [sideMenu, setSideMenu] = useState(false);
@@ -110,14 +111,14 @@ export function MainPage(props) {
         []
     );
 
-    const memoizedRenderScene = useMemo(() => renderScene(categories), [categories]);
+    // const memoizedRenderScene = useMemo(() => renderScene(categories, index), [categories, index]);
 
     if (categories.length === 0 || routes.length === 0) {
         // Handle the loading state while categories are being fetched
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Loading...</Text>
-            </View>
+            <>
+                <ShimmeringSkeletonLoader count={5} />
+            </>
         );
     }
 
@@ -135,7 +136,7 @@ export function MainPage(props) {
                             style={{ backgroundColor: 'white' }}
                             renderTabBar={renderTabBar}
                             navigationState={{ index, routes }}
-                            renderScene={memoizedRenderScene}
+                            renderScene={({ route }) => <RenderScene categories={categories} index={index} route={route} />}
                             onIndexChange={setIndex}
                             initialLayout={{ width: layout.width }}
                             overScrollMode={'always'}
