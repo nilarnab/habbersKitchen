@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react';
-import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text } from 'react-native';
+import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2 } from '../env';
@@ -40,25 +40,25 @@ export function MainPage(props) {
         if (sideMenu) {
             Animated.timing(fadeAnim, {
                 toValue: 200,
-                duration: 1000,
+                duration: 500,
                 useNativeDriver: false,
             }).start();
 
             Animated.timing(opAnim, {
                 toValue: 0.4,
-                duration: 1000,
+                duration: 500,
                 useNativeDriver: false,
             }).start();
         } else {
             Animated.timing(fadeAnim, {
                 toValue: 0,
-                duration: 1000,
+                duration: 500,
                 useNativeDriver: false,
             }).start();
 
             Animated.timing(opAnim, {
                 toValue: 1,
-                duration: 1000,
+                duration: 500,
                 useNativeDriver: false,
             }).start();
         }
@@ -129,8 +129,8 @@ export function MainPage(props) {
                     <SideBar props={props.navigation} sideList={sideList} setState={setSideMenu} />
                 </Animated.View>
 
-                <View style={{ width: mainWidth, height: '100%', backgroundColor: COLOR2, elevation: 1 }}>
-                    <Animated.View style={{ opacity: opAnim, height: '100%' }}>
+                <TouchableOpacity style={{ width: mainWidth, height: '100%', backgroundColor: COLOR2, elevation: 1 }} onPress={() => { setSideMenu(0); }} >
+                    <Animated.View pointerEvents={sideMenu ? "none" : 'auto'} style={{ opacity: opAnim, height: '100%' }}>
                         <Header SideMenu={sideMenu} setSideMenu={setSideMenu} />
                         <TabView
                             style={{ backgroundColor: 'white' }}
@@ -142,7 +142,7 @@ export function MainPage(props) {
                             overScrollMode={'always'}
                         />
                     </Animated.View>
-                </View>
+                </TouchableOpacity>
             </View>
         </>
     );
