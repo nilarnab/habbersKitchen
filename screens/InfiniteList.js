@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import {
     View,
+    Platform,
     Dimensions,
     FlatList,
     StyleSheet,
@@ -11,11 +12,12 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { BASE_URL, COLOR1, COLOR2, COLOR3 } from "../env";
+import { BASE_URL, COLOR1, COLOR2, COLOR3, ANDROID_BANNER_UNIT_ID, IOS_BANNER_UNIT_ID } from "../env";
 import { FlashList } from "@shopify/flash-list";
 import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 import { useIsFocused } from '@react-navigation/native';
 import axios from "axios";
+import { GAMBannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     const isFocused = useIsFocused();
@@ -122,6 +124,13 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
             />
             {/* {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : 
             } */}
+            <GAMBannerAd
+                unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
+                sizes={[BannerAdSize.FULL_BANNER]}
+                requestOptions={{
+                    requestNonPersonalizedAdsOnly: true,
+                }}
+            />
         </View>
     );
 };

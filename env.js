@@ -23,4 +23,8 @@ export const COLOR4 = '#FF971D'
 export const COLOR5 = '#BA2025'
 export const COLOR_GREEN = '#3a6e6e'
 
+// admob configuration
+export const ANDROID_BANNER_UNIT_ID = "ca-app-pub-5515597551541709\/9419287888"
+export const IOS_BANNER_UNIT_ID = "ca-app-pub-5515597551541709\/1667686727"
+
 

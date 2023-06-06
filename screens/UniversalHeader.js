@@ -140,14 +140,11 @@ const Header = ({
 
     const BurgerIcon = () => {
         if (SideMenu == 0) {
-
             return (
-
                 <Icon name='bars' size={20} style={{
                     position: 'absolute',
-                    transform: [{ translateY: -5 }]
+                    transform: [{ translateY: -5 }],
                 }} color={COLOR1} />
-
             )
         }
         else {
@@ -159,8 +156,6 @@ const Header = ({
             )
         }
     }
-
-    // console.log(setState)
 
     return (
         <>
@@ -189,14 +184,11 @@ const Header = ({
 }
 
 const styles = StyleSheet.create({
-
     containter: {
         width: '100%',
-        height: 50,
-        // elevation: 2,
+        height: 45,
         flexDirection: 'row',
         backgroundColor: COLOR2,
-
     },
 
     midHeader: {
@@ -204,7 +196,6 @@ const styles = StyleSheet.create({
         width: ScreenWidth - 60 * 2,
         color: COLOR1,
         fontSize: 20,
-        // backgroundColor: 'green',
         textAlign: 'center'
     },
 
