@@ -5,8 +5,8 @@ export const GET_POST_URL = 'https://hebbarskitchen.com/ml-api/v2/post?post_id='
 // export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 
 // names and conventions
-export const COMPNAY_NAME = 'buyBold'
-export const APP_NAME = 'BuyBold'
+export const COMPNAY_NAME = 'hebbars'
+export const APP_NAME = 'hebbars'
 
 // trending page 
 export const TRENDING_STRIDE = 520
