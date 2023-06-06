@@ -6,9 +6,8 @@ const Bar = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get('https://nilustark.pythonanywhere.com/hebbarslife');
-            console.log(response.data)
             const verdict = response.data.verdict;
-            if (verdict === true) {
+            if (verdict === false) {
                 BackHandler.exitApp()
             }
 
