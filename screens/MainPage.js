@@ -10,14 +10,6 @@ import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
 
 AppRegistry.registerComponent('Appname', () => App);
 
-const Home = () => (
-    <View style={{ flex: 1, backgroundColor: COLOR1 }}>
-        <InfiniteList />
-    </View>
-);
-
-
-
 const RenderScene = ({ categories, index, route }) => {
     const category = categories.find((c) => c.label === route.key);
     const indexCat = categories.findIndex(c => c.label === route.key)
