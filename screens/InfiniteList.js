@@ -17,13 +17,14 @@ import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 import { useIsFocused } from '@react-navigation/native';
 import axios from "axios";
 
-const InfiniteList = ({ categoryID, route }) => {
+const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
+    const [coldStart, setColdStart] = useState(true)
 
     // Function to handle the refresh action
     const handleRefresh = () => {
@@ -36,38 +37,37 @@ const InfiniteList = ({ categoryID, route }) => {
     };
 
     const fetchPosts = useCallback(async () => {
-        setLoading(true);
-        try {
-            var startTime = Date.now()
-            const jsonData = (await axios.get(
-                `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
-            )).data;
-            console.log("RESPONSE TIME", Date.now() - startTime)
-            if (!jsonData) return
-            // const jsonData = await response.json();
+        if (visibleIndex == categoryIndex) {
+            console.log('fetching post for', categoryIndex, 'with page number', page)
+            setLoading(true);
+            try {
+                var startTime = Date.now()
+                const jsonData = (await axios.get(
+                    `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
+                )).data;
+                console.log("RESPONSE TIME", Date.now() - startTime)
+                if (!jsonData) return
+                // const jsonData = await response.json();
 
-            if (jsonData && jsonData.length > 0) {
-                setFeedData((prevData) => [...prevData, ...jsonData]);
-                setPage((prevPage) => prevPage + 1);
+                if (jsonData && jsonData.length > 0) {
+                    setFeedData((prevData) => [...prevData, ...jsonData]);
+                    setPage((prevPage) => prevPage + 1);
+                }
+            } catch (error) {
+                console.log("Error fetching posts:", error);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.log("Error fetching posts:", error);
-        } finally {
-            setLoading(false);
         }
-    }, [categoryID, page]);
+    }, [categoryID, page, visibleIndex]);
 
     useEffect(() => {
-        if (isFocused) {
-            fetchPosts();
-        }
-    }, []);
+        fetchPosts();
+    }, [visibleIndex]);
 
     const handleEndReached = useCallback(() => {
         console.log("end reached ---------------------------------")
-        if (!loading) {
-            fetchPosts();
-        }
+        fetchPosts();
     }, [fetchPosts, loading]);
 
     const ItemRender = ({ item }) => {
@@ -103,8 +103,7 @@ const InfiniteList = ({ categoryID, route }) => {
 
     return (
         <View style={styles.container}>
-
-            {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : <FlashList
+            <FlashList
                 data={feedData}
                 renderItem={ItemRender}
                 keyExtractor={(item, index) => {
@@ -121,7 +120,8 @@ const InfiniteList = ({ categoryID, route }) => {
                     onRefresh={handleRefresh}
                 />}
             />
-            }
+            {/* {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : 
+            } */}
         </View>
     );
 };
