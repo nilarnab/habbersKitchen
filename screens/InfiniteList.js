@@ -18,6 +18,7 @@ import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 import { useIsFocused } from '@react-navigation/native';
 import axios from "axios";
 import { GAMBannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
+import WebView from "react-native-webview";
 
 const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     const isFocused = useIsFocused();
@@ -25,18 +26,9 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
-    const [refreshing, setRefreshing] = useState(false);
-    const [coldStart, setColdStart] = useState(true)
 
-    // Function to handle the refresh action
-    const handleRefresh = () => {
-        // Set the refreshing state to true
-        setRefreshing(true);
-        // Perform your refresh logic here
-        fetchPosts();
-        // Once the refresh is complete, set the refreshing state back to false
-        setRefreshing(false);
-    };
+    console.log(categoryID, visibleIndex, categoryIndex)
+
 
     const fetchPosts = useCallback(async () => {
         if (visibleIndex == categoryIndex) {
@@ -67,68 +59,48 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
         fetchPosts();
     }, [visibleIndex]);
 
-    const handleEndReached = useCallback(() => {
-        console.log("end reached ---------------------------------")
-        fetchPosts();
-    }, [fetchPosts, loading]);
+    const jsInjectable = `// Add an event listener to all ons-list-item elements
+    const listItems = document.getElementsByTagName('ons-list-item');
+    Array.from(listItems).forEach((item) => {
+      item.addEventListener('click', () => {
+        // Get the data-ml-post-id attribute value
+        const postId = item.getAttribute('data-ml-post-id');
+        
+        // Create a message object with the post ID
+        const message = { postId };
+        
+        // Send the message back to the WebView
+        window.ReactNativeWebView.postMessage(JSON.stringify(message));
+      });
+    });`
 
-    const ItemRender = ({ item }) => {
-        let thumbimage;
-        try {
-            thumbimage = item.yoast_head_json.og_image[0].url;
-        }
-        catch (err) {
-            thumbimage = 'NOTFOUND';
-            console.log("image not found for " + item.id)
-        }
-        return (
-            <TouchableOpacity
-                style={styles.itemContainer}
-                onPress={() => {
-                    navigation.navigate("Post", { pid: item.id });
-                }}
-            >
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={{
-                            uri: thumbimage,
-                        }}
-                        style={styles.image}
-                    />
-                </View>
-                <View style={styles.textContainer}>
-                    <Text style={styles.title}>{item.yoast_head_json.title}</Text>
-                </View>
-            </TouchableOpacity>
-        );
+    const onMessageReceived = (event) => {
+        const pid = JSON.parse(event.nativeEvent.data).postId;
+        // Handle the received message here
+        navigation.navigate("Post", { pid: pid });
+
     };
 
     return (
         <View style={styles.container}>
-            <FlashList
-                data={feedData}
-                renderItem={ItemRender}
-                keyExtractor={(item, index) => {
-                    return item.id;
-                }}
-                onEndReached={handleEndReached}
-                onEndReachedThreshold={0.5}
-                estimatedItemSize={150}
-                ListFooterComponent={
-                    loading ? <ShimmeringSkeletonLoader count={2} /> : null
-                }
-                refreshControl={<RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={handleRefresh}
-                />}
+
+            <WebView
+                originWhitelist={['*']}
+                source={{ uri: 'https://hebbarskitchen.com/ml-api/v2/list' }}
+                scalesPageToFit={true}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                scrollEnabled={true}
+                injectedJavaScript={jsInjectable}
+                nestedScrollEnabled
+                onMessage={onMessageReceived}
             />
-            {/* {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : 
-            } */}
+
             <GAMBannerAd
                 unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
                 sizes={[BannerAdSize.FULL_BANNER]}
                 requestOptions={{
-                    requestNonPersonalizedAdsOnly: true,
+                    requestNonPersonalizedAdsOnly: false,
                 }}
             />
         </View>

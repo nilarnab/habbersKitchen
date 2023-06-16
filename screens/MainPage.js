@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react';
-import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity } from 'react-native';
+import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity, Pressable } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2 } from '../env';
@@ -121,7 +121,7 @@ export function MainPage(props) {
                     <SideBar props={props.navigation} sideList={sideList} setState={setSideMenu} />
                 </Animated.View>
 
-                <TouchableOpacity style={{ width: mainWidth, height: '100%', backgroundColor: COLOR2, elevation: 1 }} onPress={() => { setSideMenu(0); }} >
+                <Pressable style={{ width: mainWidth, height: '100%', backgroundColor: COLOR2, elevation: 1 }} onPress={() => { setSideMenu(0); }} >
                     <Animated.View pointerEvents={sideMenu ? "none" : 'auto'} style={{ opacity: opAnim, height: '100%' }}>
                         <Header SideMenu={sideMenu} setSideMenu={setSideMenu} />
                         <TabView
@@ -134,7 +134,7 @@ export function MainPage(props) {
                             overScrollMode={'always'}
                         />
                     </Animated.View>
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </>
     );
