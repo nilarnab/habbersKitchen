@@ -16,6 +16,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { CategorySpecific } from './screens/CategorySpecific';
 import { SearchResult } from './screens/SearchResult';
 import Bar from './screens/Bar';
+import ReactGA from 'react-ga';
 
 import {
   SafeAreaView,
@@ -43,6 +44,7 @@ const Stack = createNativeStackNavigator();
 
 
 const App: () => Node = () => {
+  ReactGA.initialize('UA-68620027-3');
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -51,6 +53,7 @@ const App: () => Node = () => {
 
   useEffect(() => {
     SplashScreen.hide(); //hides the splash screen on app load.
+    ReactGA.pageview('Home');
   }, []);
 
   return (

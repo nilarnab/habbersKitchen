@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview'
 import { GET_POST_URL } from '../env';
 import { Header } from './PostSpecHeader';
-
+import ReactGA from 'react-ga';
 
 const PostSpecific = ({ route }) => {
+  useEffect(() => {
+    ReactGA.pageview('PostSpecific');
+  }, [])
   return <>
     <SafeAreaView style={{
       backgroundColor: 'white',

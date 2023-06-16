@@ -9,7 +9,7 @@ import { Header } from './SearchResultHeader';
 import { ActivityIndicator } from 'react-native-paper';
 import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
 import axios from 'axios';
-
+import ReactGA from 'react-ga';
 export const SearchResult = (props) => {
     const [feedData, setFeedData] = useState([])
     const [page, setPage] = useState(1)
@@ -36,6 +36,7 @@ export const SearchResult = (props) => {
     }
 
     useEffect(() => {
+        ReactGA.pageview('SearchResult');
         fetchResults(1)
     }, [])
 

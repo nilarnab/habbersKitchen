@@ -27,6 +27,7 @@
     "moment": "^2.29.4",
     "patch-package": "^6.5.0",
     "react": "18.2.0",
+    "react-ga": "^3.3.1",
     "react-native": "0.71.8",
     "react-native-eject": "^0.2.0",
     "react-native-fontawesome": "^7.0.0",
