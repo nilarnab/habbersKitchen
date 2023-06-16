@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react';
-import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity, Pressable } from 'react-native';
+import { Animated, SafeAreaView, ActivityIndicator, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity, Pressable, Dimensions } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2 } from '../env';
@@ -15,7 +15,7 @@ const RenderScene = ({ categories, index, route }) => {
     const indexCat = categories.findIndex(c => c.label === route.key)
     return (
         <View style={{ flex: 1, backgroundColor: COLOR1 }}>
-            <InfiniteList categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} />
+            <InfiniteList categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} categoryUrl={category.endpoint_url} />
         </View>
     );
 
@@ -61,6 +61,7 @@ export function MainPage(props) {
     const [index, setIndex] = useState(0);
     const [routes, setRoutes] = useState([]);
     const [sideList, setSideList] = useState([])
+    const { height, width } = useWindowDimensions();
 
     useEffect(() => {
         axios.get('https://hebbarskitchen.com/ml-api/v1/config/')
@@ -80,14 +81,16 @@ export function MainPage(props) {
     }, []);
 
     const renderTabBar = useCallback(
+
         (props) => {
             return <TabBar
                 scrollEnabled={true}
                 style={{
                     backgroundColor: COLOR2,
                     elevation: 0,
-                    // borderColor: '#000000',
-                    // height: 40,
+                }}
+                tabStyle={{
+                    width: 'auto'
                 }}
                 labelStyle={{
                     color: COLOR1,
@@ -97,11 +100,10 @@ export function MainPage(props) {
                 {...props}
                 indicatorStyle={{
                     backgroundColor: COLOR1,
-                    //  height: 2.5
                 }}
             />
         },
-        []
+        [width]
     );
 
     // const memoizedRenderScene = useMemo(() => renderScene(categories, index), [categories, index]);
@@ -110,7 +112,16 @@ export function MainPage(props) {
         // Handle the loading state while categories are being fetched
         return (
             <>
-                <ShimmeringSkeletonLoader count={5} />
+                <Header SideMenu={sideMenu} setSideMenu={setSideMenu} />
+                <View style={{
+                    height: '100%',
+                    width: '100%',
+                    justifyContent: 'center',
+                    position: 'absolute',
+                    zIndex: 1
+                }}>
+                    <ActivityIndicator size={'large'} color={COLOR2} />
+                </View>
             </>
         );
     }

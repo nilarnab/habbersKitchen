@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Animated, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, useWindowDimensions, TouchableOpacity, Touchable } from 'react-native';
+import { Animated, Share, SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, useWindowDimensions, TouchableOpacity, Touchable } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
-export const Header = () => {
+export const Header = ({ sharable }) => {
     const navigation = useNavigation();
     return <>
         <View
@@ -38,7 +38,12 @@ export const Header = () => {
                 <TouchableOpacity style={{
                     width: '50%',
                     marginTop: 20,
-                }} >
+                }} onPress={() => {
+                    Share.share({
+                        message:
+                            sharable,
+                    });
+                }}>
                     <Icon name='share-alt' size={20} color={COLOR1} />
                 </TouchableOpacity>
 

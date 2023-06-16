@@ -19,7 +19,7 @@ export const SideBar = (props) => {
                 return (<TouchableOpacity key={el.id} style={styles.sideItemWrapper} onPress={() => {
                     navigation.navigate("Category", { cid: el.id, label: el.label });
                 }}
-                ><Text style={styles.sidebarItems}>{el.label}</Text></TouchableOpacity>)
+                ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>{el.label}</Text></TouchableOpacity>)
             }) : <></>}
 
 

@@ -4,6 +4,7 @@ import {
     Platform,
     Dimensions,
     FlatList,
+    useWindowDimensions,
     StyleSheet,
     Image,
     ActivityIndicator,
@@ -13,96 +14,82 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3, ANDROID_BANNER_UNIT_ID, IOS_BANNER_UNIT_ID } from "../env";
-import { FlashList } from "@shopify/flash-list";
-import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 import { useIsFocused } from '@react-navigation/native';
-import axios from "axios";
 import { GAMBannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import WebView from "react-native-webview";
+import { jsInjectable } from "../env";
+import { isEqualIcon } from "react-native-paper/lib/typescript/components/Icon";
 
-const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
+const defaultUrl = "https://hebbarskitchen.com/ml-api/v2/list";
+
+const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, categoryUrl }) => {
     const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
-
-    console.log(categoryID, visibleIndex, categoryIndex)
-
+    const { height, width } = useWindowDimensions()
+    const [show, setShow] = useState(false)
 
     const fetchPosts = useCallback(async () => {
         if (visibleIndex == categoryIndex) {
-            console.log('fetching post for', categoryIndex, 'with page number', page)
-            setLoading(true);
-            try {
-                var startTime = Date.now()
-                const jsonData = (await axios.get(
-                    `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
-                )).data;
-                console.log("RESPONSE TIME", Date.now() - startTime)
-                if (!jsonData) return
-                // const jsonData = await response.json();
-
-                if (jsonData && jsonData.length > 0) {
-                    setFeedData((prevData) => [...prevData, ...jsonData]);
-                    setPage((prevPage) => prevPage + 1);
-                }
-            } catch (error) {
-                console.log("Error fetching posts:", error);
-            } finally {
-                setLoading(false);
-            }
+            setShow(true)
+            console.log("category url found", categoryID)
         }
-    }, [categoryID, page, visibleIndex]);
+    }, [categoryUrl, page, visibleIndex]);
 
     useEffect(() => {
         fetchPosts();
     }, [visibleIndex]);
 
-    const jsInjectable = `// Add an event listener to all ons-list-item elements
-    const listItems = document.getElementsByTagName('ons-list-item');
-    Array.from(listItems).forEach((item) => {
-      item.addEventListener('click', () => {
-        // Get the data-ml-post-id attribute value
-        const postId = item.getAttribute('data-ml-post-id');
-        
-        // Create a message object with the post ID
-        const message = { postId };
-        
-        // Send the message back to the WebView
-        window.ReactNativeWebView.postMessage(JSON.stringify(message));
-      });
-    });`
-
     const onMessageReceived = (event) => {
         const pid = JSON.parse(event.nativeEvent.data).postId;
+        console.log('getting', JSON.parse(event.nativeEvent.data))
         // Handle the received message here
         navigation.navigate("Post", { pid: pid });
-
     };
+
+    const Loader = () => {
+        return <>
+            <View style={{
+                height: '100%',
+                width: '100%',
+                justifyContent: 'center',
+                position: 'absolute',
+                zIndex: 1
+            }}>
+                <ActivityIndicator size={'large'} color={COLOR2} />
+            </View>
+        </>
+    }
 
     return (
         <View style={styles.container}>
+            {loading ? <Loader /> : <></>}
+            {show ? <>
+                <WebView
+                    originWhitelist={['*']}
+                    source={categoryUrl ? { uri: categoryUrl } : { uri: defaultUrl }}
+                    scalesPageToFit={true}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    scrollEnabled={true}
+                    onLoadStart={() => { setLoading(false) }}
+                    injectedJavaScript={jsInjectable}
+                    nestedScrollEnabled
+                    onMessage={onMessageReceived}
+                />
+                <GAMBannerAd
+                    unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
+                    sizes={[BannerAdSize.FULL_BANNER]}
+                    requestOptions={{
+                        requestNonPersonalizedAdsOnly: false,
+                    }}
+                />
+            </>
+                : <></>}
 
-            <WebView
-                originWhitelist={['*']}
-                source={{ uri: 'https://hebbarskitchen.com/ml-api/v2/list' }}
-                scalesPageToFit={true}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                scrollEnabled={true}
-                injectedJavaScript={jsInjectable}
-                nestedScrollEnabled
-                onMessage={onMessageReceived}
-            />
 
-            <GAMBannerAd
-                unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
-                sizes={[BannerAdSize.FULL_BANNER]}
-                requestOptions={{
-                    requestNonPersonalizedAdsOnly: false,
-                }}
-            />
         </View>
     );
 };

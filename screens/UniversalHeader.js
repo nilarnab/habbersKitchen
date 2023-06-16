@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Dimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
+import { SafeAreaView, Dimensions, useWindowDimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
+import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4, COMPNAY_NAME } from '../env';
 import fetch_home from '../methods/fetch';
 import { useNavigation } from '@react-navigation/native';
-const ScreenWidth = Dimensions.get('window').width;
 
 
 const MidHeader = ({ searchMode, searchText, setSearchText }) => {
+    const { height, width } = useWindowDimensions();
     const navigation = useNavigation();
 
     if (searchMode) {
         return <>
-            <View style={styles.midHeader}>
+            <View style={{ ...styles.midHeader, width: width - 60 * 2 }}>
                 <TextInput
                     style={styles.input}
                     value={searchText}
+                    autoFocus
                     onChangeText={(text) => { setSearchText(text) }}
                     placeholder='Search ..'
                     placeholderTextColor={'grey'}
@@ -29,10 +30,20 @@ const MidHeader = ({ searchMode, searchText, setSearchText }) => {
     }
     else {
         return <>
-            <Text
-                style={{ ...styles.midHeader, paddingTop: 10 }}>
-                Hebbers Kitchen
-            </Text>
+            <View
+                source={{ uri: `https://hebbarskitchen.com/wp-content/uploads/2016/11/my_logo.png` }}
+                style={{ ...styles.midHeader, width: width - 60 * 2 }}>
+
+                <Image
+                    source={{ uri: `https://hebbarskitchen.com/wp-content/uploads/2016/11/my_logo.png` }}
+                    style={{
+                        height: 20,
+                        width: 200,
+                        alignSelf: 'center'
+                    }}
+                />
+            </View>
+
         </>
     }
 }
@@ -42,10 +53,6 @@ const SearchBar = (props) => {
     const [hideHeader, setHideHeader] = useState(props.hideHeader)
     const [searchMode, setSearchMode] = useState(false)
     var setProducts = props.setProducts
-
-    const fetchSearchResult = () => {
-
-    }
 
     const ResetButton = (props) => {
         // console.log("reset button props")
@@ -84,26 +91,14 @@ const SearchBar = (props) => {
 
         if (searchMode) {
             return <>
-                <View style={{
-                    height: 30,
-                    width: 30,
-                    // backgroundColor: 'red',
-                    marginLeft: 20
-                }}>
-                    <Icon name='close' size={20} color={COLOR1} />
-                </View>
+                <Icon name='close' size={20} color={COLOR1} />
             </>
         }
         else {
             return <>
-                <View style={{
-                    height: 30,
-                    width: 30,
-                    // backgroundColor: 'red',
-                    marginLeft: 20
-                }}>
-                    <Icon name='search' size={20} color={COLOR1} />
-                </View>
+
+                <Icon name='search' size={20} color={COLOR1} />
+
             </>
         }
     }
@@ -117,9 +112,6 @@ const SearchBar = (props) => {
                 setSearchMode(!searchMode)
             }} style={{
                 ...styles.left_icons,
-                width: 60,
-                paddingLeft: 10,
-                // backgroundColor: 'pink'
             }} >
                 <SearchButtonIcon />
             </TouchableOpacity>
@@ -137,22 +129,17 @@ const Header = ({
     setHideHeader,
     hideHeader,
     setIgnoreSearch }) => {
+    const { height, width } = useWindowDimensions();
 
     const BurgerIcon = () => {
         if (SideMenu == 0) {
             return (
-                <Icon name='bars' size={20} style={{
-                    position: 'absolute',
-                    transform: [{ translateY: -5 }],
-                }} color={COLOR1} />
+                <Icon name='bars' size={20} color={COLOR1} />
             )
         }
         else {
             return (
-                <Icon name='close' size={20} style={{
-                    position: 'absolute',
-                    transform: [{ translateY: -5 }]
-                }} color={COLOR1} />
+                <Icon name='close' size={20} color={COLOR1} />
             )
         }
     }
@@ -160,7 +147,6 @@ const Header = ({
     return (
         <>
             <View style={styles.containter}>
-
                 <TouchableOpacity
                     onPress={() => {
                         setSideMenu(!SideMenu)
@@ -173,9 +159,7 @@ const Header = ({
                         <BurgerIcon />
                     </View>
                 </TouchableOpacity>
-
-
-                <View style={styles.right_icons}>
+                <View style={{ ...styles.right_icons, width: width - 60 }}>
                     <SearchBar setProducts={setProducts} hideHeader={hideHeader} setHideHeader={setHideHeader} setIgnoreSearch={setIgnoreSearch} />
                 </View>
             </View>
@@ -193,27 +177,19 @@ const styles = StyleSheet.create({
 
     midHeader: {
         justifyContent: 'center',
-        width: ScreenWidth - 60 * 2,
-        color: COLOR1,
-        fontSize: 20,
-        textAlign: 'center'
+        alignItems: 'center'
     },
 
     left_icons: {
         width: 60,
         height: '100%',
-        padding: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 5,
-        // backgroundColor: 'blue'
     },
 
     right_icons:
     {
-        width: ScreenWidth - 60,
         height: '100%',
-        // backgroundColor: 'white',
         position: 'absolute',
         right: 0,
         flexDirection: 'row'
@@ -231,7 +207,7 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        fontSize: 15,
+        fontSize: 18,
         color: COLOR1,
         paddingLeft: 10,
         width: '80%',

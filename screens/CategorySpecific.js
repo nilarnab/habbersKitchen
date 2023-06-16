@@ -49,7 +49,7 @@ export const CategorySpecific = ({ route }) => {
                             flex: 1,
                             alignItems: "center"
                         }} >
-                            <Text style={{ color: 'white', fontSize: 20 }}>{route.params.label}</Text>
+                            <Text style={{ color: 'white', fontSize: 20, textTransform: 'uppercase' }}>{route.params.label}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{

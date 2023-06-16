@@ -5,7 +5,7 @@ export const GET_POST_URL = 'https://hebbarskitchen.com/ml-api/v2/post?post_id='
 // export const BASE_URL = 'https://buybold.vmplay.ml/' // -> server
 
 // names and conventions
-export const COMPNAY_NAME = 'hebbars'
+export const COMPNAY_NAME = "HEBBARS KITCHEN"
 export const APP_NAME = 'hebbars'
 
 // trending page 
@@ -23,8 +23,25 @@ export const COLOR4 = '#FF971D'
 export const COLOR5 = '#BA2025'
 export const COLOR_GREEN = '#3a6e6e'
 
+
 // admob configuration
 export const ANDROID_BANNER_UNIT_ID = "ca-app-pub-5515597551541709\/9419287888"
 export const IOS_BANNER_UNIT_ID = "ca-app-pub-5515597551541709\/1667686727"
+
+// injectable code
+export const jsInjectable = `// Add an event listener to all ons-list-item elements
+    const listItems = document.getElementsByTagName('ons-list-item');
+    Array.from(listItems).forEach((item) => {
+      item.addEventListener('click', () => {
+        // Get the data-ml-post-id attribute value
+        const postId = item.getAttribute('data-ml-post-id');
+        
+        // Create a message object with the post ID
+        const message = { postId };
+        
+        // Send the message back to the WebView
+        window.ReactNativeWebView.postMessage(JSON.stringify(message));
+      });
+    });`
 
 
