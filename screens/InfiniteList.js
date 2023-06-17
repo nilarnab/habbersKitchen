@@ -22,7 +22,7 @@ import { isEqualIcon } from "react-native-paper/lib/typescript/components/Icon";
 
 const defaultUrl = "https://hebbarskitchen.com/ml-api/v2/list";
 
-const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, categoryUrl }) => {
+const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, categoryUrl, setIndex, lenRoutes }) => {
     const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
@@ -43,10 +43,22 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, category
     }, [visibleIndex]);
 
     const onMessageReceived = (event) => {
-        const pid = JSON.parse(event.nativeEvent.data).postId;
-        console.log('getting', JSON.parse(event.nativeEvent.data))
-        // Handle the received message here
-        navigation.navigate("Post", { pid: pid });
+        let eventOccured = event.nativeEvent.data;
+        if (eventOccured == 'swipeLeft') {
+            if (visibleIndex < lenRoutes - 1)
+                setIndex(visibleIndex + 1)
+        }
+        else if (eventOccured == 'swipeRight') {
+            if (visibleIndex > 0)
+                setIndex(visibleIndex - 1);
+        }
+        else {
+            console.log("clicked")
+            const pid = JSON.parse(event.nativeEvent.data).postId;
+            console.log('getting', JSON.parse(event.nativeEvent.data))
+            // Handle the received message here
+            navigation.navigate("Post", { pid: pid });
+        }
     };
 
     const Loader = () => {
@@ -74,6 +86,8 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, category
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     scrollEnabled={true}
+                    // onTouchStartCapture={(e) => { e.stopPropagation(); console.log("lolo") }}
+                    // onTouchMoveCapture={(e) => { e.stopPropagation(); console.log(e.nativeEvent.touches) }}
                     onLoadStart={() => { setLoading(false) }}
                     injectedJavaScript={jsInjectable}
                     nestedScrollEnabled

@@ -42,6 +42,24 @@ export const jsInjectable = `// Add an event listener to all ons-list-item eleme
         // Send the message back to the WebView
         window.ReactNativeWebView.postMessage(JSON.stringify(message));
       });
-    });`
+    });
+    var touchStartX = 0;
+    var touchStartY = 0;
+    document.addEventListener('touchstart', function(e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+    document.addEventListener('touchend', function(e) {
+      var touchEndX = e.changedTouches[0].clientX;
+      var touchEndY = e.changedTouches[0].clientY;
+      if (touchStartX - touchEndX > 50 && Math.abs(touchStartY - touchEndY) < 50) {
+        window.ReactNativeWebView.postMessage('swipeLeft');
+      }
+      if (touchEndX - touchStartX  > 50 && Math.abs(touchStartY - touchEndY) < 50) {
+        window.ReactNativeWebView.postMessage('swipeRight');
+      }
+      
+    });
+    `
 
 

@@ -10,12 +10,12 @@ import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
 import ReactGA from 'react-ga';
 AppRegistry.registerComponent('Appname', () => App);
 
-const RenderScene = ({ categories, index, route }) => {
+const RenderScene = ({ categories, index, route, setIndex, lenRoutes }) => {
     const category = categories.find((c) => c.label === route.key);
     const indexCat = categories.findIndex(c => c.label === route.key)
     return (
-        <View style={{ flex: 1, backgroundColor: COLOR1 }}>
-            <InfiniteList categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} categoryUrl={category.endpoint_url} />
+        <View style={{ flex: 1, height: '100%', backgroundColor: COLOR1 }}>
+            <InfiniteList setIndex={setIndex} lenRoutes={lenRoutes} categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} categoryUrl={category.endpoint_url} />
         </View>
     );
 
@@ -140,9 +140,10 @@ export function MainPage(props) {
                             style={{ backgroundColor: 'white' }}
                             renderTabBar={renderTabBar}
                             navigationState={{ index, routes }}
-                            renderScene={({ route }) => <RenderScene categories={categories} index={index} route={route} />}
+                            renderScene={({ route }) => <RenderScene categories={categories} lenRoutes={routes.length} index={index} setIndex={setIndex} route={route} />}
                             onIndexChange={setIndex}
                             initialLayout={{ width: layout.width }}
+
                             overScrollMode={'always'}
                         />
                     </Animated.View>
