@@ -44,6 +44,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, category
 
     const onMessageReceived = (event) => {
         let eventOccured = event.nativeEvent.data;
+        console.log(eventOccured)
         if (eventOccured == 'swipeLeft') {
             if (visibleIndex < lenRoutes - 1)
                 setIndex(visibleIndex + 1)
@@ -54,10 +55,16 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, category
         }
         else {
             console.log("clicked")
-            const pid = JSON.parse(event.nativeEvent.data).postId;
-            console.log('getting', JSON.parse(event.nativeEvent.data))
-            // Handle the received message here
-            navigation.navigate("Post", { pid: pid });
+            try {
+                const pid = JSON.parse(event.nativeEvent.data).postId;
+                console.log('getting', JSON.parse(event.nativeEvent.data))
+                // Handle the received message here
+                navigation.navigate("Post", { pid: pid });
+            }
+            catch (err) {
+                console.log("pid not found -")
+                console.log(eventOccured)
+            }
         }
     };
 
