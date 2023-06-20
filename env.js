@@ -55,11 +55,11 @@ export const jsInjectable = `// Add an event listener to all ons-list-item eleme
       if (done == 1) {
         var touchEndX = e.changedTouches[0].clientX;
         var touchEndY = e.changedTouches[0].clientY;
-        if (touchStartX - touchEndX > 50 && Math.abs(touchStartY - touchEndY) < 50) {
+        if (touchStartX - touchEndX > 0 && Math.abs(touchStartY - touchEndY) < Math.abs(touchStartX - touchEndX)) {
           window.ReactNativeWebView.postMessage('swipeLeft');
           done = 0;
         }
-        if (touchEndX - touchStartX  > 50 && Math.abs(touchStartY - touchEndY) < 50) {
+        if (touchStartX - touchEndX < 0 && Math.abs(touchStartY - touchEndY) < Math.abs(touchStartX - touchEndX)) {
           window.ReactNativeWebView.postMessage('swipeRight');
           done = 0;
         }
