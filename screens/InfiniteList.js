@@ -4,113 +4,149 @@ import {
     Platform,
     Dimensions,
     FlatList,
-    useWindowDimensions,
     StyleSheet,
     Image,
     ActivityIndicator,
     RefreshControl,
     Text,
     TouchableOpacity,
+    useWindowDimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { BASE_URL, COLOR1, COLOR2, COLOR3, ANDROID_BANNER_UNIT_ID, IOS_BANNER_UNIT_ID } from "../env";
+import { BASE_URL, COLOR1, COLOR2, COLOR3, LIGHT_GREY, ANDROID_BANNER_UNIT_ID, IOS_BANNER_UNIT_ID } from "../env";
+import { FlashList } from "@shopify/flash-list";
+import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 import { useIsFocused } from '@react-navigation/native';
+import axios from "axios";
 import { GAMBannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
-import WebView from "react-native-webview";
-import { jsInjectable } from "../env";
-import { isEqualIcon } from "react-native-paper/lib/typescript/components/Icon";
 
-const defaultUrl = "https://hebbarskitchen.com/ml-api/v2/list";
-
-const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex, categoryUrl, setIndex, lenRoutes }) => {
+const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
+    const [refreshing, setRefreshing] = useState(false);
+    const [coldStart, setColdStart] = useState(true)
     const { height, width } = useWindowDimensions()
-    const [show, setShow] = useState(false)
+    const [numColumns, setNumColumns] = useState(1)
+
+    useEffect(() => {
+        if (width > 768) {
+            setNumColumns(2)
+        }
+        else {
+            setNumColumns(1)
+        }
+    }, [height, width])
+
+    // Function to handle the refresh action
+    const handleRefresh = () => {
+        // Set the refreshing state to true
+        setRefreshing(true);
+        // Perform your refresh logic here
+        fetchPosts();
+        // Once the refresh is complete, set the refreshing state back to false
+        setRefreshing(false);
+    };
 
     const fetchPosts = useCallback(async () => {
         if (visibleIndex == categoryIndex) {
-            setShow(true)
-            console.log("category url found", categoryID)
+            console.log('fetching post for', categoryIndex, 'with page number', page)
+            setLoading(true);
+            try {
+                var startTime = Date.now()
+                const jsonData = (await axios.get(
+                    `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
+                )).data;
+                console.log("RESPONSE TIME", Date.now() - startTime)
+                if (!jsonData) return
+                // const jsonData = await response.json();
+
+                if (jsonData && jsonData.length > 0) {
+                    setFeedData((prevData) => [...prevData, ...jsonData]);
+                    setPage((prevPage) => prevPage + 1);
+                }
+            } catch (error) {
+                console.log("Error fetching posts:", error);
+            } finally {
+                setLoading(false);
+            }
         }
-    }, [categoryUrl, page, visibleIndex]);
+    }, [categoryID, page, visibleIndex]);
 
     useEffect(() => {
         fetchPosts();
     }, [visibleIndex]);
 
-    const onMessageReceived = (event) => {
-        let eventOccured = event.nativeEvent.data;
-        console.log(eventOccured)
-        if (eventOccured == 'swipeLeft') {
-            if (visibleIndex < lenRoutes - 1)
-                setIndex(visibleIndex + 1)
-        }
-        else if (eventOccured == 'swipeRight') {
-            if (visibleIndex > 0)
-                setIndex(visibleIndex - 1);
-        }
-        else {
-            console.log("clicked")
-            try {
-                const pid = JSON.parse(event.nativeEvent.data).postId;
-                console.log('getting', JSON.parse(event.nativeEvent.data))
-                // Handle the received message here
-                navigation.navigate("Post", { pid: pid });
-            }
-            catch (err) {
-                console.log("pid not found -")
-                console.log(eventOccured)
-            }
-        }
-    };
+    const handleEndReached = useCallback(() => {
+        console.log("end reached ---------------------------------")
+        fetchPosts();
+    }, [fetchPosts, loading]);
 
-    const Loader = () => {
-        return <>
-            <View style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'center',
-                position: 'absolute',
-                zIndex: 1
-            }}>
-                <ActivityIndicator size={'large'} color={COLOR2} />
-            </View>
-        </>
-    }
+    const ItemRender = ({ item }) => {
+        let thumbimage;
+        try {
+            thumbimage = item.yoast_head_json.og_image[0].url;
+        }
+        catch (err) {
+            thumbimage = 'NOTFOUND';
+            console.log("image not found for " + item.id)
+        }
+        return (
+            <TouchableOpacity
+                style={styles.itemContainer}
+                onPress={() => {
+                    navigation.navigate("Post", { pid: item.id });
+                }}
+            >
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={{
+                            uri: thumbimage,
+                        }}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={styles.textContainer}>
+                    <Text style={styles.title}>{item.yoast_head_json.title}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <View style={styles.container}>
-            {loading ? <Loader /> : <></>}
-            {show ? <>
-                <WebView
-                    originWhitelist={['*']}
-                    source={categoryUrl ? { uri: categoryUrl } : { uri: defaultUrl }}
-                    scalesPageToFit={true}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    scrollEnabled={true}
-                    // onTouchStartCapture={(e) => { e.stopPropagation(); console.log("lolo") }}
-                    // onTouchMoveCapture={(e) => { e.stopPropagation(); console.log(e.nativeEvent.touches) }}
-                    onLoadStart={() => { setLoading(false) }}
-                    injectedJavaScript={jsInjectable}
-                    nestedScrollEnabled
-                    onMessage={onMessageReceived}
-                />
-                <GAMBannerAd
-                    unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
-                    sizes={[BannerAdSize.FULL_BANNER]}
-                    requestOptions={{
-                        requestNonPersonalizedAdsOnly: false,
-                    }}
-                />
-            </>
-                : <></>}
-
-
+            {/* <ShimmeringSkeletonLoader count={2} numColumns={numColumns} /> */}
+            <FlashList
+                data={feedData}
+                renderItem={ItemRender}
+                keyExtractor={(item, index) => {
+                    return item.id;
+                }}
+                key={numColumns}
+                horizontal={false}
+                numColumns={numColumns}
+                onEndReached={handleEndReached}
+                onEndReachedThreshold={0.5}
+                estimatedItemSize={170}
+                ListFooterComponent={
+                    loading ? <ShimmeringSkeletonLoader count={2} numColumns={numColumns} /> : null
+                }
+                refreshControl={<RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={handleRefresh}
+                />}
+            />
+            {/* {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : 
+            } */}
+            <GAMBannerAd
+                unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
+                sizes={[BannerAdSize.FULL_BANNER]}
+                requestOptions={{
+                    requestNonPersonalizedAdsOnly: true,
+                }}
+            />
         </View>
     );
 };
@@ -120,25 +156,25 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     itemContainer: {
-        height: 200,
+        height: 170,
         width: "100%",
         flexDirection: "row",
-        borderBottomColor: COLOR3,
-        borderBottomWidth: 1,
+        borderBottomColor: LIGHT_GREY,
+        borderBottomWidth: 0.5,
     },
     imageContainer: {
         width: "50%",
     },
     image: {
         width: "80%",
-        height: "80%",
+        height: 150,
         marginLeft: "10%",
-        marginTop: "10%",
+        marginTop: 10,
     },
     textContainer: {
         width: "50%",
-        paddingTop: 20,
-        paddingHorizontal: 20,
+        paddingTop: 10,
+        paddingRight: 20,
     },
     title: {
         fontSize: 15,

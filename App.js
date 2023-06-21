@@ -58,6 +58,10 @@ const App: () => Node = () => {
 
   return (
     <>
+      <StatusBar
+        animated={true}
+        backgroundColor="black"
+      />
       <Bar />
       <NavigationContainer ref={navigationRef}>
         <Stack.Navigator>

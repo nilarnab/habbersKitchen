@@ -22,6 +22,7 @@ export const COLOR3 = 'grey'
 export const COLOR4 = '#FF971D'
 export const COLOR5 = '#BA2025'
 export const COLOR_GREEN = '#3a6e6e'
+export const LIGHT_GREY = 'lightgrey'
 
 
 // admob configuration
@@ -42,29 +43,6 @@ export const jsInjectable = `// Add an event listener to all ons-list-item eleme
         // Send the message back to the WebView
         window.ReactNativeWebView.postMessage(JSON.stringify(message));
       });
-    });
-    var touchStartX = 0;
-    var touchStartY = 0;
-    var done = 0;
-    document.addEventListener('touchstart', function(e) {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      done = 1;
-    });
-    document.addEventListener('touchmove', function(e) {
-      if (done == 1) {
-        var touchEndX = e.changedTouches[0].clientX;
-        var touchEndY = e.changedTouches[0].clientY;
-        if (touchStartX - touchEndX > 0 && Math.abs(touchStartY - touchEndY) < Math.abs(touchStartX - touchEndX)) {
-          window.ReactNativeWebView.postMessage('swipeLeft');
-          done = 0;
-        }
-        if (touchStartX - touchEndX < 0 && Math.abs(touchStartY - touchEndY) < Math.abs(touchStartX - touchEndX)) {
-          window.ReactNativeWebView.postMessage('swipeRight');
-          done = 0;
-        }
-      }
-      
     });
     `
 

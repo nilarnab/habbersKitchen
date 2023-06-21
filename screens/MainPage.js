@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useMemo, memo } from 'react';
-import { Animated, SafeAreaView, ActivityIndicator, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity, Pressable, Dimensions } from 'react-native';
+import { Animated, SafeAreaView, View, AppRegistry, useWindowDimensions, Text, TouchableOpacity, Pressable } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import InfiniteList from './InfiniteList';
 import { COLOR1, COLOR2 } from '../env';
@@ -10,12 +10,12 @@ import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
 import ReactGA from 'react-ga';
 AppRegistry.registerComponent('Appname', () => App);
 
-const RenderScene = ({ categories, index, route, setIndex, lenRoutes }) => {
+const RenderScene = ({ categories, index, route }) => {
     const category = categories.find((c) => c.label === route.key);
     const indexCat = categories.findIndex(c => c.label === route.key)
     return (
-        <View style={{ flex: 1, height: '100%', backgroundColor: COLOR1 }}>
-            <InfiniteList setIndex={setIndex} lenRoutes={lenRoutes} categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} categoryUrl={category.endpoint_url} />
+        <View style={{ flex: 1, backgroundColor: COLOR1 }}>
+            <InfiniteList categoryID={category.id} route={route.key} visibleIndex={index} categoryIndex={indexCat} />
         </View>
     );
 
@@ -61,7 +61,6 @@ export function MainPage(props) {
     const [index, setIndex] = useState(0);
     const [routes, setRoutes] = useState([]);
     const [sideList, setSideList] = useState([])
-    const { height, width } = useWindowDimensions();
 
     useEffect(() => {
         axios.get('https://hebbarskitchen.com/ml-api/v1/config/')
@@ -81,13 +80,14 @@ export function MainPage(props) {
     }, []);
 
     const renderTabBar = useCallback(
-
         (props) => {
             return <TabBar
                 scrollEnabled={true}
                 style={{
                     backgroundColor: COLOR2,
                     elevation: 0,
+                    // borderColor: '#000000',
+                    // height: 40,
                 }}
                 tabStyle={{
                     width: 'auto'
@@ -100,10 +100,11 @@ export function MainPage(props) {
                 {...props}
                 indicatorStyle={{
                     backgroundColor: COLOR1,
+                    //  height: 2.5
                 }}
             />
         },
-        [width]
+        []
     );
 
     // const memoizedRenderScene = useMemo(() => renderScene(categories, index), [categories, index]);
@@ -112,16 +113,7 @@ export function MainPage(props) {
         // Handle the loading state while categories are being fetched
         return (
             <>
-                <Header SideMenu={sideMenu} setSideMenu={setSideMenu} />
-                <View style={{
-                    height: '100%',
-                    width: '100%',
-                    justifyContent: 'center',
-                    position: 'absolute',
-                    zIndex: 1
-                }}>
-                    <ActivityIndicator size={'large'} color={COLOR2} />
-                </View>
+                <ShimmeringSkeletonLoader count={5} />
             </>
         );
     }
@@ -140,10 +132,9 @@ export function MainPage(props) {
                             style={{ backgroundColor: 'white' }}
                             renderTabBar={renderTabBar}
                             navigationState={{ index, routes }}
-                            renderScene={({ route }) => <RenderScene categories={categories} lenRoutes={routes.length} index={index} setIndex={setIndex} route={route} />}
+                            renderScene={({ route }) => <RenderScene categories={categories} index={index} route={route} />}
                             onIndexChange={setIndex}
                             initialLayout={{ width: layout.width }}
-
                             overScrollMode={'always'}
                         />
                     </Animated.View>
