@@ -52,17 +52,13 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
 
     const fetchPosts = useCallback(async () => {
         if (visibleIndex == categoryIndex) {
-            console.log('fetching post for', categoryIndex, 'with page number', page)
             setLoading(true);
             try {
                 var startTime = Date.now()
                 const jsonData = (await axios.get(
                     `${BASE_URL}posts/?page=${page}${route !== 'Home' ? "&categories=" + categoryID : ""}`
                 )).data;
-                console.log("RESPONSE TIME", Date.now() - startTime)
                 if (!jsonData) return
-                // const jsonData = await response.json();
-
                 if (jsonData && jsonData.length > 0) {
                     setFeedData((prevData) => [...prevData, ...jsonData]);
                     setPage((prevPage) => prevPage + 1);
@@ -80,7 +76,6 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     }, [visibleIndex]);
 
     const handleEndReached = useCallback(() => {
-        console.log("end reached ---------------------------------")
         fetchPosts();
     }, [fetchPosts, loading]);
 

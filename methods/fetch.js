@@ -8,7 +8,6 @@ export default async function fetch_home(url, payload) {
         // life check
         var resp_life = await (await fetch(BASE_URL + 'check_life')).json()
 
-        console.log('resp life', resp_life)
         if (!resp_life.life) {
             alert(resp_life.message)
         }

@@ -9,25 +9,25 @@ import axios from 'axios';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const PostSpecific = ({ route }) => {
-  const [title, setTitle] = useState(null)
+  const [sharable, setSharable] = useState(null)
 
   useEffect(() => {
     ReactGA.pageview('PostSpecific');
   }, [])
 
   useEffect(() => {
-    const getTitle = () => {
+    const getSharable = () => {
       axios.get('https://hebbarskitchen.com/wp-json/wp/v2/posts/' + route.params.pid)
-        .then((response) => response.data.title.rendered)
-        .then((data) => {
-          setTitle(data)
+        .then((response) => response.data)
+        .then(({ title, link }) => {
+          setSharable(title.rendered + ":\n" + link)
         })
         .catch((error) => {
           console.error("Error fetching title", error);
         });
     }
 
-    getTitle();
+    getSharable();
   }, [])
 
   return <>
@@ -35,7 +35,7 @@ const PostSpecific = ({ route }) => {
       backgroundColor: 'white',
       height: '100%',
     }}>
-      <Header sharable={title} />
+      <Header sharable={sharable} />
       <WebView
         originWhitelist={['*']}
         source={{ uri: GET_POST_URL + route.params.pid }}
