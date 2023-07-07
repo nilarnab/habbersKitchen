@@ -19,6 +19,7 @@ import { ShimmeringSkeletonLoader } from "./PostSkeletonLoader";
 import { useIsFocused } from '@react-navigation/native';
 import axios from "axios";
 import { GAMBannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
+import { Pressable } from "react-native";
 
 const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     const isFocused = useIsFocused();
@@ -111,7 +112,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <Pressable style={styles.container}>
             {/* <ShimmeringSkeletonLoader count={2} numColumns={numColumns} /> */}
             <FlashList
                 data={feedData}
@@ -133,8 +134,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
                     onRefresh={handleRefresh}
                 />}
             />
-            {/* {loading && feedData.length == 0 ? <ShimmeringSkeletonLoader count={5} /> : 
-            } */}
+
             <GAMBannerAd
                 unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
                 sizes={[BannerAdSize.FULL_BANNER]}
@@ -142,7 +142,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
                     requestNonPersonalizedAdsOnly: true,
                 }}
             />
-        </View>
+        </Pressable>
     );
 };
 

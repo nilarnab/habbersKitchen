@@ -39,10 +39,12 @@ export const Header = ({ sharable }) => {
                     width: '50%',
                     marginTop: 20,
                 }} onPress={() => {
-                    Share.share({
-                        message:
-                            sharable,
-                    });
+                    if (sharable) {
+                        Share.share({
+                            message:
+                                sharable,
+                        });
+                    }
                 }}>
                     <Icon name='share-alt' size={20} color={COLOR1} />
                 </TouchableOpacity>

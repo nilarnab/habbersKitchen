@@ -46,7 +46,7 @@ export const Header = () => {
                     width: 20,
                     marginTop: 20,
                 }}>
-                    <Icon name='shopping-cart' size={20} color={COLOR1} />
+                    {/* <Icon name='shopping-cart' size={20} color={COLOR1} /> */}
                 </TouchableOpacity>
 
             </View>
