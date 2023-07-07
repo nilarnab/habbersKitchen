@@ -14,6 +14,7 @@ import MainPage from './screens/MainPage';
 import PostSpecific from './screens/PostSpecific';
 import SplashScreen from 'react-native-splash-screen';
 import { CategorySpecific } from './screens/CategorySpecific';
+import { Favourites } from './screens/FavouriteList';
 import { SearchResult } from './screens/SearchResult';
 import Bar from './screens/Bar';
 import ReactGA from 'react-ga';
@@ -69,6 +70,7 @@ const App: () => Node = () => {
           <Stack.Screen name="Post" component={PostSpecific} options={{ headerShown: false }} />
           <Stack.Screen name="Category" component={CategorySpecific} options={{ headerShown: false }} />
           <Stack.Screen name="SearchResult" component={SearchResult} options={{ headerShown: false }} />
+          <Stack.Screen name="Favourites" component={Favourites} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

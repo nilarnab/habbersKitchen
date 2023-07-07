@@ -27,7 +27,7 @@ export const SideBar = (props) => {
             }) : <></>}
             <View style={{ borderBottomColor: 'black', borderBottomWidth: 1 }}></View>
             <TouchableOpacity key={-2} style={styles.sideItemWrapper} onPress={() => {
-                console.log("favourites");
+                navigation.navigate('Favourites')
             }}
             ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>Favourites</Text></TouchableOpacity>
             <TouchableOpacity key={-3} style={styles.sideItemWrapper} onPress={() => {
