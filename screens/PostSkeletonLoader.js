@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL, COLOR1, COLOR2, LIGHT_GREY } from '../env';
-import fetch_home from '../methods/fetch';
 import { useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import { Header } from './SearchResultHeader';

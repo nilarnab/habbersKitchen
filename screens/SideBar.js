@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, Linking } from 'react-native';
 import { COLOR1, COLOR2, COLOR3, COLOR4, BASE_URL } from '../env';
 
 
@@ -31,7 +31,7 @@ export const SideBar = (props) => {
             }}
             ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>Favourites</Text></TouchableOpacity>
             <TouchableOpacity key={-3} style={styles.sideItemWrapper} onPress={() => {
-                console.log("Email us");
+                Linking.openURL('mailto:hebbars.kitchen@gmail.com')
             }}
             ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>Email Us</Text></TouchableOpacity>
             <TouchableOpacity key={-4} style={styles.sideItemWrapper} onPress={() => {
