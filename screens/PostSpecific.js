@@ -50,7 +50,7 @@ const PostSpecific = ({ route }) => {
       backgroundColor: 'white',
       height: '100%',
     }}>
-      <Header sharable={sharable} />
+      <Header sharable={sharable} pid={route.params.pid} />
       <WebView
         originWhitelist={['*']}
         source={{ uri: GET_POST_URL + route.params.pid }}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Dimensions, useWindowDimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4, COMPNAY_NAME } from '../env';
-import fetch_home from '../methods/fetch';
+
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -61,7 +61,7 @@ const SearchBar = (props) => {
             return (
                 <>
                     <TouchableOpacity title='Search' onPress={async () => {
-                        const result = await fetch_home(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
+                        const result = await fetch(BASE_URL + `search/query?query=${searchText}`, { method: 'GET' })
                         const response = (await result.json()).data;
                         setProducts(response);
                         setHideHeader(false)
