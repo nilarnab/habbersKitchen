@@ -6,10 +6,15 @@ import { Header } from './PostSpecHeader';
 import ReactGA from 'react-ga';
 import { useState } from 'react';
 import axios from 'axios';
+import { ANDROID_INTER_UNIT_ID, IOS_INTER_UNIT_ID } from '../env';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { InterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 
 const PostSpecific = ({ route }) => {
   const [sharable, setSharable] = useState(null)
+  const interstitial = InterstitialAd.createForAdRequest(ANDROID_INTER_UNIT_ID, {
+    requestNonPersonalizedAdsOnly: true,
+  });
 
   useEffect(() => {
     ReactGA.pageview('PostSpecific');
@@ -28,6 +33,16 @@ const PostSpecific = ({ route }) => {
     }
 
     getSharable();
+  }, [])
+
+  useEffect(async () => {
+    const load_ad = () => {
+      interstitial.load();
+      setTimeout(() => {
+        interstitial.show()
+      }, 5000);
+    }
+    load_ad()
   }, [])
 
   return <>

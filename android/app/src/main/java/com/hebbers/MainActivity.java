@@ -1,9 +1,12 @@
 package com.hebbers;
-
+import android.os.Bundle; 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+
+// react-native-splash-screen >= 0.3.1
+import org.devio.rn.splashscreen.SplashScreen; // here
 
 public class MainActivity extends ReactActivity {
 
@@ -15,6 +18,13 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "hebbers";
   }
+
+  // for slash screen installation
+  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here
+        super.onCreate(savedInstanceState);
+    }
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link

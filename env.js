@@ -27,7 +27,9 @@ export const LIGHT_GREY = 'lightgrey'
 
 // admob configuration
 export const ANDROID_BANNER_UNIT_ID = "ca-app-pub-5515597551541709\/9419287888"
+export const ANDROID_INTER_UNIT_ID = "ca-app-pub-5515597551541709/2697697367"
 export const IOS_BANNER_UNIT_ID = "ca-app-pub-5515597551541709\/1667686727"
+export const IOS_INTER_UNIT_ID = "ca-app-pub-5515597551541709/7591200899"
 
 // injectable code
 export const jsInjectable = `// Add an event listener to all ons-list-item elements
