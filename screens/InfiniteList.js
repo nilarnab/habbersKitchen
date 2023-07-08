@@ -124,7 +124,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
                 horizontal={false}
                 numColumns={numColumns}
                 onEndReached={handleEndReached}
-                onEndReachedThreshold={0.5}
+                onEndReachedThreshold={0.7}
                 estimatedItemSize={170}
                 ListFooterComponent={
                     loading ? <ShimmeringSkeletonLoader count={2} numColumns={numColumns} /> : null
