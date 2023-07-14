@@ -35,15 +35,26 @@ const PostSpecific = ({ route }) => {
     getSharable();
   }, [])
 
-  useEffect(async () => {
-    const load_ad = () => {
-      interstitial.load();
-      setTimeout(() => {
-        interstitial.show()
-      }, 5000);
-    }
-    load_ad()
-  }, [])
+  useEffect(() => {
+    const load_ad = async () => {
+      try {
+        interstitial.load()
+        interstitial.addAdEventListener(AdEventType.LOADED, () => {
+          interstitial.show({
+            immersiveModeEnabled: true,
+          });
+        });
+
+        interstitial.addAdEventListener(AdEventType.ERROR, (error) => {
+          console.log('Interstitial ad failed to load:', error);
+        });
+      } catch (error) {
+        console.log('Error loading or showing interstitial ad:', error);
+      }
+    };
+
+    load_ad();
+  }, []);
 
   return <>
     <SafeAreaView style={{

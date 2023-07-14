@@ -6,7 +6,7 @@ import { COLOR1, COLOR2, COLOR3, COLOR4, BASE_URL } from '../env';
 
 export const SideBar = (props) => {
     const navigation = useNavigation();
-    return (<>
+    return (<SafeAreaView style={{ height: '100%' }}>
         <ScrollView style={{
             width: 200,
             backgroundColor: COLOR1,
@@ -41,7 +41,7 @@ export const SideBar = (props) => {
 
 
         </ScrollView>
-    </>
+    </SafeAreaView>
     )
 }
 

@@ -120,7 +120,7 @@ export function MainPage(props) {
 
     return (
         <>
-            <View style={{ flexDirection: 'row', height: '100%' }}>
+            <SafeAreaView style={{ flexDirection: 'row', height: '100%' }}>
                 <Animated.View style={{ width: fadeAnim, height: '100%', backgroundColor: 'rgb(240, 240, 245)' }}>
                     <SideBar props={props.navigation} sideList={sideList} setState={setSideMenu} />
                 </Animated.View>
@@ -139,7 +139,7 @@ export function MainPage(props) {
                         />
                     </Animated.View>
                 </Pressable>
-            </View>
+            </SafeAreaView>
         </>
     );
 }
