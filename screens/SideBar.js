@@ -23,9 +23,9 @@ export const SideBar = (props) => {
                 return (<TouchableOpacity key={el.id} style={styles.sideItemWrapper} onPress={() => {
                     navigation.navigate("Category", { cid: el.id, label: el.label });
                 }}
-                ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>{el.label}</Text></TouchableOpacity>)
+                ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>{el.label?.replace('recipes', '')}</Text></TouchableOpacity>)
             }) : <></>}
-            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1 }}></View>
+            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginBottom: 15 }}></View>
             <TouchableOpacity key={-2} style={styles.sideItemWrapper} onPress={() => {
                 navigation.navigate('Favourites')
             }}
@@ -37,7 +37,7 @@ export const SideBar = (props) => {
             <TouchableOpacity key={-4} style={styles.sideItemWrapper} onPress={() => {
                 console.log("setting");
             }}
-            ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>Setting</Text></TouchableOpacity>
+            ><Text style={{ ...styles.sidebarItems, textTransform: 'uppercase' }}>Settings</Text></TouchableOpacity>
 
 
         </ScrollView>

@@ -20,8 +20,13 @@ import { useIsFocused } from '@react-navigation/native';
 import axios from "axios";
 import { GAMBannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import { Pressable } from "react-native";
-
+import { ANDROID_INTER_UNIT_ID, IOS_INTER_UNIT_ID } from '../env';
+import { InterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+import { BannerAd } from 'react-native-google-mobile-ads';
 const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
+    // const interstitial = InterstitialAd.createForAdRequest(ANDROID_INTER_UNIT_ID, {
+    //     requestNonPersonalizedAdsOnly: true,
+    // });
     const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);
@@ -40,6 +45,8 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
             setNumColumns(1)
         }
     }, [height, width])
+
+
 
     // Function to handle the refresh action
     const handleRefresh = () => {
@@ -80,7 +87,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
         fetchPosts();
     }, [fetchPosts, loading]);
 
-    const ItemRender = ({ item }) => {
+    const ItemRender = ({ item, index }) => {
         let thumbimage;
         try {
             thumbimage = item.yoast_head_json.og_image[0].url;
@@ -89,7 +96,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
             thumbimage = 'NOTFOUND';
             console.log("image not found for " + item.id)
         }
-        return (
+        return (<>
             <TouchableOpacity
                 style={styles.itemContainer}
                 onPress={() => {
@@ -108,12 +115,23 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
                     <Text style={styles.title}>{item.yoast_head_json.title}</Text>
                 </View>
             </TouchableOpacity>
+            {index % 7 == 0 ? < BannerAd
+                unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
+                size={BannerAdSize.INLINE_ADAPTIVE_BANNER}
+                requestOptions={{
+                    requestNonPersonalizedAdsOnly: true,
+
+
+                }}
+            /> : <></>}
+        </>
         );
     };
 
     return (
         <Pressable style={styles.container}>
             {/* <ShimmeringSkeletonLoader count={2} numColumns={numColumns} /> */}
+
             <FlashList
                 data={feedData}
                 renderItem={ItemRender}
@@ -137,7 +155,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
 
             <GAMBannerAd
                 unitId={Platform.OS === 'ios' ? IOS_BANNER_UNIT_ID : ANDROID_BANNER_UNIT_ID}
-                sizes={[BannerAdSize.FULL_BANNER]}
+                sizes={[BannerAdSize.ANCHORED_ADAPTIVE_BANNER]}
                 requestOptions={{
                     requestNonPersonalizedAdsOnly: true,
                 }}
