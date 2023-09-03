@@ -70,7 +70,7 @@ export function MainPage(props) {
                 setSideList(data.hamburger_navigation);
                 const generatedRoutes = data.horizontal_navigation.map((category) => ({
                     key: category.label,
-                    title: category.label,
+                    title: category.label?.replace('recipes', ''),
                 }));
                 setRoutes(generatedRoutes);
             })

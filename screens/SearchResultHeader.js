@@ -6,7 +6,7 @@ import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
-export const Header = () => {
+export const Header = ({ searchText }) => {
     const navigation = useNavigation();
     return <>
         <View
@@ -18,6 +18,9 @@ export const Header = () => {
             }}>
             <View style={{
                 width: '80%',
+                display: 'flex',
+                flex: 1,
+                flexDirection: 'row'
             }}>
                 <TouchableOpacity style={{
                     width: 20,
@@ -28,6 +31,7 @@ export const Header = () => {
                 }}>
                     <Icon name='arrow-left' size={20} color={COLOR1} />
                 </TouchableOpacity>
+                <Text style={{ color: 'white', marginTop: 20, marginLeft: 20 }}>Search results for "{searchText}"</Text>
 
             </View>
             <View style={{
