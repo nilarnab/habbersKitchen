@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Dimensions, useWindowDimensions, StyleSheet, Text, View, AppRegistry, FlatList, TextInput, Button, Pressable, ScrollView, Touchable, TouchableOpacity, Image, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { BASE_URL, COLOR1, COLOR2, COLOR3, COLOR4, COMPNAY_NAME } from '../env';
-
+import { firebase } from '@react-native-firebase/analytics';
 import { useNavigation } from '@react-navigation/native';
 
 
 const MidHeader = ({ searchMode, searchText, setSearchText }) => {
     const { height, width } = useWindowDimensions();
     const navigation = useNavigation();
-
+    const searchEvent = (text) => {
+        firebase.analytics().logEvent('searched_for', {
+          query: text,
+        });
+      };
     if (searchMode) {
         return <>
             <View style={{ ...styles.midHeader, width: width - 60 * 2 }}>
@@ -22,6 +26,7 @@ const MidHeader = ({ searchMode, searchText, setSearchText }) => {
                     placeholderTextColor={'grey'}
                     selectionColor={COLOR1}
                     onSubmitEditing={() => {
+                        searchEvent(searchText)
                         navigation.navigate('SearchResult', { query: searchText })
                     }}
                 />

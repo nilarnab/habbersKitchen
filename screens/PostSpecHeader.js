@@ -6,16 +6,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLOR1, COLOR2, COLOR3, COLOR4 } from '../env';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-
+import { firebase } from '@react-native-firebase/analytics';
 export const Header = ({ sharable, pid }) => {
     const [favoriteRecipes, setFavoriteRecipes] = useState([]);
 
 
     useEffect(() => {
         loadFavoriteRecipes();
+        
     }, []);
 
-
+    const shareEvent = () => {
+        firebase.analytics().logEvent('post_shared', {
+          pid:pid,
+        });
+      };
     const loadFavoriteRecipes = async () => {
         try {
             const savedRecipes = await AsyncStorage.getItem('@favoriteRecipes');
@@ -86,6 +91,7 @@ export const Header = ({ sharable, pid }) => {
                     marginRight: 30,
                     marginLeft: -30
                 }} onPress={() => {
+
                     if (sharable) {
                         Share.share({
                             message:

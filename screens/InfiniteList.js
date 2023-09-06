@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     useWindowDimensions,
 } from "react-native";
+import { firebase } from "@react-native-firebase/analytics";
 import { useNavigation } from "@react-navigation/native";
 import { BASE_URL, COLOR1, COLOR2, COLOR3, LIGHT_GREY, ANDROID_BANNER_UNIT_ID, IOS_BANNER_UNIT_ID } from "../env";
 import { FlashList } from "@shopify/flash-list";
@@ -27,6 +28,7 @@ const InfiniteList = ({ categoryID, route, visibleIndex, categoryIndex }) => {
     // const interstitial = InterstitialAd.createForAdRequest(ANDROID_INTER_UNIT_ID, {
     //     requestNonPersonalizedAdsOnly: true,
     // });
+
     const isFocused = useIsFocused();
     const [feedData, setFeedData] = useState([]);
     const [page, setPage] = useState(1);

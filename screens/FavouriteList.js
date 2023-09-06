@@ -4,9 +4,10 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, } from '
 import { BASE_URL, COLOR1, COLOR2, COLOR3, LIGHT_GREY, ANDROID_BANNER_UNIT_ID, IOS_BANNER_UNIT_ID } from "../env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 import axios from 'axios';
 import { FlashList } from '@shopify/flash-list';
+import { logScreen } from '../App';
 
 export const Favourites = ({ route }) => {
     const navigation = useNavigation();
@@ -40,7 +41,7 @@ export const Favourites = ({ route }) => {
         }
     };
     useEffect(() => {
-        ReactGA.pageview('Favourites');
+        logScreen('facourites')
     }, [])
     const ItemRender = ({ item }) => {
         return (

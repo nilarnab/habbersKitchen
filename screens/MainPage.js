@@ -7,7 +7,7 @@ import Header from './UniversalHeader';
 import { SideBar } from './SideBar';
 import axios from 'axios';
 import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 AppRegistry.registerComponent('Appname', () => App);
 
 const RenderScene = ({ categories, index, route }) => {
@@ -29,7 +29,7 @@ export function MainPage(props) {
     const layout = useWindowDimensions();
 
     useEffect(() => {
-        ReactGA.pageview('Main');
+        // ReactGA.pageview('Main');
         if (sideMenu) {
             Animated.timing(fadeAnim, {
                 toValue: 200,

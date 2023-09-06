@@ -14,8 +14,9 @@ const Bar = () => {
                 }
             }
             catch (erro) {
-                Alert.alert("Kill Switch Error", "Error fetching if kill switch is enabled, killing app in 3 seconds")
-                timeBomb()
+                // Alert.alert("Kill Switch Error", "Error fetching if kill switch is enabled, killing app in 3 seconds")
+                // timeBomb()
+                // console.log(erro)
             }
         };
 

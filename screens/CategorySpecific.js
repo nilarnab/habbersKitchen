@@ -4,12 +4,13 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, } from '
 import { COLOR1, COLOR2 } from '../env';
 import InfiniteList from './InfiniteList';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ReactGA from 'react-ga';
+import { logScreen } from '../App';
+// import ReactGA from 'react-ga';
 
 export const CategorySpecific = ({ route }) => {
     const navigation = useNavigation();
     useEffect(() => {
-        ReactGA.pageview('CategorySpecific');
+        logScreen('category_specific')
     }, [])
     return (
         <>
