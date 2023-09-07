@@ -45,7 +45,7 @@ export const SearchResult = (props) => {
     return <>
 
         <View style={styles.container}>
-            <Header />
+            <Header searchText={props?.route?.params?.query} />
             {loading ? <Loader /> : <></>}
             <WebView
                 originWhitelist={['*']}

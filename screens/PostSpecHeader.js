@@ -83,6 +83,8 @@ export const Header = ({ sharable, pid }) => {
                 <TouchableOpacity style={{
                     width: '50%',
                     marginTop: 20,
+                    marginRight: 30,
+                    marginLeft: -30
                 }} onPress={() => {
                     if (sharable) {
                         Share.share({

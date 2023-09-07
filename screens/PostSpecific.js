@@ -6,8 +6,8 @@ import { Header } from './PostSpecHeader';
 import ReactGA from 'react-ga';
 import { useState } from 'react';
 import axios from 'axios';
-import { ANDROID_INTER_UNIT_ID, IOS_INTER_UNIT_ID } from '../env';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { ANDROID_INTER_UNIT_ID, IOS_INTER_UNIT_ID } from '../env';
 import { InterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 
 const PostSpecific = ({ route }) => {
@@ -42,6 +42,9 @@ const PostSpecific = ({ route }) => {
         interstitial.addAdEventListener(AdEventType.LOADED, () => {
           interstitial.show({
             immersiveModeEnabled: true,
+
+
+
           });
         });
 
