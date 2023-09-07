@@ -17,6 +17,7 @@
     "@react-native-community/checkbox": "^0.5.14",
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/slider": "^4.4.2",
+    "@react-native-firebase/app": "^18.3.2",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/drawer": "^6.5.4",
     "@react-navigation/native": "^6.1.0",
