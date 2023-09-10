@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:368756125372:android:5b1d16bc0bf7465b0a2ab9",
+        "mobilesdk_app_id": "1:368756125372:android:af7115c8454bf8290a2ab9",
         "android_client_info": {
-          "package_name": "com.hebbars.android"
+          "package_name": "com.hebbers"
         }
       },
       "oauth_client": [

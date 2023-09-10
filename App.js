@@ -16,8 +16,9 @@ import SplashScreen from 'react-native-splash-screen';
 import { CategorySpecific } from './screens/CategorySpecific';
 import { Favourites } from './screens/FavouriteList';
 import { SearchResult } from './screens/SearchResult';
+import { firebase } from '@react-native-firebase/analytics';
 import Bar from './screens/Bar';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 
 import {
   SafeAreaView,
@@ -43,18 +44,21 @@ import { navigationRef } from './RootNavigator';
 
 const Stack = createNativeStackNavigator();
 
+export const logScreen=(screen)=>{
+    firebase.analytics().logEvent('screen_view', {
+      screen: screen,
+    });
+}
 
 const App: () => Node = () => {
-  ReactGA.initialize('UA-68620027-3');
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
   useEffect(() => {
     SplashScreen.hide(); //hides the splash screen on app load.
-    ReactGA.pageview('Home');
+    logScreen('main')
   }, []);
 
   return (

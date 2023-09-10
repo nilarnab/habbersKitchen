@@ -9,7 +9,8 @@ import { ActivityIndicator } from 'react-native-paper';
 import { ShimmeringSkeletonLoader } from './PostSkeletonLoader';
 import WebView from 'react-native-webview';
 import axios from 'axios';
-import ReactGA from 'react-ga';
+import { logScreen } from '../App';
+// import ReactGA from 'react-ga';
 
 
 export const SearchResult = (props) => {
@@ -17,7 +18,7 @@ export const SearchResult = (props) => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        ReactGA.pageview('SearchResult');
+        logScreen('search_results')
     }, [])
 
     const onMessageReceived = (event) => {

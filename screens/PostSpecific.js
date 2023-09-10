@@ -3,13 +3,13 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview'
 import { GET_POST_URL } from '../env';
 import { Header } from './PostSpecHeader';
-import ReactGA from 'react-ga';
+// import ReactGA from 'react-ga';
 import { useState } from 'react';
 import axios from 'axios';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { ANDROID_INTER_UNIT_ID, IOS_INTER_UNIT_ID } from '../env';
 import { InterstitialAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
-
+import { logScreen } from '../App';
 const PostSpecific = ({ route }) => {
   const [sharable, setSharable] = useState(null)
   const interstitial = InterstitialAd.createForAdRequest(ANDROID_INTER_UNIT_ID, {
@@ -17,7 +17,7 @@ const PostSpecific = ({ route }) => {
   });
 
   useEffect(() => {
-    ReactGA.pageview('PostSpecific');
+    logScreen('post_specific')
   }, [])
 
   useEffect(() => {
